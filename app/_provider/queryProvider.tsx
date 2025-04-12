@@ -1,6 +1,7 @@
 'use client';
+
 import { ReactNode, useState } from 'react';
-import { QueryClient, QueryClientProvider, HydrationBoundary } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 interface Props {
@@ -12,10 +13,8 @@ export default function QueryProvider({ children }: Props) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <HydrationBoundary>
-        {children}
-        {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />}
-      </HydrationBoundary>
+      {children}
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 }
