@@ -1,27 +1,30 @@
 # ─────────────────────────────
-# ✅ Node & PNPM
-node_modules/
+# ✅ Dependencies
+/node_modules/
 .pnpm-debug.log
-pnpm-lock.yaml
+.pnpm-store/
+/.pnp
+.pnp.*
 
 # ─────────────────────────────
 # ✅ Build
 .next/
 out/
+build/
 dist/
 
 # ─────────────────────────────
-# ✅ Env & 환경변수
+# ✅ Environment Variables
 .env
 .env.*.local
 .env.local
 
 # ─────────────────────────────
-# ✅ VSCode
-.vscode/
+# ✅ Vercel
+.vercel/
 
 # ─────────────────────────────
-# ✅ Mac / OS
+# ✅ Editor / OS Junk
 .DS_Store
 Thumbs.db
 
@@ -32,8 +35,15 @@ yarn-debug.log*
 yarn-error.log*
 
 # ─────────────────────────────
-# ✅ Husky
-.husky/_/
+# ✅ TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# ─────────────────────────────
+# ✅ VSCode
+/.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
 
 # ─────────────────────────────
 # ✅ Test & Coverage
