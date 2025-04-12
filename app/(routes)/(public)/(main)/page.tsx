@@ -1,11 +1,10 @@
-// app/page.tsx
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
 import { fetchHello } from '@/lib/api/hello.api';
 
 export default function HomePage() {
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ['hello'],
     queryFn: fetchHello,
   });
