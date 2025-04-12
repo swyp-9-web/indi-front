@@ -1,5 +1,5 @@
 import './globals.css';
-import { Providers } from '@/app/_provider/providers';
+import Providers from '@/app/_provider/providers';
 import { Inter } from 'next/font/google';
 
 const inter = Inter({ subsets: ['latin'] });

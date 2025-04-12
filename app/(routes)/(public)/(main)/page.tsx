@@ -9,7 +9,9 @@ export default function HomePage() {
     queryKey: ['hello'],
     queryFn: fetchHello,
   });
-
-  if (isLoading) return <p>로딩중...</p>;
-  return <p>{data.message}</p>;
+  return (
+    <>
+      <h1>Hello!</h1>
+    </>
+  );
 }
