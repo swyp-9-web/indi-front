@@ -1,17 +1,15 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useHelloQuery } from '@/lib/queries/useHelloQueries';
 
-import { fetchHello } from '@/lib/api/hello.api';
+import HomePage from './_components/Homepage';
 
-export default function HomePage() {
-  const { data } = useQuery({
-    queryKey: ['hello'],
-    queryFn: fetchHello,
-  });
+export default function Home() {
+  const { data } = useHelloQuery();
+
   return (
     <>
-      <h1>Hello!</h1>
+      <HomePage />
     </>
   );
 }

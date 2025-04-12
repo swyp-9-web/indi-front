@@ -1,4 +1,3 @@
-// utils/sum.test.ts
 import { describe, expect, it } from 'vitest';
 
 import { sum } from './sum';
