@@ -42,7 +42,7 @@ jobs:
       - name: Build Project Artifacts
         run: |
           echo "🔧 Vercel 빌드 실행"
-          if [[ "${{ github.ref }}" === "refs/heads/main" ]]; then
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
             echo "🛠️ Production 빌드 (main)"
             pnpm vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
           else
