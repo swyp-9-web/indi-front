@@ -46,14 +46,18 @@ jobs:
 
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
             echo "🔍 PR 배포 (Preview)"
-            PREVIEW_URL=$(pnpm vercel --token=${{ secrets.VERCEL_TOKEN }} --confirm | tail -n 1)
-            pnpm vercel --token=${{ secrets.VERCEL_TOKEN }} --confirm
+            pnpm vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} --yes > vercel-output.txt
+            PREVIEW_URL=$(tail -n 1 vercel-output.txt | grep -Eo 'https://[a-zA-Z0-9.-]+\.vercel\.app')
+            echo "preview_url=$PREVIEW_URL" >> $GITHUB_OUTPUT
+
           elif [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
             echo "🚧 Dev 브랜치 배포 (Preview)"
-            pnpm vercel --token=${{ secrets.VERCEL_TOKEN }} --confirm
+            pnpm vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} --yes
+
           elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
             echo "🚀 Main 브랜치 배포 (Prod)"
-            pnpm vercel --token=${{ secrets.VERCEL_TOKEN }} --confirm --prod
+            pnpm vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} --yes --prod
+
           else
             echo "❌ 해당 브랜치 배포 조건 아님"
           fi
