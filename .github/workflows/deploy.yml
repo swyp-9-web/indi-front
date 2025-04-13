@@ -59,21 +59,15 @@ jobs:
           fi
 
       - name: Comment Preview URL on PR
+        uses: marocchino/sticky-pull-request-comment@v2
         if: github.event_name == 'pull_request'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          COMMENT="### 🔍 Vercel Preview Deployment
+        with:
+          recreate: true
+          message: |
+            ### 🔍 Vercel Preview Deployment
 
-          ✅ **Deployment successful!**
+            ✅ **Deployment successful!**
 
-          🔗 [Click here to view the preview deployment](${{ steps.vercel_deploy.outputs.preview_url }})
+            🔗 [Click here to view the preview deployment](${{ steps.vercel_deploy.outputs.preview_url }})
 
-          ---
-
-          > Preview deployed automatically by GitHub Actions + Vercel 🚀"
-            
-          PR_NUMBER=${{ github.event.pull_request.number }}
-          curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
-            -X POST -d "{\"body\":\"$COMMENT\"}" \
-            "https://api.github.com/repos/${{ github.repository }}/issues/$PR_NUMBER/comments"
+            > Preview deployed automatically by GitHub Actions + Vercel 🚀
