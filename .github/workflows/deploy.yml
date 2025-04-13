@@ -41,13 +41,13 @@ jobs:
 
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
             echo "🔍 PR 배포 (Preview)"
-            vercel --token=${{ secrets.VERCEL_TOKEN }} --confirm
+            pnpm vercel --token=${{ secrets.VERCEL_TOKEN }} --confirm
           elif [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
             echo "🚧 Dev 브랜치 배포 (Preview)"
-            vercel --token=${{ secrets.VERCEL_TOKEN }} --confirm
+            pnpm vercel --token=${{ secrets.VERCEL_TOKEN }} --confirm
           elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
             echo "🚀 Main 브랜치 배포 (Prod)"
-            vercel --token=${{ secrets.VERCEL_TOKEN }} --confirm --prod
+            pnpm vercel --token=${{ secrets.VERCEL_TOKEN }} --confirm --prod
           else
             echo "❌ 해당 브랜치 배포 조건 아님"
           fi
