@@ -33,6 +33,7 @@ jobs:
         run: pnpm build
 
       - name: Deploy to Vercel
+        id: vercel_deploy
         run: |
           pnpm add vercel
 
@@ -41,6 +42,7 @@ jobs:
 
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
             echo "🔍 PR 배포 (Preview)"
+            PREVIEW_URL=$(pnpm vercel --token=${{ secrets.VERCEL_TOKEN }} --confirm | tail -n 1)
             pnpm vercel --token=${{ secrets.VERCEL_TOKEN }} --confirm
           elif [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
             echo "🚧 Dev 브랜치 배포 (Preview)"
@@ -51,3 +53,23 @@ jobs:
           else
             echo "❌ 해당 브랜치 배포 조건 아님"
           fi
+
+      - name: Comment Preview URL on PR
+        if: github.event_name == 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          COMMENT="### 🔍 Vercel Preview Deployment
+
+          ✅ **Deployment successful!**
+
+          🔗 [Click here to view the preview deployment](${{ steps.vercel_deploy.outputs.preview_url }})
+
+          ---
+
+          > Preview deployed automatically by GitHub Actions + Vercel 🚀"
+            
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -X POST -d "{\"body\":\"$COMMENT\"}" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/$PR_NUMBER/comments"
