@@ -34,7 +34,7 @@ jobs:
 
       - name: Deploy to Vercel
         run: |
-          pnpm add -g vercel
+          pnpm add vercel
 
           echo "Event: ${{ github.event_name }}"
           echo "Branch: ${{ github.ref }}"
