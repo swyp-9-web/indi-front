@@ -1,0 +1,54 @@
+name: Deploy to Vercel
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+  pull_request:
+    branches:
+      - dev
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build
+        run: pnpm build
+
+      - name: Deploy to Vercel
+        run: |
+          pnpm add -g vercel
+
+          echo "Event: ${{ github.event_name }}"
+          echo "Branch: ${{ github.ref }}"
+
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "🔍 PR 배포 (Preview)"
+            vercel --token=${{ secrets.VERCEL_TOKEN }} --confirm
+          elif [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
+            echo "🚧 Dev 브랜치 배포 (Preview)"
+            vercel --token=${{ secrets.VERCEL_TOKEN }} --confirm
+          elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "🚀 Main 브랜치 배포 (Prod)"
+            vercel --token=${{ secrets.VERCEL_TOKEN }} --confirm --prod
+          else
+            echo "❌ 해당 브랜치 배포 조건 아님"
+          fi
