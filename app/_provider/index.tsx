@@ -1,5 +1,4 @@
-import QueryProvider from '@/app/_provider/queryProvider';
-
+import QueryProvider from './QueryProvider';
 import ThemeProvider from './ThemeProvider';
 
 export default function Providers({ children }: { children: React.ReactNode }) {
