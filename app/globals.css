@@ -4,8 +4,37 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  /* custom color system (TailwindCSS className) */
+  --color-background: var(--surface-background);
+  --color-foreground: var(--custom-gray-900);
+
+  --color-custom-background: var(--surface-background);
+  --color-custom-ivory-50: var(--surface-ivory-50);
+  --color-custom-ivory-100: var(--surface-ivory-100);
+
+  --color-custom-brand-primary: var(--brand-primary);
+  --color-custom-brand-secondary: var(--brand-secondary);
+
+  --color-custom-button-text: var(--button-text-color);
+
+  --color-custom-status-informative: var(--status-informative);
+  --color-custom-status-positive: var(--status-positive);
+  --color-custom-status-notice: var(--status-notice);
+  --color-custom-status-negative: var(--status-negative);
+
+  --color-custom-gray-900: var(--custom-gray-900);
+  --color-custom-gray-800: var(--custom-gray-800);
+  --color-custom-gray-700: var(--custom-gray-700);
+  --color-custom-gray-600: var(--custom-gray-600);
+  --color-custom-gray-500: var(--custom-gray-500);
+  --color-custom-gray-400: var(--custom-gray-400);
+  --color-custom-gray-300: var(--custom-gray-300);
+  --color-custom-gray-200: var(--custom-gray-200);
+  --color-custom-gray-100: var(--custom-gray-100);
+
+  /* shadcn/ui color system (TailwindCSS className) */
+  /* --color-background: var(--background); */
+  /* --color-foreground: var(--foreground); */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -45,6 +74,33 @@
 
 :root {
   --radius: 0.625rem;
+
+  /* custom color system */
+  --surface-background: #f9f7f0;
+  --surface-ivory-50: #f2edde;
+  --surface-ivory-100: #eae4cc;
+
+  --brand-primary: #646054;
+  --brand-secondary: #f7d252;
+
+  --button-text-color: #141311;
+
+  --status-informative: #4387d6;
+  --status-positive: #77997a;
+  --status-notice: #eb5406;
+  --status-negative: #8c0302;
+
+  --custom-gray-900: #141311;
+  --custom-gray-800: #282622;
+  --custom-gray-700: #3c3a32;
+  --custom-gray-600: #504d43;
+  --custom-gray-500: #646054;
+  --custom-gray-400: #838076;
+  --custom-gray-300: #a2a098;
+  --custom-gray-200: #c1bfbb;
+  --custom-gray-100: #e0dfdd;
+
+  /* shadcn/ui color system */
   --background: oklch(1 0 0);
   --foreground: oklch(0.13 0.028 261.692);
   --card: oklch(1 0 0);
