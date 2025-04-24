@@ -62,6 +62,8 @@ export default function FollowingDropdown({ isLoggedIn }: FollowingDropdownProps
     );
   }
 
+  console.log(data.followingList);
+
   return (
     <DropdownMenu onOpenChange={() => setIsSelected((prev) => !prev)}>
       <DropdownMenuTrigger
@@ -88,7 +90,7 @@ export default function FollowingDropdown({ isLoggedIn }: FollowingDropdownProps
               className="text-custom-brand-primary hover:text-custom-brand-primary focus:text-custom-brand-primary flex h-17 w-full items-center justify-between px-5 text-sm font-medium hover:bg-transparent focus:bg-transparent"
             >
               <Link
-                href={`${ROUTE_PATHS.CREATOR}/${creator.id}`}
+                href={ROUTE_PATHS.CREATOR(creator.id)}
                 className="flex items-center justify-between gap-5 underline-offset-2 hover:underline"
               >
                 <Avatar className="h-12 w-12">
