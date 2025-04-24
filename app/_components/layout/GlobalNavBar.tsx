@@ -2,13 +2,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Input } from '@/components/ui/input';
 import { ROUTE_PATHS } from '@/constants';
-import { BookmarkIcon, NotificationIcon, NotificationUnreadIcon, SearchIcon } from '@/lib/icons';
+import { BookmarkIcon, NotificationIcon, NotificationUnreadIcon } from '@/lib/icons';
 
 import CategoryDropdown from './CategoryDropdown';
 import FollowingDropdown from './FollowingDropdown';
+import SearchBar from './SearchBar';
 
+// TODO: 유저 기능 연동 필요
 export default function GlobalNavBar() {
   const isLoggedIn = true;
   const hasUnreadNotification = false;
@@ -32,16 +33,7 @@ export default function GlobalNavBar() {
         </div>
 
         <div className="flex flex-1 justify-center">
-          <form className="relative h-9 w-97">
-            <label htmlFor="search">
-              <SearchIcon className="absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 hover:cursor-text" />
-            </label>
-            <Input
-              id="search"
-              className="bg-custom-ivory-50 placeholder:text-custom-gray-300 rounded-full border-none py-2 pr-3 pl-9.5"
-              placeholder="작가/작품 검색"
-            />
-          </form>
+          <SearchBar />
         </div>
 
         <div className="flex flex-1 justify-end">
