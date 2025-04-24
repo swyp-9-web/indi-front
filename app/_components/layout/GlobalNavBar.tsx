@@ -1,19 +1,18 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ROUTE_PATHS } from '@/constants';
 import { BookmarkIcon, NotificationIcon, NotificationUnreadIcon } from '@/lib/icons';
 
 import CategoryDropdown from './CategoryDropdown';
 import FollowingDropdown from './FollowingDropdown';
 import SearchBar from './SearchBar';
+import UserProfileDropdown from './UserProfileDropdown';
 
 // TODO: 유저 기능 연동 필요
 export default function GlobalNavBar() {
   const isLoggedIn = true;
   const hasUnreadNotification = false;
-  const profileSrc: string | undefined = undefined;
 
   return (
     <header className="border-custom-gray-100 absolute inset-x-0 top-0 z-50 h-14 border-b">
@@ -58,10 +57,8 @@ export default function GlobalNavBar() {
                   </button>
                 </li>
               </ul>
-              <Avatar className="h-9 w-9">
-                <AvatarImage src={profileSrc} />
-                <AvatarFallback className="bg-custom-gray-100 h-full w-full rounded-full" />
-              </Avatar>
+
+              <UserProfileDropdown />
             </div>
           ) : (
             <Link href={ROUTE_PATHS.LOGIN}>
