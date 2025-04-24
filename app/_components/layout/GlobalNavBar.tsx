@@ -7,6 +7,7 @@ import { ROUTE_PATHS } from '@/constants';
 import { BookmarkIcon, NotificationIcon, NotificationUnreadIcon, SearchIcon } from '@/lib/icons';
 
 import CategoryDropdown from './CategoryDropdown';
+import FollowingDropdown from './FollowingDropdown';
 
 export default function GlobalNavBar() {
   const isLoggedIn = true;
@@ -25,9 +26,7 @@ export default function GlobalNavBar() {
               <CategoryDropdown />
             </li>
             <li>
-              <button className="cursor-pointer text-sm font-medium underline-offset-2 hover:underline">
-                팔로잉 작가
-              </button>
+              <FollowingDropdown isLoggedIn={isLoggedIn} />
             </li>
           </ul>
         </div>
