@@ -39,7 +39,6 @@ export default function GlobalNavBar() {
             </label>
             <Input
               id="search"
-              type="search"
               className="bg-custom-ivory-50 placeholder:text-custom-gray-300 rounded-full border-none py-2 pr-3 pl-9.5"
               placeholder="작가/작품 검색"
             />
