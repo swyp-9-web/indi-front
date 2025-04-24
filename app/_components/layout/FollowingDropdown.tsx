@@ -15,6 +15,7 @@ import { ROUTE_PATHS } from '@/constants';
 import { AddIcon, CheckIcon } from '@/lib/icons';
 import { followingPreviewMock as data } from '@/lib/mocks/following-preview.mock';
 import { cn } from '@/lib/utils';
+import { formatNumberWithComma } from '@/utils/formatNumber';
 
 interface FollowingDropdownProps {
   isLoggedIn: boolean;
@@ -76,10 +77,12 @@ export default function FollowingDropdown({ isLoggedIn }: FollowingDropdownProps
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-custom-background border-custom-gray-100 z-10 w-108.5 translate-x-43 translate-y-[13px] rounded-none border p-0 shadow-none">
         <div className="text-custom-brand-primary h-11.5 border-b-1 px-5 py-3 text-sm font-medium">
-          팔로잉 작가 ({data.totalFollowing})
+          {Number(data.totalFollowing) === 0
+            ? '팔로잉 중인 작가가 없습니다.'
+            : `팔로잉 작가 (${formatNumberWithComma(data.totalFollowing)})`}
         </div>
 
-        {data.followingList.length === 0 ? (
+        {Number(data.totalFollowing) === 0 ? (
           <div className="text-custom-gray-300 flex h-60 w-full items-center justify-center text-sm">
             팔로잉 중인 작가가 없습니다.
           </div>
