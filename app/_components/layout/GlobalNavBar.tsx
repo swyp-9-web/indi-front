@@ -14,7 +14,7 @@ export default function GlobalNavBar() {
   return (
     <header className="border-custom-gray-100 absolute inset-x-0 top-0 h-14 border-b">
       <div className="w-8xl mx-auto flex h-full items-center justify-between px-6">
-        <div className="flex gap-8">
+        <div className="flex flex-1 gap-8">
           <Link href={ROUTE_PATHS.HOME}>
             <Image quality={100} width={96} height={24} src="/logo/Artego.png" alt="Artego logo" />
           </Link>
@@ -32,19 +32,21 @@ export default function GlobalNavBar() {
           </ul>
         </div>
 
-        <form className="relative h-9 w-97">
-          <label htmlFor="search">
-            <SearchIcon className="absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 hover:cursor-text" />
-          </label>
-          <Input
-            id="search"
-            type="search"
-            className="bg-custom-ivory-50 placeholder:text-custom-gray-300 rounded-full border-none py-2 pr-3 pl-9.5"
-            placeholder="작가/작품 검색"
-          />
-        </form>
+        <div className="flex flex-1 justify-center">
+          <form className="relative h-9 w-97">
+            <label htmlFor="search">
+              <SearchIcon className="absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 hover:cursor-text" />
+            </label>
+            <Input
+              id="search"
+              type="search"
+              className="bg-custom-ivory-50 placeholder:text-custom-gray-300 rounded-full border-none py-2 pr-3 pl-9.5"
+              placeholder="작가/작품 검색"
+            />
+          </form>
+        </div>
 
-        <div>
+        <div className="flex flex-1 justify-end">
           {isLoggedIn ? (
             <div className="flex gap-4">
               <ul className="flex gap-2.5">
