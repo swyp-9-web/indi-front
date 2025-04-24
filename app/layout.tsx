@@ -2,6 +2,7 @@ import localFont from 'next/font/local';
 
 import Providers from '@/app/_provider';
 
+import GlobalNavBar from './_components/layout/GlobalNavBar';
 import './globals.css';
 
 const pretendard = localFont({
@@ -30,7 +31,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko" suppressHydrationWarning>
       <body className={pretendard.className}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <GlobalNavBar />
+          {children}
+        </Providers>
       </body>
     </html>
   );
