@@ -6,13 +6,15 @@ import { Input } from '@/components/ui/input';
 import { ROUTE_PATHS } from '@/constants';
 import { BookmarkIcon, NotificationIcon, NotificationUnreadIcon, SearchIcon } from '@/lib/icons';
 
+import CategoryDropdown from './CategoryDropdown';
+
 export default function GlobalNavBar() {
   const isLoggedIn = true;
   const hasUnreadNotification = false;
   const profileSrc: string | undefined = undefined;
 
   return (
-    <header className="border-custom-gray-100 absolute inset-x-0 top-0 h-14 border-b">
+    <header className="border-custom-gray-100 absolute inset-x-0 top-0 z-50 h-14 border-b">
       <div className="w-8xl mx-auto flex h-full items-center justify-between px-6">
         <div className="flex flex-1 gap-8">
           <Link href={ROUTE_PATHS.HOME}>
@@ -20,9 +22,7 @@ export default function GlobalNavBar() {
           </Link>
           <ul className="flex gap-5">
             <li>
-              <button className="cursor-pointer text-sm font-medium underline-offset-2 hover:underline">
-                카테고리
-              </button>
+              <CategoryDropdown />
             </li>
             <li>
               <button className="cursor-pointer text-sm font-medium underline-offset-2 hover:underline">
