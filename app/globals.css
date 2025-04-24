@@ -10,7 +10,7 @@
 
   /* custom color system (TailwindCSS className) */
   --color-background: var(--surface-background);
-  --color-foreground: var(--custom-gray-900);
+  --color-foreground: var(--brand-primary);
 
   --color-custom-background: var(--surface-background);
   --color-custom-ivory-50: var(--surface-ivory-50);
@@ -73,6 +73,8 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  --width-8xl: 90rem;
 }
 
 :root {
