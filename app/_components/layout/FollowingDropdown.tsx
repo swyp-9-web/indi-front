@@ -19,10 +19,11 @@ import { formatNumberWithComma } from '@/utils/formatNumber';
 import ProfileImage from '../shared/ProfileImage';
 
 interface FollowingDropdownProps {
-  isLoggedIn: boolean;
+  userId: string | null;
 }
 
-export default function FollowingDropdown({ isLoggedIn }: FollowingDropdownProps) {
+// TODO: 유저 데이터 연동 시, userId 값 수정 필요 및 isLoggedIn을 별도로 사용하지 않고 userId를 null로 사용?
+export default function FollowingDropdown({ userId }: FollowingDropdownProps) {
   const [isSelected, setIsSelected] = useState(false);
   const [followStates, setFollowStates] = useState<Record<string, boolean>>({});
 

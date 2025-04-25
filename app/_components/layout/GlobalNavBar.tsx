@@ -11,7 +11,7 @@ import UserProfileDropdown from './UserProfileDropdown';
 
 // TODO: 유저 기능 연동 필요
 export default function GlobalNavBar() {
-  const isLoggedIn = true;
+  const userId: string | null = '21919299';
   const hasUnreadNotification = false;
 
   return (
@@ -26,7 +26,7 @@ export default function GlobalNavBar() {
               <CategoryDropdown />
             </li>
             <li>
-              <FollowingDropdown isLoggedIn={isLoggedIn} />
+              <FollowingDropdown userId={userId} />
             </li>
           </ul>
         </div>
@@ -36,7 +36,7 @@ export default function GlobalNavBar() {
         </div>
 
         <div className="flex flex-1 justify-end">
-          {isLoggedIn ? (
+          {userId ? (
             <div className="flex gap-4">
               <ul className="flex gap-2.5">
                 <li className="h-9.5 w-9.5">
