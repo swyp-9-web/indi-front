@@ -1,4 +1,4 @@
-'use client';
+import Footer from '@/app/_components/shared/Footer';
 
 import HeroSection from './_components/HeroSection';
 
@@ -8,6 +8,8 @@ export default function Home() {
       <div className="pt-14" />
 
       <HeroSection />
+
+      <Footer className="mt-27.5" />
     </>
   );
 }
