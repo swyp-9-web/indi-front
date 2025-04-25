@@ -1,10 +1,13 @@
 'use client';
 
-import { useHelloQuery } from '@/lib/queries/useHelloQueries';
+import HeroSection from './_components/HeroSection';
 
 export default function Home() {
-  const { data } = useHelloQuery();
+  return (
+    <>
+      <div className="pt-14" />
 
-  return null;
-  return <div>{data?.message}</div>;
+      <HeroSection />
+    </>
+  );
 }
