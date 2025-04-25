@@ -1,18 +1,21 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Input } from '@/components/ui/input';
 import { ROUTE_PATHS } from '@/constants';
-import { BookmarkIcon, NotificationIcon, NotificationUnreadIcon, SearchIcon } from '@/lib/icons';
+import { BookmarkIcon, NotificationIcon, NotificationUnreadIcon } from '@/lib/icons';
 
+import CategoryDropdown from './CategoryDropdown';
+import FollowingDropdown from './FollowingDropdown';
+import SearchBar from './SearchBar';
+import UserProfileDropdown from './UserProfileDropdown';
+
+// TODO: 유저 기능 연동 필요
 export default function GlobalNavBar() {
   const isLoggedIn = true;
   const hasUnreadNotification = false;
-  const profileSrc: string | undefined = undefined;
 
   return (
-    <header className="border-custom-gray-100 absolute inset-x-0 top-0 h-14 border-b">
+    <header className="border-custom-gray-100 absolute inset-x-0 top-0 z-50 h-14 border-b">
       <div className="w-8xl mx-auto flex h-full items-center justify-between px-6">
         <div className="flex flex-1 gap-8">
           <Link href={ROUTE_PATHS.HOME}>
@@ -20,29 +23,16 @@ export default function GlobalNavBar() {
           </Link>
           <ul className="flex gap-5">
             <li>
-              <button className="cursor-pointer text-sm font-medium underline-offset-2 hover:underline">
-                카테고리
-              </button>
+              <CategoryDropdown />
             </li>
             <li>
-              <button className="cursor-pointer text-sm font-medium underline-offset-2 hover:underline">
-                팔로잉 작가
-              </button>
+              <FollowingDropdown isLoggedIn={isLoggedIn} />
             </li>
           </ul>
         </div>
 
         <div className="flex flex-1 justify-center">
-          <form className="relative h-9 w-97">
-            <label htmlFor="search">
-              <SearchIcon className="absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 hover:cursor-text" />
-            </label>
-            <Input
-              id="search"
-              className="bg-custom-ivory-50 placeholder:text-custom-gray-300 rounded-full border-none py-2 pr-3 pl-9.5"
-              placeholder="작가/작품 검색"
-            />
-          </form>
+          <SearchBar />
         </div>
 
         <div className="flex flex-1 justify-end">
@@ -67,10 +57,8 @@ export default function GlobalNavBar() {
                   </button>
                 </li>
               </ul>
-              <Avatar className="h-9 w-9">
-                <AvatarImage src={profileSrc} />
-                <AvatarFallback className="bg-custom-gray-100 h-full w-full rounded-full" />
-              </Avatar>
+
+              <UserProfileDropdown />
             </div>
           ) : (
             <Link href={ROUTE_PATHS.LOGIN}>
