@@ -132,42 +132,22 @@ interface FollowingButtonProps {
 }
 
 function FollowingButton({ isFollowing, onFollowButtonClick }: FollowingButtonProps) {
-  const [isHovering, setIsHovering] = useState(false);
-
   const handleFollowButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-
-    // 불필요하게 팔로우취소 버튼 나타나는 것 방지
-    if (!isFollowing) {
-      setIsHovering(false);
-    }
 
     onFollowButtonClick();
   };
 
   return (
-    <div
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
-      className="relative"
-    >
+    <div className="relative">
       {isFollowing ? (
-        isHovering ? (
-          <button
-            onClick={handleFollowButtonClick}
-            className="bg-custom-status-notice text-custom-background border-custom-gray-100 flex h-9.5 w-24 cursor-pointer items-center justify-center gap-1.5 rounded-full border text-sm"
-          >
-            팔로우취소
-          </button>
-        ) : (
-          <button
-            onClick={handleFollowButtonClick}
-            className="border-custom-gray-100 flex h-9.5 w-24 cursor-pointer items-center justify-center gap-1.5 rounded-full border text-sm"
-          >
-            <CheckIcon className="!h-6 !w-6" />
-            <span>팔로잉</span>
-          </button>
-        )
+        <button
+          onClick={handleFollowButtonClick}
+          className="border-custom-gray-100 flex h-9.5 w-24 cursor-pointer items-center justify-center gap-1.5 rounded-full border text-sm"
+        >
+          <CheckIcon className="!h-6 !w-6" />
+          <span>팔로잉</span>
+        </button>
       ) : (
         <button
           onClick={handleFollowButtonClick}
