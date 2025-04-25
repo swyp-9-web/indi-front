@@ -15,7 +15,7 @@ export default function GlobalNavBar() {
   const hasUnreadNotification = false;
 
   return (
-    <header className="border-custom-gray-100 absolute inset-x-0 top-0 z-50 h-14 border-b">
+    <header className="border-custom-gray-100 bg-custom-background absolute inset-x-0 top-0 z-50 h-14 border-b">
       <div className="w-8xl mx-auto flex h-full items-center justify-between px-6">
         <div className="flex flex-1 gap-8">
           <Link href={ROUTE_PATHS.HOME}>
