@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 
 import Link from 'next/link';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,6 +15,8 @@ import { AddIcon, CheckIcon } from '@/lib/icons';
 import { followingPreviewMock as data } from '@/lib/mocks/following-preview.mock';
 import { cn } from '@/lib/utils';
 import { formatNumberWithComma } from '@/utils/formatNumber';
+
+import ProfileImage from '../shared/ProfileImage';
 
 interface FollowingDropdownProps {
   isLoggedIn: boolean;
@@ -96,10 +97,7 @@ export default function FollowingDropdown({ isLoggedIn }: FollowingDropdownProps
                 href={ROUTE_PATHS.CREATOR(creator.id)}
                 className="flex items-center justify-between gap-5 underline-offset-2 hover:underline"
               >
-                <Avatar className="h-12 w-12">
-                  <AvatarImage src={creator.profileImage ?? 'undefined'} />
-                  <AvatarFallback className="bg-custom-gray-100 h-full w-full rounded-full" />
-                </Avatar>
+                <ProfileImage src={creator.profileImage} className="h-12 w-12" />
                 <p>{creator.nickname}</p>
               </Link>
 
