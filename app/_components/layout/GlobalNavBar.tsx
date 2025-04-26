@@ -5,7 +5,7 @@ import { ROUTE_PATHS } from '@/constants';
 import { BookmarkIcon } from '@/lib/icons';
 
 import CategoryDropdown from './CategoryDropdown';
-import FollowingDropdown from './FollowingDropdown';
+import FollowingPopover from './FollowingPopover';
 import NotificationPopover from './NotificationPopover';
 import SearchBar from './SearchBar';
 import UserProfileDropdown from './UserProfileDropdown';
@@ -26,7 +26,7 @@ export default function GlobalNavBar() {
               <CategoryDropdown />
             </li>
             <li>
-              <FollowingDropdown userId={userId} />
+              <FollowingPopover userId={userId} />
             </li>
           </ul>
         </div>
