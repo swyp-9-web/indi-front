@@ -13,7 +13,7 @@ export const productListMock = {
         id: '1258292',
         nickname: '신기한 작가',
       },
-      isScraped: false,
+      isScraped: true,
     },
     {
       id: '1234568',
@@ -83,7 +83,7 @@ export const productListMock = {
         id: '1258292',
         nickname: '신나는 작가',
       },
-      isScraped: false,
+      isScraped: true,
     },
     {
       id: '1299729',
