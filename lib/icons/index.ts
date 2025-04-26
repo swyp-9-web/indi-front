@@ -1,5 +1,7 @@
 export { default as AddIcon } from './svg/add.svg';
 export { default as BookmarkIcon } from './svg/bookmark.svg';
+export { default as CardBookmarkFilledIcon } from './svg/card-bookmark-filled.svg';
+export { default as CardBookmarkIcon } from './svg/card-bookmark.svg';
 export { default as CheckIcon } from './svg/check.svg';
 export { default as DehazeIcon } from './svg/dehaze.svg';
 export { default as NotificationUnreadIcon } from './svg/notifications-unread.svg';

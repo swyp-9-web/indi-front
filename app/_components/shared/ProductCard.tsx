@@ -1,0 +1,112 @@
+'use client';
+
+import { useState } from 'react';
+
+import Image from 'next/image';
+import Link from 'next/link';
+
+import { ROUTE_PATHS } from '@/constants';
+import { CardBookmarkFilledIcon, CardBookmarkIcon } from '@/lib/icons';
+import { productListMock } from '@/lib/mocks/product-list.mock';
+import { cn } from '@/lib/utils';
+import { formatNumberWithComma } from '@/utils/formatNumber';
+import { getSizeLabelByValue } from '@/utils/itemUtils';
+
+// TODO: Product 카드 타입 정의 필요 및 API 변경 시 값 적용
+interface ProductCardProps {
+  textColor?: 'dark' | 'light';
+  product: (typeof productListMock.products)[0];
+}
+
+export default function ProductCard({ textColor = 'dark', product }: ProductCardProps) {
+  return (
+    <article className="relative">
+      <figure className="bg-custom-gray-100 relative flex h-76.5 w-76.5 items-center justify-center rounded-xl">
+        {product.imageUrl ? (
+          <Image
+            fill
+            src={product.imageUrl}
+            className="rounded-xl object-cover"
+            alt="작품 이미지"
+          />
+        ) : (
+          <figcaption className="text-custom-gray-400 text-base">No Image</figcaption>
+        )}
+      </figure>
+
+      <SizeBadge sizeValue={product.size} />
+
+      <div className="absolute top-2.5 right-2.5">
+        <ScrapButton isScraped={product.isScraped} />
+      </div>
+
+      <div className="mt-2.5">
+        <p>
+          <Link
+            href={ROUTE_PATHS.CREATOR(product.artist.id)}
+            className={cn(
+              'mb-0.5 text-xs font-semibold underline-offset-2 hover:underline',
+              textColor === 'dark' ? 'text-custom-gray-300' : 'text-custom-gray-100'
+            )}
+          >
+            {product.artist.nickname}
+          </Link>
+        </p>
+        <h2>
+          <Link
+            href={ROUTE_PATHS.PRODUCT_DETAIL(product.id)}
+            className={cn(
+              'mb-1.5 text-sm font-semibold underline-offset-2 hover:underline',
+              textColor === 'dark' ? 'text-custom-brand-primary' : 'text-custom-background'
+            )}
+          >
+            {product.name || 'untitled'}
+          </Link>
+        </h2>
+        <p
+          className={cn(
+            'text-custom-brand-primary text-sm font-semibold',
+            textColor === 'dark' ? 'text-custom-brand-primary' : 'text-custom-background'
+          )}
+        >
+          {product.price ? `${formatNumberWithComma(product.price)}원` : '구매시 문의'}
+        </p>
+      </div>
+    </article>
+  );
+}
+
+interface SizeBadgeProps {
+  sizeValue: string;
+}
+
+function SizeBadge({ sizeValue }: SizeBadgeProps) {
+  const sizeLabel = getSizeLabelByValue(sizeValue);
+
+  if (!sizeLabel || sizeValue === 'X') return null;
+
+  return (
+    <div className="text-custom-brand-primary bg-custom-background absolute top-4 left-4 rounded-full px-2.5 py-1.5 text-xs font-normal">
+      {sizeLabel}
+    </div>
+  );
+}
+
+interface ScrapButtonProps {
+  isScraped: boolean;
+}
+
+// TODO: 스크랩 버튼 클릭 시 API 요청 필요, debounce 적용 필요
+function ScrapButton({ isScraped }: ScrapButtonProps) {
+  const [optimisticScraped, setOptimisticScraped] = useState(isScraped);
+
+  const handleScrapButtonClick = () => {
+    setOptimisticScraped((prev) => !prev);
+  };
+
+  return (
+    <button onClick={handleScrapButtonClick} className="cursor-pointer">
+      {optimisticScraped ? <CardBookmarkFilledIcon /> : <CardBookmarkIcon />}
+    </button>
+  );
+}
