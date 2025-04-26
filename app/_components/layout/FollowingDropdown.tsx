@@ -98,7 +98,7 @@ export default function FollowingDropdown({ userId }: FollowingDropdownProps) {
               className="text-custom-brand-primary hover:text-custom-brand-primary focus:text-custom-brand-primary flex h-17 w-full items-center justify-between px-5 text-sm font-medium hover:bg-transparent focus:bg-transparent"
             >
               <Link
-                href={ROUTE_PATHS.CREATOR(artist.artistId)}
+                href={ROUTE_PATHS.ARTIST(artist.artistId)}
                 className="flex items-center justify-between gap-5 underline-offset-2 hover:underline"
               >
                 <ProfileImage src={artist.artistProfileImage} className="h-12 w-12" />
