@@ -12,13 +12,19 @@ import { CATEGORY_ITEMS, SIZE_ITEMS } from '@/constants';
 import { DehazeIcon } from '@/lib/icons';
 import { cn } from '@/lib/utils';
 
-// TODO: 백엔드 API 값 나오면 그 값으로 변경하기
+// TODO: 백엔드 API 값 나오면 그 값으로 변경하기, debounce 적용 필요
 // TODO: zustand 이용하여 filter value 리팩토링 진행
-type FilterValueType = 'category' | 'size';
+type FilterValue = 'category' | 'size';
 
 export default function CategoryFilter() {
-  const [filterType, setFilterType] = useState<FilterValueType>('category');
+  const [filterType, setFilterType] = useState<FilterValue>('category');
   const [categories, setCategories] = useState<string[] | null>(null);
+
+  // FIXME: 카테고리 드롭다운 클릭해서 변경시에 오류 있음, ex. 사이즈 선택하고 카테고리로 넘어오는 경우
+  const handleFilterTypeSelected = (type: FilterValue) => {
+    setFilterType(type);
+    setCategories(null);
+  };
 
   const handleItemClick = (value: string | null) => {
     if (value === null) {
@@ -40,7 +46,7 @@ export default function CategoryFilter() {
 
   return (
     <div className="mb-7.5 flex h-10 items-center gap-2.5">
-      <FilterDropdown onItemClick={(type) => setFilterType(type)} />
+      <FilterDropdown onItemClick={handleFilterTypeSelected} />
 
       <ul className="flex h-full items-center justify-center gap-2.5">
         <li>
@@ -76,7 +82,7 @@ export default function CategoryFilter() {
 }
 
 interface FilterDropdownProps {
-  onItemClick: (type: FilterValueType) => void;
+  onItemClick: (type: FilterValue) => void;
 }
 
 function FilterDropdown({ onItemClick }: FilterDropdownProps) {
