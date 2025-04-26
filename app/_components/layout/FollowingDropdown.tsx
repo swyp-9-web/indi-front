@@ -70,6 +70,8 @@ export default function FollowingDropdown({ userId }: FollowingDropdownProps) {
     );
   }
 
+  const hasNoFollowingArtists = Number(data.totalFollowings) === 0;
+
   return (
     <DropdownMenu onOpenChange={() => setIsSelected((prev) => !prev)}>
       <DropdownMenuTrigger
@@ -82,14 +84,12 @@ export default function FollowingDropdown({ userId }: FollowingDropdownProps) {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-custom-background border-custom-gray-100 z-10 w-108.5 translate-x-43 translate-y-[13px] rounded-none border p-0 shadow-none">
         <div className="text-custom-brand-primary h-11.5 border-b-1 px-5 py-3 text-sm font-medium">
-          {Number(data.totalFollowings) === 0
-            ? '팔로잉 중인 작가가 없습니다.'
-            : `팔로잉 작가 (${formatNumberWithComma(data.totalFollowings)})`}
+          팔로잉 작가 ({formatNumberWithComma(data.totalFollowings)})
         </div>
 
-        {Number(data.totalFollowings) === 0 ? (
-          <div className="text-custom-gray-300 flex h-60 w-full items-center justify-center text-sm">
-            팔로잉 중인 작가가 없습니다.
+        {hasNoFollowingArtists ? (
+          <div className="text-custom-gray-200 flex h-35 w-full items-center justify-center text-xs">
+            팔로잉 중인 작가가 없습니다
           </div>
         ) : (
           data.followings.map((artist: any) => (
@@ -113,14 +113,16 @@ export default function FollowingDropdown({ userId }: FollowingDropdownProps) {
           ))
         )}
 
-        <div className="flex h-21.5 w-full items-center justify-center border-t-1">
-          <Link
-            href={`${ROUTE_PATHS.FOLLOWING_CREATORS}`}
-            className="bg-custom-brand-secondary text-custom-button-text flex h-11.5 w-46 items-center justify-center rounded-full text-sm font-medium"
-          >
-            팔로잉 작가 모두보기
-          </Link>
-        </div>
+        {!hasNoFollowingArtists && (
+          <div className="flex h-21.5 w-full items-center justify-center border-t-1">
+            <Link
+              href={`${ROUTE_PATHS.FOLLOWING_CREATORS}`}
+              className="bg-custom-brand-secondary text-custom-button-text flex h-11.5 w-46 items-center justify-center rounded-full text-sm font-medium"
+            >
+              팔로잉 작가 모두보기
+            </Link>
+          </div>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );
