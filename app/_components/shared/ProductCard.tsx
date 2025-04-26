@@ -41,22 +41,22 @@ export default function ProductCard({ textColor = 'dark', product }: ProductCard
       </div>
 
       <div className="mt-2.5">
-        <p>
+        <p className="mb-0.5 leading-0">
           <Link
             href={ROUTE_PATHS.CREATOR(product.artist.id)}
             className={cn(
-              'mb-0.5 text-xs font-semibold underline-offset-2 hover:underline',
+              'text-xs font-semibold underline-offset-2 hover:underline',
               textColor === 'dark' ? 'text-custom-gray-300' : 'text-custom-gray-100'
             )}
           >
             {product.artist.nickname}
           </Link>
         </p>
-        <h2>
+        <h2 className="mb-1.5 leading-0">
           <Link
             href={ROUTE_PATHS.PRODUCT_DETAIL(product.id)}
             className={cn(
-              'mb-1.5 text-sm font-semibold underline-offset-2 hover:underline',
+              'text-sm font-semibold underline-offset-2 hover:underline',
               textColor === 'dark' ? 'text-custom-brand-primary' : 'text-custom-background'
             )}
           >
