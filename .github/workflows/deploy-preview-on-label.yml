@@ -1,0 +1,55 @@
+name: Preview Deploy on Label
+
+on:
+  pull_request:
+    types: [labeled, synchronize, opened]
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  preview-deploy:
+    if: contains(github.event.pull_request.labels.*.name, '🚀 preview')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Install Vercel CLI
+        run: pnpm add vercel
+
+      - name: Pull Vercel Environment Variables
+        run: pnpm vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build Project
+        run: pnpm vercel build --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy Preview to Vercel
+        id: vercel_deploy
+        run: |
+          pnpm vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} --yes > vercel-output.txt
+          echo "preview_url=$(cat vercel-output.txt)" >> $GITHUB_OUTPUT
+
+      - name: Comment Preview URL on PR
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          recreate: true
+          message: |
+            ### 🔍 Vercel Preview Deployment (by Label)
+
+            🔗 [Click here to view the preview deployment](${{ steps.vercel_deploy.outputs.preview_url }})
+
+            > Preview deployed automatically for PR with `preview` label 🚀
