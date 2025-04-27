@@ -8,4 +8,4 @@ export const CATEGORY_ITEMS = [
   { label: '가구 & 인테리어', value: 'FURNITURE_INTERIOR' },
   { label: '자연 & 생활 공예', value: 'NATURE_LIFE_CRAFT' },
   { label: '패션 & 의류', value: 'FASHION_CLOTHING' },
-];
+] as const;

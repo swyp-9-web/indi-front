@@ -4,4 +4,4 @@ export const SIZE_ITEMS = [
   { label: '중형', value: 'M' },
   { label: '소형', value: 'S' },
   { label: '해당없음', value: 'X' },
-];
+] as const;
