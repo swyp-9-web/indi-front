@@ -1,0 +1,52 @@
+name: Deploy Branch to Vercel
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+
+concurrency:
+  group: deploy-${{github.ref}}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Install Vercel CLI
+        run: pnpm add vercel
+
+      - name: Pull Vercel Environment Variables
+        run: pnpm vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build Project Artifacts
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            pnpm vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+          else
+            pnpm vercel build --token=${{ secrets.VERCEL_TOKEN }}
+          fi
+
+      - name: Deploy Project Artifacts to Vercel
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            pnpm vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} --yes --prod
+          else
+            pnpm vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} --yes
+          fi
