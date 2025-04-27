@@ -81,7 +81,7 @@ export default function FollowingPopover({ userId }: FollowingPopoverProps) {
               className="text-custom-brand-primary hover:text-custom-brand-primary focus:text-custom-brand-primary flex h-17 w-full items-center justify-between px-5 text-sm font-medium hover:bg-transparent focus:bg-transparent"
             >
               <Link
-                href={ROUTE_PATHS.CREATOR(artist.artistId)}
+                href={ROUTE_PATHS.ARTIST(artist.artistId)}
                 className="flex items-center justify-between gap-5 underline-offset-2 hover:underline"
               >
                 <ProfileImage src={artist.artistProfileImage} className="h-12 w-12" />
@@ -99,7 +99,7 @@ export default function FollowingPopover({ userId }: FollowingPopoverProps) {
         {!hasNoFollowingArtists && (
           <div className="flex h-21.5 w-full items-center justify-center border-t-1">
             <Link
-              href={`${ROUTE_PATHS.FOLLOWING_CREATORS}`}
+              href={`${ROUTE_PATHS.MY_FOLLOWING}`}
               className="bg-custom-brand-secondary text-custom-button-text flex h-11.5 w-46 items-center justify-center rounded-full text-sm font-medium"
             >
               팔로잉 작가 모두보기
