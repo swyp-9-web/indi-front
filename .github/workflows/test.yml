@@ -18,5 +18,8 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
 
+      - name: Install dependency
+        run: pnpm install
+
       - name: Run Vitest
-        run: pnpm dlx vitest run --reporter verbose
+        run: pnpm test
