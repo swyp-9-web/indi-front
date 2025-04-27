@@ -6,8 +6,8 @@ export const ROUTE_PATHS = {
 
   // 마이페이지
   MYPAGE: '/mypage',
-  FOLLOWING_CREATORS: '/mypage/following',
-  SCRAPPED_PRODUCTS: '/mypage/products/scrap',
+  MY_FOLLOWING: '/mypage/following',
+  MY_SCRAPPED: '/mypage/products/scrap',
   DELETE_ACCOUNT: '/mypage/account/delete',
 
   // 로그인/회원가입 관련 (임시)
