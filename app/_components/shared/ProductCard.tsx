@@ -43,7 +43,7 @@ export default function ProductCard({ textColor = 'dark', product }: ProductCard
       <div className="mt-2.5">
         <p className="mb-0.5 leading-0">
           <Link
-            href={ROUTE_PATHS.CREATOR(product.artist.id)}
+            href={ROUTE_PATHS.ARTIST(product.artist.id)}
             className={cn(
               'text-xs font-semibold underline-offset-2 hover:underline',
               textColor === 'dark' ? 'text-custom-gray-300' : 'text-custom-gray-100'

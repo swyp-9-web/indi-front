@@ -41,7 +41,7 @@ export default function GlobalNavBar() {
               <ul className="flex gap-2.5">
                 <li className="h-9.5 w-9.5">
                   <Link
-                    href={ROUTE_PATHS.SCRAPPED_PRODUCTS}
+                    href={ROUTE_PATHS.MY_SCRAPPED}
                     className="flex h-full w-full items-center justify-center"
                   >
                     <BookmarkIcon className="h-6 w-6" />
