@@ -2,17 +2,17 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { ROUTE_PATHS } from '@/constants';
-import { BookmarkIcon, NotificationIcon, NotificationUnreadIcon } from '@/lib/icons';
+import { BookmarkIcon } from '@/lib/icons';
 
 import CategoryDropdown from './CategoryDropdown';
-import FollowingDropdown from './FollowingDropdown';
+import FollowingPopover from './FollowingPopover';
+import NotificationPopover from './NotificationPopover';
 import SearchBar from './SearchBar';
 import UserProfileDropdown from './UserProfileDropdown';
 
 // TODO: 유저 기능 연동 필요
 export default function GlobalNavBar() {
   const userId: string | null = '21919299';
-  const hasUnreadNotification = false;
 
   return (
     <header className="border-custom-gray-100 bg-custom-background absolute inset-x-0 top-0 z-50 h-14 border-b">
@@ -26,7 +26,7 @@ export default function GlobalNavBar() {
               <CategoryDropdown />
             </li>
             <li>
-              <FollowingDropdown userId={userId} />
+              <FollowingPopover userId={userId} />
             </li>
           </ul>
         </div>
@@ -41,20 +41,14 @@ export default function GlobalNavBar() {
               <ul className="flex gap-2.5">
                 <li className="h-9.5 w-9.5">
                   <Link
-                    href={ROUTE_PATHS.SCRAPPED_PRODUCTS}
+                    href={ROUTE_PATHS.MY_SCRAPPED}
                     className="flex h-full w-full items-center justify-center"
                   >
                     <BookmarkIcon className="h-6 w-6" />
                   </Link>
                 </li>
                 <li className="h-9.5 w-9.5">
-                  <button className="flex h-9.5 w-9.5 cursor-pointer items-center justify-center">
-                    {hasUnreadNotification ? (
-                      <NotificationUnreadIcon className="h-6 w-6" />
-                    ) : (
-                      <NotificationIcon className="h-6 w-6" />
-                    )}
-                  </button>
+                  <NotificationPopover />
                 </li>
               </ul>
 
