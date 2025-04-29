@@ -1,7 +1,9 @@
 'use client';
 
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
 import {
   DropdownMenu,
@@ -26,28 +28,108 @@ import { getCategoryLabelByValue } from '@/utils/itemUtils';
 
 import ImageInputGrid from './ImageInputGrid';
 
-interface FormValues {
-  name: string;
-  category: string;
-  size: {
-    width: string;
-    height: string;
-    depth: string;
-  };
-  material: string;
-  description: string;
-  price: string;
-  images: Array<File | string>;
-}
-
 const MAX_LENGTH = {
   name: 40,
   material: 40,
   description: 400,
 };
 
+const productRegisterFormSchema = z
+  .object({
+    name: z
+      .string()
+      .min(1, { message: '작품명을 입력해 주세요.' })
+      .refine((val) => val.replace(/\s/g, '').length <= MAX_LENGTH.name, {
+        message: '작품명은 공백 제외 40자 이내여야 합니다.',
+      }),
+
+    category: z.string().min(1, { message: '카테고리를 선택해 주세요.' }),
+
+    size: z
+      .object({
+        width: z.string().optional(),
+        height: z.string().optional(),
+        depth: z.string().optional(),
+      })
+      .superRefine((value, ctx) => {
+        if (value.width && !/^\d+$/.test(value.width)) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: [],
+            message: '숫자를 입력해 주세요.',
+          });
+        }
+        if (value.height && !/^\d+$/.test(value.height)) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: [],
+            message: '숫자를 입력해 주세요.',
+          });
+        }
+        if ((value.width && !value.height) || (value.height && !value.width)) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: [],
+            message: '가로와 세로를 모두 입력해 주세요.',
+          });
+        }
+        if (value.depth && !/^\d+$/.test(value.depth)) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: [],
+            message: '숫자를 입력해 주세요.',
+          });
+        }
+      }),
+
+    material: z
+      .string()
+      .optional()
+      .refine((val) => !val || val.replace(/\s/g, '').length <= MAX_LENGTH.material, {
+        message: '재질은 공백 제외 40자 이내여야 합니다.',
+      }),
+
+    description: z
+      .string()
+      .min(1, { message: '작품 설명을 입력해 주세요.' })
+      .refine((val) => val.replace(/(\s|\n)/g, '').length <= MAX_LENGTH.description, {
+        message: '작품 설명은 공백/줄바꿈 제외 400자 이내여야 합니다.',
+      }),
+
+    priceType: z.enum(['fixed', 'inquiry'], {
+      required_error: '거래 방식을 선택해 주세요.',
+    }),
+
+    price: z.string().optional(),
+
+    images: z
+      .array(z.union([z.instanceof(File), z.string()]))
+      .min(1, { message: '최소 1장의 이미지를 업로드해 주세요.' }),
+  })
+  .superRefine((value, ctx) => {
+    if (value.priceType === 'fixed') {
+      if (!value.price) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['price'],
+          message: '가격을 입력해 주세요.',
+        });
+      }
+      if (value.price && !/^\d+$/.test(value.price)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['price'],
+          message: '숫자를 입력해 주세요.',
+        });
+      }
+    }
+  });
+
+type FormValues = z.infer<typeof productRegisterFormSchema>;
+
 export default function RegisterForm() {
   const form = useForm<FormValues>({
+    resolver: zodResolver(productRegisterFormSchema),
     defaultValues: {
       name: '',
       category: '',
@@ -58,12 +140,11 @@ export default function RegisterForm() {
       },
       material: '',
       description: '',
+      priceType: 'fixed',
       price: '',
       images: [],
     },
   });
-
-  const [pricingType, setPricingType] = useState<'fixed' | 'inquiry'>('fixed');
 
   // TODO: 실제 API 요청과 연동 필요
   const onSubmit = async (data: FormValues) => {
@@ -89,11 +170,11 @@ export default function RegisterForm() {
       form.setValue('images', uploadedImageUrls);
 
       // 최종 서버에 보낼 데이터
-      const { images: _images, ...rest } = data;
+      const { images: _images, priceType: _priceType, ...rest } = data;
 
       const finalPayload = {
         ...rest,
-        price: pricingType === 'inquiry' ? null : Number(data.price),
+        price: data.priceType === 'inquiry' ? null : Number(data.price),
         imgUrls: uploadedImageUrls,
       };
 
@@ -129,11 +210,11 @@ export default function RegisterForm() {
                     <ImageInputGrid
                       initialImages={form.getValues('images')}
                       onChangeImages={(images) => {
-                        form.setValue('images', images);
+                        form.setValue('images', images, { shouldValidate: true });
                       }}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-custom-status-negative text-xs font-semibold" />
                 </FormItem>
               )}
             />
@@ -149,7 +230,7 @@ export default function RegisterForm() {
                 name="name"
                 render={({ field }) => (
                   <FormItem className="relative block">
-                    <FormLabel className="mb-1.5 gap-0 text-sm font-semibold">
+                    <FormLabel className="data-[error=true]:text-custom-brand-primary mb-1.5 gap-0 text-sm font-semibold">
                       작품명<span className="text-custom-status-notice">*</span>
                     </FormLabel>
                     <FormControl>
@@ -189,7 +270,7 @@ export default function RegisterForm() {
                 name="category"
                 render={({ field }) => (
                   <FormItem className="relative block">
-                    <FormLabel className="mb-1.5 gap-0 text-sm font-semibold">
+                    <FormLabel className="data-[error=true]:text-custom-brand-primary mb-1.5 gap-0 text-sm font-semibold">
                       카테고리<span className="text-custom-status-notice">*</span>
                     </FormLabel>
                     <FormControl>
@@ -227,54 +308,85 @@ export default function RegisterForm() {
               />
 
               {/* 작품 크기 */}
-              <FormItem className="relative block">
-                <FormLabel className="mb-1.5 gap-0 text-sm font-semibold">작품 실측(cm)</FormLabel>
-                <div className="flex items-center gap-2">
-                  <FormField
-                    control={form.control}
-                    name="size.width"
-                    render={({ field }) => (
-                      <FormControl>
-                        <Input
-                          className="placeholder:text-custom-gray-200 text-custom-gray-900 h-12 w-20 px-4.5 font-medium shadow-none placeholder:text-sm placeholder:font-medium"
-                          placeholder="가로"
-                          {...field}
-                        />
-                      </FormControl>
-                    )}
-                  />
-                  <CloseIcon />
-                  <FormField
-                    control={form.control}
-                    name="size.height"
-                    render={({ field }) => (
-                      <FormControl>
-                        <Input
-                          className="placeholder:text-custom-gray-200 text-custom-gray-900 h-12 w-20 px-4.5 font-medium shadow-none placeholder:text-sm placeholder:font-medium"
-                          placeholder="세로"
-                          {...field}
-                        />
-                      </FormControl>
-                    )}
-                  />
-                  <CloseIcon />
-                  <FormField
-                    control={form.control}
-                    name="size.depth"
-                    render={({ field }) => (
-                      <FormControl>
-                        <Input
-                          className="placeholder:text-custom-gray-200 text-custom-gray-900 h-12 w-20 px-4.5 font-medium shadow-none placeholder:text-sm placeholder:font-medium"
-                          placeholder="폭"
-                          {...field}
-                        />
-                      </FormControl>
-                    )}
-                  />
-                </div>
+              <FormField
+                control={form.control}
+                name="size"
+                render={() => (
+                  <FormItem className="relative block">
+                    <FormLabel className="data-[error=true]:text-custom-brand-primary mb-1.5 gap-0 text-sm font-semibold">
+                      작품 실측(cm)
+                    </FormLabel>
 
-                <FormMessage className="text-custom-status-negative mt-1 text-xs font-semibold" />
-              </FormItem>
+                    <div className="flex items-center gap-2">
+                      {/* 가로 입력 */}
+                      <FormField
+                        control={form.control}
+                        name="size.width"
+                        render={({ field }) => (
+                          <FormControl>
+                            <Input
+                              className="placeholder:text-custom-gray-200 text-custom-gray-900 h-12 w-20 px-4.5 font-medium shadow-none placeholder:text-sm placeholder:font-medium"
+                              placeholder="가로"
+                              type="number"
+                              {...field}
+                              onChange={(value) => {
+                                field.onChange(value);
+                                form.trigger('size');
+                              }}
+                            />
+                          </FormControl>
+                        )}
+                      />
+
+                      <CloseIcon />
+
+                      {/* 세로 입력 */}
+                      <FormField
+                        control={form.control}
+                        name="size.height"
+                        render={({ field }) => (
+                          <FormControl>
+                            <Input
+                              className="placeholder:text-custom-gray-200 text-custom-gray-900 h-12 w-20 px-4.5 font-medium shadow-none placeholder:text-sm placeholder:font-medium"
+                              placeholder="세로"
+                              type="number"
+                              {...field}
+                              onChange={(value) => {
+                                field.onChange(value);
+                                form.trigger('size');
+                              }}
+                            />
+                          </FormControl>
+                        )}
+                      />
+
+                      <CloseIcon />
+
+                      {/* 폭 입력 */}
+                      <FormField
+                        control={form.control}
+                        name="size.depth"
+                        render={({ field }) => (
+                          <FormControl>
+                            <Input
+                              className="placeholder:text-custom-gray-200 text-custom-gray-900 h-12 w-20 px-4.5 font-medium shadow-none placeholder:text-sm placeholder:font-medium"
+                              placeholder="폭"
+                              type="number"
+                              {...field}
+                              onChange={(value) => {
+                                field.onChange(value);
+                                form.trigger('size');
+                              }}
+                            />
+                          </FormControl>
+                        )}
+                      />
+                    </div>
+
+                    <FormMessage className="text-custom-status-negative mt-1 text-xs font-semibold" />
+                  </FormItem>
+                )}
+              />
 
               {/* 재질 */}
               <FormField
@@ -282,7 +394,9 @@ export default function RegisterForm() {
                 name="material"
                 render={({ field }) => (
                   <FormItem className="relative block">
-                    <FormLabel className="mb-1.5 gap-0 text-sm font-semibold">작품 재질</FormLabel>
+                    <FormLabel className="data-[error=true]:text-custom-brand-primary mb-1.5 gap-0 text-sm font-semibold">
+                      작품 재질
+                    </FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Input
@@ -305,7 +419,7 @@ export default function RegisterForm() {
                       <FormMessage className="text-custom-status-negative text-xs font-semibold" />
                       <p className="flex-1 text-right text-xs">
                         <span className="text-custom-status-notice">
-                          {field.value.trim().length}
+                          {field.value?.trim().length}
                         </span>
                         /{MAX_LENGTH.material}
                       </p>
@@ -320,12 +434,12 @@ export default function RegisterForm() {
                 name="description"
                 render={({ field }) => (
                   <FormItem className="relative block">
-                    <FormLabel className="mb-1.5 gap-0 text-sm font-semibold">
+                    <FormLabel className="data-[error=true]:text-custom-brand-primary mb-1.5 gap-0 text-sm font-semibold">
                       작품 설명<span className="text-custom-status-notice">*</span>
                     </FormLabel>
                     <FormControl>
                       <Textarea
-                        className="placeholder:text-custom-gray-200 text-custom-gray-900 h-57 resize-none px-4.5 py-3.5 font-medium shadow-none placeholder:text-sm placeholder:font-medium"
+                        className="aria-invalid:border-input aria-invalid:focus-visible:ring-ring/50 placeholder:text-custom-gray-200 text-custom-gray-900 h-57 resize-none px-4.5 py-3.5 font-medium shadow-none placeholder:text-sm placeholder:font-medium"
                         placeholder="작품 설명을 입력해 주세요."
                         {...field}
                       />
@@ -344,52 +458,72 @@ export default function RegisterForm() {
               />
 
               {/* 거래 방식 */}
-              <FormItem className="relative block">
-                <FormLabel className="mb-1.5 gap-0 text-sm font-semibold">
-                  거래 방식<span className="text-custom-status-notice">*</span>
-                </FormLabel>
-                <div className="mb-1.5 flex items-center justify-start gap-0.5">
-                  <button
-                    type="button"
-                    onClick={() => setPricingType('fixed')}
-                    className={cn(
-                      'border-custom-gray-100 flex cursor-pointer items-center justify-center rounded-full border px-4 py-2 text-xs',
-                      pricingType === 'fixed' && 'text-custom-background bg-custom-gray-400'
-                    )}
-                  >
-                    가격입력
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setPricingType('inquiry')}
-                    className={cn(
-                      'border-custom-gray-100 flex cursor-pointer items-center justify-center rounded-full border px-4 py-2 text-xs',
-                      pricingType === 'inquiry' && 'text-custom-background bg-custom-gray-400'
-                    )}
-                  >
-                    작가에게 문의
-                  </button>
-                </div>
-                <FormControl>
-                  <div className="relative w-75">
-                    <Input
-                      className="disabled:bg-custom-gray-100 disabled:placeholder:text-custom-gray-300 placeholder:text-custom-gray-200 text-custom-gray-900 relative h-12 w-full pr-10 pl-4.5 font-medium shadow-none placeholder:text-sm placeholder:font-medium disabled:opacity-100"
-                      placeholder="작품 가격을 입력해 주세요."
-                      disabled={pricingType === 'inquiry'}
-                      {...form.register('price')}
-                    />
-                    <p
-                      className={cn(
-                        'text-custom-gray-200 absolute top-1/2 right-4.5 -translate-1/2 text-sm font-medium',
-                        pricingType === 'inquiry' && 'text-custom-gray-300'
+              <FormField
+                control={form.control}
+                name="priceType"
+                render={({ field }) => (
+                  <FormItem className="relative block">
+                    <FormLabel className="data-[error=true]:text-custom-brand-primary mb-1.5 gap-0 text-sm font-semibold">
+                      거래 방식<span className="text-custom-status-notice">*</span>
+                    </FormLabel>
+                    <div className="mb-1.5 flex items-center justify-start gap-0.5">
+                      <button
+                        type="button"
+                        onClick={() => field.onChange('fixed')}
+                        className={cn(
+                          'border-custom-gray-100 flex cursor-pointer items-center justify-center rounded-full border px-4 py-2 text-xs',
+                          field.value === 'fixed' && 'text-custom-background bg-custom-gray-400'
+                        )}
+                      >
+                        가격입력
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          field.onChange('inquiry');
+                          form.setValue('price', '', { shouldValidate: true });
+                        }}
+                        className={cn(
+                          'border-custom-gray-100 flex cursor-pointer items-center justify-center rounded-full border px-4 py-2 text-xs',
+                          field.value === 'inquiry' && 'text-custom-background bg-custom-gray-400'
+                        )}
+                      >
+                        작가에게 문의
+                      </button>
+                    </div>
+
+                    <FormField
+                      control={form.control}
+                      name="price"
+                      render={({ field: priceField }) => (
+                        <FormItem>
+                          <FormControl>
+                            <div className="relative w-75">
+                              <Input
+                                className="disabled:bg-custom-gray-100 disabled:placeholder:text-custom-gray-300 placeholder:text-custom-gray-200 text-custom-gray-900 relative h-12 w-full pr-10 pl-4.5 font-medium shadow-none placeholder:text-sm placeholder:font-medium disabled:opacity-100"
+                                placeholder="작품 가격을 입력해 주세요."
+                                disabled={form.watch('priceType') === 'inquiry'}
+                                type="number"
+                                {...priceField}
+                              />
+                              <p
+                                className={cn(
+                                  'text-custom-gray-200 absolute top-1/2 right-4.5 -translate-1/2 text-sm font-medium',
+                                  form.watch('priceType') === 'inquiry' && 'text-custom-gray-300'
+                                )}
+                              >
+                                원
+                              </p>
+                            </div>
+                          </FormControl>
+
+                          <FormMessage className="text-custom-status-negative mt-1 text-xs font-semibold" />
+                        </FormItem>
                       )}
-                    >
-                      원
-                    </p>
-                  </div>
-                </FormControl>
-                <FormMessage className="text-custom-status-negative mt-1 text-xs font-semibold" />
-              </FormItem>
+                    />
+                  </FormItem>
+                )}
+              />
             </div>
           </div>
         </div>
