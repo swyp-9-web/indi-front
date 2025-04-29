@@ -15,9 +15,9 @@ export default function SizeInputGroup({ form }: SizeInputGroupProps) {
       <FormLabel className="data-[error=true]:text-custom-brand-primary mb-1.5 gap-0 text-sm font-semibold">
         작품 실측(cm)
       </FormLabel>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-0.5">
         {(['width', 'height', 'depth'] as const).map((dimension) => (
-          <div key={dimension}>
+          <div key={dimension} className="flex items-center gap-0.5">
             <FormField
               control={form.control}
               name={`size.${dimension}`}
