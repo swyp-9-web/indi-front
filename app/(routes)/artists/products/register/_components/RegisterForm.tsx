@@ -34,6 +34,23 @@ const MAX_LENGTH = {
   description: 400,
 };
 
+const sizeSchema = z
+  .object({
+    width: z.string().optional(),
+    height: z.string().optional(),
+    depth: z.string().optional(),
+  })
+  .superRefine(({ width, height, depth }, ctx) => {
+    if ((width && !height) || (height && !width)) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: '가로와 세로를 모두 입력해 주세요.' });
+    }
+    [width, height, depth].forEach((value) => {
+      if (value && !/^\d+$/.test(value)) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: '숫자를 입력해 주세요.' });
+      }
+    });
+  });
+
 const productRegisterFormSchema = z
   .object({
     name: z
@@ -42,80 +59,36 @@ const productRegisterFormSchema = z
       .refine((val) => val.replace(/\s/g, '').length <= MAX_LENGTH.name, {
         message: '작품명은 공백 제외 40자 이내여야 합니다.',
       }),
-
     category: z.string().min(1, { message: '카테고리를 선택해 주세요.' }),
-
-    size: z
-      .object({
-        width: z.string().optional(),
-        height: z.string().optional(),
-        depth: z.string().optional(),
-      })
-      .superRefine((value, ctx) => {
-        if (value.width && !/^\d+$/.test(value.width)) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            path: [],
-            message: '숫자를 입력해 주세요.',
-          });
-        }
-        if (value.height && !/^\d+$/.test(value.height)) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            path: [],
-            message: '숫자를 입력해 주세요.',
-          });
-        }
-        if ((value.width && !value.height) || (value.height && !value.width)) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            path: [],
-            message: '가로와 세로를 모두 입력해 주세요.',
-          });
-        }
-        if (value.depth && !/^\d+$/.test(value.depth)) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            path: [],
-            message: '숫자를 입력해 주세요.',
-          });
-        }
-      }),
-
+    size: sizeSchema,
     material: z
       .string()
       .optional()
       .refine((val) => !val || val.replace(/\s/g, '').length <= MAX_LENGTH.material, {
         message: '재질은 공백 제외 40자 이내여야 합니다.',
       }),
-
     description: z
       .string()
       .min(1, { message: '작품 설명을 입력해 주세요.' })
       .refine((val) => val.replace(/(\s|\n)/g, '').length <= MAX_LENGTH.description, {
         message: '작품 설명은 공백/줄바꿈 제외 400자 이내여야 합니다.',
       }),
-
-    priceType: z.enum(['fixed', 'inquiry'], {
-      required_error: '거래 방식을 선택해 주세요.',
-    }),
-
+    priceType: z.enum(['fixed', 'inquiry'], { required_error: '거래 방식을 선택해 주세요.' }),
     price: z.string().optional(),
-
     images: z
       .array(z.union([z.instanceof(File), z.string()]))
       .min(1, { message: '최소 1장의 이미지를 업로드해 주세요.' }),
   })
-  .superRefine((value, ctx) => {
-    if (value.priceType === 'fixed') {
-      if (!value.price) {
+  .superRefine(({ priceType, price }, ctx) => {
+    if (priceType === 'fixed') {
+      if (!price) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: ['price'],
           message: '가격을 입력해 주세요.',
         });
       }
-      if (value.price && !/^\d+$/.test(value.price)) {
+      if (price && !/^\d+$/.test(price)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: ['price'],
