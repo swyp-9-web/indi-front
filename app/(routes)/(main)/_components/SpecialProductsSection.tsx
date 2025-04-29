@@ -1,5 +1,3 @@
-'use client';
-
 import HighlightedProductsCarousel from '@/app/_components/shared/HighlightedProductsCarousel';
 import { productListMock } from '@/lib/mocks/product-list.mock';
 
