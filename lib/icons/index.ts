@@ -1,6 +1,7 @@
 export { default as AddIcon } from './svg/add.svg';
 export { default as ArrowNextIcon } from './svg/arrow-next.svg';
 export { default as ArrowPrevIcon } from './svg/arrow-prev.svg';
+export { default as ArrowUpwardIcon } from './svg/arrow-upward.svg';
 export { default as BookmarkIcon } from './svg/bookmark.svg';
 export { default as CardBookmarkFilledIcon } from './svg/card-bookmark-filled.svg';
 export { default as CardBookmarkIcon } from './svg/card-bookmark.svg';
