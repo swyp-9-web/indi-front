@@ -14,6 +14,7 @@ export const productListMock = {
         nickname: '신기한 작가',
       },
       isScraped: true,
+      totalScraped: 50,
     },
     {
       id: '1234568',
@@ -28,6 +29,7 @@ export const productListMock = {
         nickname: '작가 닉네임',
       },
       isScraped: false,
+      totalScraped: 0,
     },
     {
       id: '1234521',
@@ -42,6 +44,7 @@ export const productListMock = {
         nickname: '신나는 작가',
       },
       isScraped: false,
+      totalScraped: 500,
     },
     {
       id: '1234349',
@@ -56,6 +59,7 @@ export const productListMock = {
         nickname: '신나는 작가',
       },
       isScraped: false,
+      totalScraped: 5000,
     },
     {
       id: '1223349',
@@ -70,6 +74,7 @@ export const productListMock = {
         nickname: '신나는 작가',
       },
       isScraped: false,
+      totalScraped: 50,
     },
     {
       id: '1223322',
@@ -84,6 +89,7 @@ export const productListMock = {
         nickname: '신나는 작가',
       },
       isScraped: true,
+      totalScraped: 50,
     },
     {
       id: '1299729',
@@ -98,6 +104,7 @@ export const productListMock = {
         nickname: '신나는 작가',
       },
       isScraped: false,
+      totalScraped: 50,
     },
     {
       id: '2123229',
@@ -112,6 +119,7 @@ export const productListMock = {
         nickname: '신나는 작가',
       },
       isScraped: false,
+      totalScraped: 50,
     },
   ],
 
