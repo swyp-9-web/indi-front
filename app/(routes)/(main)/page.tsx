@@ -1,6 +1,7 @@
 'use client';
 
 import Footer from '@/app/_components/shared/Footer';
+import ScrollToTopButton from '@/app/_components/shared/ScrollToTopButtont';
 
 import CategoryFilter from './_components/CategoryFilter';
 import DefaultProductsSection from './_components/DefaultProductsSection';
@@ -22,16 +23,14 @@ export default function Home() {
       </div>
 
       <DefaultProductsSection />
-
       <SpecialProductsSection title="주목할 만한 작품" variant="primary" />
-
       <DefaultProductsSection />
-
       <SpecialProductsSection title="반응 좋은 작품" variant="secondary" />
-
       <InfiniteProductsSection />
 
       <Footer className="mt-27.5" />
+
+      <ScrollToTopButton />
     </>
   );
 }
