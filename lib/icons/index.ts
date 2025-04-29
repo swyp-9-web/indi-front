@@ -5,7 +5,7 @@ export { default as BookmarkIcon } from './svg/bookmark.svg';
 export { default as CardBookmarkFilledIcon } from './svg/card-bookmark-filled.svg';
 export { default as CardBookmarkIcon } from './svg/card-bookmark.svg';
 export { default as CheckIcon } from './svg/check.svg';
-export { default as DehazeIcon } from './svg/dehaze.svg';
 export { default as NotificationUnreadIcon } from './svg/notifications-unread.svg';
 export { default as NotificationIcon } from './svg/notifications.svg';
+export { default as RefreshIcon } from './svg/refresh.svg';
 export { default as SearchIcon } from './svg/search.svg';
