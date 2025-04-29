@@ -10,7 +10,7 @@ import { AddPhotoIcon, ProductImageCancelIcon } from '@/lib/icons';
 
 interface ImageInputGridProps {
   onChangeImages: (images: Array<File | string>) => void;
-  initialImages?: string[];
+  initialImages: Array<File | string>;
 }
 
 export default function ImageInputGrid({ onChangeImages, initialImages }: ImageInputGridProps) {
@@ -67,14 +67,14 @@ export default function ImageInputGrid({ onChangeImages, initialImages }: ImageI
     <>
       <div className="grid grid-cols-2 gap-2.5">
         {images.map((image, idx) => (
-          <div key={getImageSrc(image)} className="relative h-50 w-50 rounded-xl">
+          <div key={getImageSrc(image)} className="relative h-50 w-50 rounded-lg">
             <Image
               unoptimized
               quality={100}
               src={getImageSrc(image)}
               alt={`preview ${idx + 1}`}
               fill
-              className="rounded-xl object-cover"
+              className="rounded-lg object-cover"
             />
             {idx === 0 && (
               <div className="border-custom-gray-100 bg-custom-background text-custom-gray-900 absolute top-2 left-2 flex h-7 w-11 items-center justify-center rounded-full border text-xs">
@@ -93,7 +93,7 @@ export default function ImageInputGrid({ onChangeImages, initialImages }: ImageI
 
         {images.length < 8 && (
           <FormItem>
-            <FormLabel className="bg-custom-ivory-100 flex h-50 w-50 cursor-pointer flex-col items-center justify-center rounded-xl">
+            <FormLabel className="bg-custom-ivory-100 flex h-50 w-50 cursor-pointer flex-col items-center justify-center rounded-lg">
               <AddPhotoIcon />
               <p className="text-custom-brand-primary text-sm font-medium">이미지 등록</p>
             </FormLabel>
