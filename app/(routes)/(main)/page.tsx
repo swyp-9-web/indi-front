@@ -16,26 +16,20 @@ export default function Home() {
 
       <HeroSection />
 
-      <section className="w-8xl mx-auto mt-15 px-21">
+      <div className="w-8xl mx-auto mt-15 px-21">
+        <h2 className="text-custom-brand-primary mb-5 text-2xl font-bold">아르테고의 최신 작품</h2>
         <CategoryFilter />
-        <DefaultProductsSection />
-      </section>
+      </div>
 
-      <section className="bg-custom-brand-primary mt-25 py-12.5">
-        <SpecialProductsSection title="주목할 만한 작품" variant="primary" />
-      </section>
+      <DefaultProductsSection />
 
-      <section className="w-8xl mx-auto mt-25 px-21">
-        <DefaultProductsSection />
-      </section>
+      <SpecialProductsSection title="주목할 만한 작품" variant="primary" />
 
-      <section className="bg-custom-brand-secondary mt-25 py-12.5">
-        <SpecialProductsSection title="반응 좋은 작품" variant="secondary" />
-      </section>
+      <DefaultProductsSection />
 
-      <section className="w-8xl mx-auto mt-25 px-21">
-        <InfiniteProductsSection />
-      </section>
+      <SpecialProductsSection title="반응 좋은 작품" variant="secondary" />
+
+      <InfiniteProductsSection />
 
       <Footer className="mt-27.5" />
     </>

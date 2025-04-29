@@ -13,6 +13,7 @@ export default function SpecialProductsSection({ title, variant }: SpecialProduc
       title={title}
       variant={variant}
       products={productListMock.products}
+      className="mt-15"
     />
   );
 }

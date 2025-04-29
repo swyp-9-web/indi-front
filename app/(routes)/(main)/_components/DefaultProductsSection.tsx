@@ -5,7 +5,7 @@ export default function DefaultProductsSection() {
   const data = productListMock.products;
 
   return (
-    <>
+    <section className="w-8xl mx-auto mt-15 px-21">
       <div className="flex w-full gap-x-5">
         {data.slice(0, 4).map((product) => (
           <ProductCard key={product.id} product={product} />
@@ -16,6 +16,6 @@ export default function DefaultProductsSection() {
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
-    </>
+    </section>
   );
 }

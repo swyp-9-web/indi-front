@@ -5,7 +5,7 @@ export default function InfiniteProductsSection() {
   const data = productListMock.products;
 
   return (
-    <>
+    <section className="w-8xl mx-auto mt-15 px-21">
       <div className="flex w-full gap-x-5">
         {data.slice(0, 4).map((product) => (
           <ProductCard key={product.id} product={product} />
@@ -19,6 +19,6 @@ export default function InfiniteProductsSection() {
       <button className="border-custom-gray-100 text-custom-brand-primary mx-auto mt-20 flex h-11.5 w-46 items-center justify-center rounded-full border text-sm font-medium">
         더보기
       </button>
-    </>
+    </section>
   );
 }
