@@ -8,7 +8,7 @@ import DefaultProductsSection from './_components/DefaultProductsSection';
 import HeroSection from './_components/HeroSection';
 import SpecialProductsSection from './_components/SpecialProductsSection';
 
-// TODO: ProductsSection API 연결 필요
+// TODO: 상품 리스트 관련 API 연결 필요
 export default function Home() {
   return (
     <>
