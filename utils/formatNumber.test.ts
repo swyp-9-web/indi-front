@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { formatNumberWithComma } from './formatNumber';
+import { formatNumberWithComma, formatOverThousand } from './formatNumber';
 
 describe('formatNumber utilities', () => {
   describe('formatNumberWithComma', () => {
@@ -31,10 +31,27 @@ describe('formatNumber utilities', () => {
     });
   });
 
-  // 이후에 formatNumber.ts 파일에 추가되는 함수 테스트는 아래와 같이 진행
-  // describe('formatCurrency', () => {
-  //   it('formats number as currency', () => {
-  //     ...
-  //   });
-  // });
+  describe('formatOverThousand', () => {
+    it('returns "999+" for numbers >= 1000', () => {
+      expect(formatOverThousand(1000)).toBe('999+');
+      expect(formatOverThousand(1500)).toBe('999+');
+      expect(formatOverThousand('10000')).toBe('999+');
+    });
+
+    it('returns the number as a string if < 1000', () => {
+      expect(formatOverThousand(999)).toBe('999');
+      expect(formatOverThousand(0)).toBe('0');
+      expect(formatOverThousand('888')).toBe('888');
+    });
+
+    it('returns an empty string for invalid input', () => {
+      expect(formatOverThousand('abc')).toBe('');
+      expect(formatOverThousand(NaN)).toBe('');
+    });
+
+    it('handles negative numbers correctly', () => {
+      expect(formatOverThousand(-1)).toBe('-1');
+      expect(formatOverThousand('-999')).toBe('-999');
+    });
+  });
 });
