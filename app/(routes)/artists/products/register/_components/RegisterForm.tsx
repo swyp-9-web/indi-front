@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -28,6 +29,8 @@ export default function RegisterForm() {
       images: [],
     },
   });
+
+  const [submitType, setSubmitType] = useState<'save' | 'upload'>('upload');
 
   // TODO: 실제 API 요청과 연동 필요
   const onSubmit = async (data: FormValues) => {
@@ -63,9 +66,9 @@ export default function RegisterForm() {
 
       console.log('3. 최종 서버로 전송할 데이터:', finalPayload);
 
-      console.log('✅ 등록이 완료되었습니다.');
+      console.log(`${submitType}이 완료되었습니다.`);
     } catch (error) {
-      console.error('❌ 등록 중 오류 발생:', error);
+      console.error('등록 중 오류 발생:', error);
     }
   };
 
@@ -80,13 +83,14 @@ export default function RegisterForm() {
         <div className="mb-20 flex items-center justify-center gap-2.5">
           <button
             type="button"
+            onClick={() => setSubmitType('save')}
             className="border-custom-gray-100 flex h-11.5 w-42 cursor-pointer items-center justify-center rounded-full border text-sm font-medium"
-            onClick={() => console.log('임시저장')}
           >
             임시저장
           </button>
           <button
             type="submit"
+            onClick={() => setSubmitType('upload')}
             className="bg-custom-brand-secondary text-custom-gray-900 flex h-11.5 w-42 cursor-pointer items-center justify-center rounded-full text-sm font-medium"
           >
             등록하기
