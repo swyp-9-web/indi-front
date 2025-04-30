@@ -11,13 +11,12 @@ import { followingPreviewMock } from '@/lib/mocks/following-preview.mock';
 import { cn } from '@/lib/utils';
 import { formatNumberWithComma } from '@/utils/formatNumber';
 
-import ProfileImage from '../shared/ProfileImage';
+import ProfileImage from '../../shared/ProfileImage';
 
-interface FollowingPopoverProps {
-  userId: string | null;
-}
+// TODO: 유저 기능 연동 필요
+export default function FollowingPopover() {
+  const userId: string | null = '21919299';
 
-export default function FollowingPopover({ userId }: FollowingPopoverProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [followStates, setFollowStates] = useState<Record<string, boolean>>({});
 
