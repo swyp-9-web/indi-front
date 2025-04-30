@@ -33,6 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={pretendard.className}>
         <Providers>
           <GlobalNavBar />
+          <div className="pt-14" />
           {children}
         </Providers>
       </body>
