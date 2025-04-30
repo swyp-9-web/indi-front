@@ -12,6 +12,8 @@ export const CATEGORY_ITEMS = [
   { label: '패션 & 의류', value: 'FASHION_CLOTHING' },
 ] as const;
 
+export const CATEGORY_VALUES = CATEGORY_ITEMS.map((item) => item.value) as readonly string[];
+
 export const SIZE_ITEMS = [
   { label: '대형', value: 'L' },
   { label: '중형', value: 'M' },
