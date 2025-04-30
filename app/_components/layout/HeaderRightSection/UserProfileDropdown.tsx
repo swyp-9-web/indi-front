@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { ROUTE_PATHS } from '@/constants';
 
-import ProfileImage from '../shared/ProfileImage';
+import ProfileImage from '../../shared/ProfileImage';
 
 // TODO: 유저 프로필 확인 및 로그아웃 기능 추가 필요
 export default function UserProfileDropdown() {
