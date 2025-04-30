@@ -12,8 +12,6 @@ import SpecialProductsSection from './_components/SpecialProductsSection';
 export default function Home() {
   return (
     <>
-      <div className="pt-14" />
-
       <HeroSection />
 
       <section className="w-8xl mx-auto mt-25 px-20">
