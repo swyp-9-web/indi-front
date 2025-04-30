@@ -1,7 +1,7 @@
 import ProductCard from '@/app/_components/shared/ProductCard';
 import { productListMock } from '@/lib/mocks/product-list.mock';
 
-export default function DefaultProductsSection() {
+export default function InfiniteProductsSection() {
   const data = productListMock.products;
 
   return (
@@ -16,6 +16,9 @@ export default function DefaultProductsSection() {
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
+      <button className="border-custom-gray-100 text-custom-brand-primary mx-auto mt-20 flex h-11.5 w-46 cursor-pointer items-center justify-center rounded-full border text-sm font-medium">
+        더보기
+      </button>
     </section>
   );
 }
