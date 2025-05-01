@@ -1,4 +1,4 @@
-import ScrollToTopButton from '@/app/_components/shared/ScrollToTopButtont';
+import ScrollToTopButton from '@/app/_components/shared/ScrollToTopButton';
 import { getCategoryLabelByValue } from '@/utils/itemUtils';
 
 import InfiniteProductsGrid from './_components/InfiniteProductsGrid';
