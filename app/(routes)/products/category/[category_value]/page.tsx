@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+
 import ScrollToTopButton from '@/app/_components/shared/ScrollToTopButton';
 import { getCategoryLabelByValue } from '@/utils/itemUtils';
 
@@ -26,7 +28,15 @@ export default async function ProductsCategory({ params, searchParams }: Categor
       </div>
 
       <section>
-        <ProductsGrid />
+        <Suspense
+          fallback={
+            <div className="mt-25 flex items-center justify-center">
+              <div className="border-custom-gray-200 h-12 w-12 animate-spin rounded-full border-4 border-t-transparent" />
+            </div>
+          }
+        >
+          <ProductsGrid queryParams={{ categoryTypes: categoryValue, ...query }} />
+        </Suspense>
         <InfiniteProductsGrid />
       </section>
 

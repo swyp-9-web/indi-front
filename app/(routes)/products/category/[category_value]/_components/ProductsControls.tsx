@@ -14,8 +14,8 @@ export default function ProductsControls() {
   const buildSizeQuery = (value: string[]) => {
     const params = new URLSearchParams(searchParams.toString());
 
-    params.delete('size');
-    value.forEach((size) => params.append('size', size));
+    params.delete('sizeTypes');
+    value.forEach((size) => params.append('sizeTypes', size));
 
     return params.toString();
   };
@@ -23,8 +23,8 @@ export default function ProductsControls() {
   const buildSortQuery = (value: string) => {
     const params = new URLSearchParams(searchParams.toString());
 
-    params.delete('sort');
-    params.append('sort', value);
+    params.delete('sortType');
+    params.append('sortType', value);
 
     return params.toString();
   };

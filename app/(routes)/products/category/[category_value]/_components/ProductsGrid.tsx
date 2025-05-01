@@ -1,24 +1,18 @@
 import ProductCard from '@/app/_components/shared/ProductCard';
-import { productListMock } from '@/lib/mocks/product-list.mock';
+import { fetchProductsList } from '@/lib/apis/products.api';
+import { ProductsListQueryParams } from '@/lib/apis/products.type';
 
-export default function ProductsGrid() {
-  const products = productListMock.result.items;
+interface ProductsGridProps {
+  queryParams: ProductsListQueryParams;
+}
+
+export default async function ProductsGrid({ queryParams }: ProductsGridProps) {
+  const data = await fetchProductsList({ ...queryParams, limit: 20 });
+  const products = data.result.items;
 
   return (
     <div className="mb-10 flex flex-wrap gap-x-5 gap-y-10">
-      {products.slice(0, 4).map((product) => (
-        <ProductCard hasScrapCount key={product.id} product={product} />
-      ))}
-      {products.slice(4, 8).map((product) => (
-        <ProductCard hasScrapCount key={product.id} product={product} />
-      ))}
-      {products.slice(0, 4).map((product) => (
-        <ProductCard hasScrapCount key={product.id} product={product} />
-      ))}
-      {products.slice(4, 8).map((product) => (
-        <ProductCard hasScrapCount key={product.id} product={product} />
-      ))}
-      {products.slice(0, 4).map((product) => (
+      {products.map((product) => (
         <ProductCard hasScrapCount key={product.id} product={product} />
       ))}
     </div>
