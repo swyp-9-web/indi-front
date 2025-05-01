@@ -25,7 +25,7 @@ export default function ProductCard({
 }: ProductCardProps) {
   return (
     <article className="relative">
-      <figure className="bg-custom-gray-100 relative flex h-76.5 w-76.5 items-center justify-center rounded-xl">
+      <figure className="bg-custom-gray-100 relative flex h-76.25 w-76.25 items-center justify-center rounded-xl">
         {product.thumbnailImgUrl ? (
           <Image
             fill
