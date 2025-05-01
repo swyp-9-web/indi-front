@@ -49,3 +49,14 @@ export interface ProductsListResponse extends SuccessResponse {
     conditions: SearchConditions;
   };
 }
+
+// 상품 리스트 API 요청 시에 사용되는 쿼리 파라미터 값들에 대한 타입
+export interface ProductsListQueryParams {
+  page?: number;
+  limit?: number;
+  artistId?: number[] | number;
+  sortType?: string;
+  sizeTypes?: string[] | string;
+  categoryTypes?: string[] | string;
+  keyword?: string;
+}
