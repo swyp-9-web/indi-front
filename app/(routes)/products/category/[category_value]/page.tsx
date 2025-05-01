@@ -17,6 +17,8 @@ interface CategoryPageProps {
 export default async function ProductsCategory({ params, searchParams }: CategoryPageProps) {
   const [{ category_value: categoryValue }, query] = await Promise.all([params, searchParams]);
 
+  const queryParams = { categoryTypes: categoryValue, ...query };
+
   return (
     <main className="w-8xl mx-auto mt-25 px-20">
       <h2 className="text-custom-brand-primary text-2xl font-bold">
@@ -35,9 +37,9 @@ export default async function ProductsCategory({ params, searchParams }: Categor
             </div>
           }
         >
-          <ProductsGrid queryParams={{ categoryTypes: categoryValue, ...query }} />
+          <ProductsGrid queryParams={queryParams} />
         </Suspense>
-        <InfiniteProductsGrid />
+        <InfiniteProductsGrid queryParams={queryParams} />
       </section>
 
       <ScrollToTopButton />
