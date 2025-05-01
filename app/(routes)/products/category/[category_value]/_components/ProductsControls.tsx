@@ -2,9 +2,9 @@
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-import SortDropdown from '@/app/_components/shared/SortDropdown';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { NORMAL_SORT_ITEMS, SIZE_ITEMS } from '@/constants';
+import SizeToggleGroup from '@/app/_components/filter/SizeToggleGroup';
+import SortDropdown from '@/app/_components/filter/SortDropdown';
+import { NORMAL_SORT_ITEMS } from '@/constants';
 
 export default function ProductsControls() {
   const router = useRouter();
@@ -35,7 +35,7 @@ export default function ProductsControls() {
     router.replace(query ? `${pathname}?${query}` : pathname);
   };
 
-  const onDropdownItemSelected = (item: { label: string; value: string }) => {
+  const handleDropdownItemSelected = (item: { label: string; value: string }) => {
     const query = buildSortQuery(item.value);
 
     router.replace(query ? `${pathname}?${query}` : pathname);
@@ -45,22 +45,11 @@ export default function ProductsControls() {
     <>
       <div className="text-custom-brand-primary mr-2.5 text-right font-semibold">사이즈</div>
 
-      <ToggleGroup type="multiple" onValueChange={handleSizeChange} className="flex gap-0.5">
-        {SIZE_ITEMS.map((item) => {
-          if (item.value === 'X') return null;
-          return (
-            <ToggleGroupItem
-              key={item.value}
-              value={item.value}
-              className="data-[state=on]:bg-custom-gray-400 data-[state=on]:text-custom-background cursor-pointer rounded-full border px-3 py-2 text-xs first:rounded-full last:rounded-full"
-            >
-              {item.label}
-            </ToggleGroupItem>
-          );
-        })}
-      </ToggleGroup>
+      <SizeToggleGroup onValueChange={handleSizeChange} />
 
-      <SortDropdown items={NORMAL_SORT_ITEMS} onSelect={onDropdownItemSelected} />
+      <div className="ml-9">
+        <SortDropdown items={NORMAL_SORT_ITEMS} onSelect={handleDropdownItemSelected} />
+      </div>
     </>
   );
 }
