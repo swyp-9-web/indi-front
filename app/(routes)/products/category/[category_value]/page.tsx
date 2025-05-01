@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 
 import ScrollToTopButton from '@/app/_components/shared/ScrollToTopButton';
-import { getCategoryLabelByValue } from '@/utils/itemUtils';
+import { getCategoryLabelByValue } from '@/utils/item';
 
 import InfiniteProductsGrid from './_components/InfiniteProductsGrid';
 import ProductsControls from './_components/ProductsControls';

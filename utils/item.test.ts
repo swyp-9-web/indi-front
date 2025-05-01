@@ -6,9 +6,9 @@ import {
   getSizeLabelByValue,
   getSizeValueByLabel,
   getSortValueByLabel,
-} from './itemUtils';
+} from './item';
 
-describe('ItemUtils 테스트', () => {
+describe('Item 관련 유틸 함수 테스트', () => {
   describe('Category 변환 함수', () => {
     it('value로 label을 가져온다', () => {
       expect(getCategoryLabelByValue('TEXTILE_ART')).toBe('섬유 & 텍스타일 아트');
