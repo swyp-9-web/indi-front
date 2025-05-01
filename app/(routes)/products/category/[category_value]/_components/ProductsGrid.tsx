@@ -1,3 +1,4 @@
+import InfiniteProductsGrid from '@/app/_components/product/InfiniteProductsGrid';
 import ProductCard from '@/app/_components/product/ProductCard';
 import { fetchProductsList } from '@/lib/apis/products.api';
 import { ProductsListQueryParams } from '@/lib/apis/products.type';
@@ -11,10 +12,13 @@ export default async function ProductsGrid({ queryParams }: ProductsGridProps) {
   const products = data.result.items;
 
   return (
-    <div className="mb-10 flex flex-wrap gap-x-5 gap-y-10">
-      {products.map((product) => (
-        <ProductCard hasScrapCount key={product.id} product={product} />
-      ))}
-    </div>
+    <>
+      <div className="mb-10 flex flex-wrap gap-x-5 gap-y-10">
+        {products.map((product) => (
+          <ProductCard hasScrapCount key={product.id} product={product} />
+        ))}
+      </div>
+      {data.result.meta.hasNextPage && <InfiniteProductsGrid queryParams={queryParams} />}
+    </>
   );
 }

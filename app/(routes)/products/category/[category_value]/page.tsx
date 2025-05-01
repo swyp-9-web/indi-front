@@ -1,9 +1,9 @@
 import { Suspense } from 'react';
 
+import InfiniteProductsGrid from '@/app/_components/product/InfiniteProductsGrid';
 import ScrollToTopButton from '@/app/_components/shared/ScrollToTopButton';
 import { getCategoryLabelByValue } from '@/utils/item';
 
-import InfiniteProductsGrid from './_components/InfiniteProductsGrid';
 import ProductsControls from './_components/ProductsControls';
 import ProductsGrid from './_components/ProductsGrid';
 
@@ -39,7 +39,6 @@ export default async function ProductsCategory({ params, searchParams }: Categor
         >
           <ProductsGrid queryParams={queryParams} />
         </Suspense>
-        <InfiniteProductsGrid queryParams={queryParams} />
       </section>
 
       <ScrollToTopButton />
