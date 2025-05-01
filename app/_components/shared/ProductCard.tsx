@@ -6,17 +6,16 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { ROUTE_PATHS } from '@/constants';
+import { Product } from '@/lib/apis/products.type';
 import { CardBookmarkFilledIcon, CardBookmarkIcon } from '@/lib/icons';
-import { productListMock } from '@/lib/mocks/product-list.mock';
 import { cn } from '@/lib/utils';
 import { formatNumberWithComma, formatOverThousand } from '@/utils/formatNumber';
 import { getSizeLabelByValue } from '@/utils/itemUtils';
 
-// TODO: API 적용 이후 product 타입 수정
 interface ProductCardProps {
   textColor?: 'dark' | 'light';
   hasScrapCount?: boolean;
-  product: (typeof productListMock.products)[0];
+  product: Product;
 }
 
 export default function ProductCard({
@@ -26,11 +25,11 @@ export default function ProductCard({
 }: ProductCardProps) {
   return (
     <article className="relative">
-      <figure className="bg-custom-gray-100 relative flex h-76.5 w-76.5 items-center justify-center rounded-xl">
-        {product.imageUrl ? (
+      <figure className="bg-custom-gray-100 relative flex h-76.25 w-76.25 items-center justify-center rounded-xl">
+        {product.thumbnailImgUrl ? (
           <Image
             fill
-            src={product.imageUrl}
+            src={product.thumbnailImgUrl}
             className="rounded-xl object-cover"
             alt="작품 이미지"
           />
@@ -43,7 +42,7 @@ export default function ProductCard({
 
       <div className="absolute top-2.5 right-2.5 flex flex-col items-center justify-center gap-0">
         <ScrapButton
-          isScraped={product.isScraped}
+          isScraped={product.scrap.isScrapped}
           hasScrapCount={hasScrapCount}
           totalScraped={product.totalScraped}
         />
@@ -52,7 +51,7 @@ export default function ProductCard({
       <div className="mt-2.5">
         <p className="mb-0.5 leading-0">
           <Link
-            href={ROUTE_PATHS.ARTIST(product.artist.id)}
+            href={ROUTE_PATHS.ARTIST(String(product.artist.id))}
             className={cn(
               'text-xs font-semibold underline-offset-2 hover:underline',
               textColor === 'dark' ? 'text-custom-gray-300' : 'text-custom-gray-100'
@@ -63,7 +62,7 @@ export default function ProductCard({
         </p>
         <h2 className="mb-1.5 leading-0">
           <Link
-            href={ROUTE_PATHS.PRODUCT_DETAIL(product.id)}
+            href={ROUTE_PATHS.PRODUCT_DETAIL(String(product.id))}
             className={cn(
               'text-sm font-semibold underline-offset-2 hover:underline',
               textColor === 'dark' ? 'text-custom-brand-primary' : 'text-custom-background'

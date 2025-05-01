@@ -1,4 +1,4 @@
-import { CATEGORY_ITEMS, SIZE_ITEMS } from '@/constants';
+import { CATEGORY_ITEMS, NORMAL_SORT_ITEMS, SCRAP_SORT_ITEMS, SIZE_ITEMS } from '@/constants';
 
 /**
  * Category value를 받아 label을 반환합니다.
@@ -46,4 +46,15 @@ export function getSizeLabelByValue(value: string): string | undefined {
  */
 export function getSizeValueByLabel(label: string): string | undefined {
   return SIZE_ITEMS.find((item) => item.label === label)?.value;
+}
+
+/**
+ * Sort label을 받아 value를 반환합니다.
+ *
+ * @param label - 정렬 label
+ * @returns 해당하는 value (없는 경우 undefined)
+ */
+export function getSortValueByLabel(label: string): string | undefined {
+  const SORT_ITEMS = [...NORMAL_SORT_ITEMS, ...SCRAP_SORT_ITEMS];
+  return SORT_ITEMS.find((item) => item.label === label)?.value;
 }

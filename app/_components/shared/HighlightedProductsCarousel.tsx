@@ -8,16 +8,15 @@ import 'swiper/css/navigation';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import ProductCard from '@/app/_components/shared/ProductCard';
+import { Product } from '@/lib/apis/products.type';
 import { ArrowNextIcon, ArrowPrevIcon } from '@/lib/icons';
-import { productListMock } from '@/lib/mocks/product-list.mock';
 import { cn } from '@/lib/utils';
 
-// TODO: API 적용 이후 products 타입 수정
 interface HighlightedProductsCarouselProps {
   title: React.ReactNode;
   variant: 'primary' | 'secondary';
   hasScrapCount?: boolean;
-  products: typeof productListMock.products;
+  products: Product[];
   className?: string;
 }
 

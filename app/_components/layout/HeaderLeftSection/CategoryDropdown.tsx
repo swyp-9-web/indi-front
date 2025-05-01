@@ -19,7 +19,7 @@ export default function CategoryDropdown() {
   const router = useRouter();
 
   const handleItemClick = (value: string) => {
-    router.push(`${ROUTE_PATHS.PRODUCTS}?category=${value}`);
+    router.push(ROUTE_PATHS.PRODUCTS_CATEGORY(value));
   };
 
   return (
