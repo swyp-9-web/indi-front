@@ -10,7 +10,7 @@ export const CATEGORY_ITEMS = [
   { label: '가구 & 인테리어', value: 'FURNITURE_INTERIOR' },
   { label: '자연 & 생활 공예', value: 'NATURE_LIFE_CRAFT' },
   { label: '패션 & 의류', value: 'FASHION_CLOTHING' },
-] as const;
+];
 
 export const CATEGORY_VALUES = CATEGORY_ITEMS.map((item) => item.value) as readonly string[];
 
@@ -19,15 +19,15 @@ export const SIZE_ITEMS = [
   { label: '중형', value: 'M' },
   { label: '소형', value: 'S' },
   { label: '해당없음', value: 'X' },
-] as const;
+];
 
 export const NORMAL_SORT_ITEMS = [
   { label: '최신순', value: 'CREATED_RECENT' },
   { label: '인기순', value: 'SCRAPED_TOP' },
   { label: '과거순', value: 'CREATED_OLDEST' },
-] as const;
+];
 
 export const SCRAP_SORT_ITEMS = [
   { label: '최신 작품순', value: 'CREATED_RECENT' },
   { label: '최신 스크랩순', value: 'SCRAPED_RECENT' },
-] as const;
+];
