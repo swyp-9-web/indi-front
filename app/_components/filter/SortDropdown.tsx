@@ -27,7 +27,7 @@ export default function SortDropdown({ items, onSelect }: SortDropdownProps) {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="text-custom-brand-primary flex h-9 cursor-pointer items-center justify-center text-sm font-medium">
+      <DropdownMenuTrigger className="text-custom-brand-primary flex h-9 cursor-pointer items-center justify-center pl-2 text-sm font-medium">
         {selectedItem.label}
         <ArrowDropdownIcon />
       </DropdownMenuTrigger>
