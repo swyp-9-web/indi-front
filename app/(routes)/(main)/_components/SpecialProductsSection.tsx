@@ -12,7 +12,7 @@ export default function SpecialProductsSection({ title, variant }: SpecialProduc
     <HighlightedProductsCarousel
       title={title}
       variant={variant}
-      products={productListMock.products}
+      products={productListMock.result.items}
       className="mt-15"
     />
   );
