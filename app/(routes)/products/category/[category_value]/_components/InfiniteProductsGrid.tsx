@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import ProductCard from '@/app/_components/shared/ProductCard';
+import ProductCard from '@/app/_components/product/ProductCard';
 import { ProductsListQueryParams } from '@/lib/apis/products.type';
 import { useProductsInfiniteQuery } from '@/lib/queries/useProductsQueries';
 

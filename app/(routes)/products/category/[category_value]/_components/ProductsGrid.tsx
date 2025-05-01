@@ -1,4 +1,4 @@
-import ProductCard from '@/app/_components/shared/ProductCard';
+import ProductCard from '@/app/_components/product/ProductCard';
 import { fetchProductsList } from '@/lib/apis/products.api';
 import { ProductsListQueryParams } from '@/lib/apis/products.type';
 

@@ -13,6 +13,7 @@ export default function SearchBar() {
 
   const router = useRouter();
 
+  // TODO: 인코딩 필요 (에러 방지)
   const handleSearchFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     router.push(`${ROUTE_PATHS.PRODUCTS}?query=${value}`);
