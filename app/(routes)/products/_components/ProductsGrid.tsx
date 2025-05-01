@@ -18,9 +18,9 @@ export default async function ProductsGrid({ queryParams }: ProductsGridProps) {
     'keyword' in queryParams && !Object.keys(queryParams).some((key) => key !== 'keyword');
 
   if (hasOnlyKeyword && products.length === 0) {
-    const searchParams = new URLSearchParams(queryParams as Record<string, string>);
-
-    redirect(`${ROUTE_PATHS.PRODUCTS_NO_RESULTS}?${searchParams.toString()}`);
+    redirect(
+      `${ROUTE_PATHS.PRODUCTS_NO_RESULTS}?keyword=${encodeURIComponent(queryParams.keyword as string)}`
+    );
   }
 
   return (
