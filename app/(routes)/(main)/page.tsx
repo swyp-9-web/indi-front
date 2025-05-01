@@ -1,7 +1,7 @@
 'use client';
 
 import Footer from '@/app/_components/shared/Footer';
-import ScrollToTopButton from '@/app/_components/shared/ScrollToTopButtont';
+import ScrollToTopButton from '@/app/_components/shared/ScrollToTopButton';
 
 import CategoryFilter from './_components/CategoryFilter';
 import DefaultProductsSection from './_components/DefaultProductsSection';

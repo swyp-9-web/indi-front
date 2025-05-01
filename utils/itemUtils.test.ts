@@ -5,6 +5,7 @@ import {
   getCategoryValueByLabel,
   getSizeLabelByValue,
   getSizeValueByLabel,
+  getSortValueByLabel,
 } from './itemUtils';
 
 describe('ItemUtils 테스트', () => {
@@ -29,6 +30,19 @@ describe('ItemUtils 테스트', () => {
     it('label로 value를 가져온다', () => {
       expect(getSizeValueByLabel('소형')).toBe('S');
       expect(getSizeValueByLabel('해당없음')).toBe('X');
+    });
+  });
+
+  describe('Sort 변환 함수', () => {
+    it('label로 value를 가져온다', () => {
+      expect(getSortValueByLabel('최신순')).toBe('CREATED_RECENT');
+      expect(getSortValueByLabel('인기순')).toBe('SCRAPED_TOP');
+      expect(getSortValueByLabel('최신 작품순')).toBe('CREATED_RECENT');
+      expect(getSortValueByLabel('최신 스크랩순')).toBe('SCRAPED_RECENT');
+    });
+
+    it('없는 label을 넣으면 undefined를 반환한다', () => {
+      expect(getSortValueByLabel('없는 정렬값')).toBeUndefined();
     });
   });
 });

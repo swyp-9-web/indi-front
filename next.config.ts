@@ -2,7 +2,9 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ['fastly.picsum.photos'], // 임시 추가 (product-list.mock.ts)
+    // fastly.picsum.photos : 팔로잉 목록 데이터 (임시)
+    // kr.object.ncloudstorage.com : 더미 데이터 (임시)
+    domains: ['fastly.picsum.photos', 'kr.object.ncloudstorage.com'],
   },
 
   reactStrictMode: true,

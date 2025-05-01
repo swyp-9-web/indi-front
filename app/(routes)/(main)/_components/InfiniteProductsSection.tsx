@@ -2,7 +2,7 @@ import ProductCard from '@/app/_components/shared/ProductCard';
 import { productListMock } from '@/lib/mocks/product-list.mock';
 
 export default function InfiniteProductsSection() {
-  const data = productListMock.products;
+  const data = productListMock.result.items;
 
   return (
     <section className="w-8xl mx-auto mt-15 px-21">

@@ -1,5 +1,6 @@
 export { default as AddPhotoIcon } from './svg/add_a_photo.svg';
 export { default as AddIcon } from './svg/add.svg';
+export { default as ArrowDropdownIcon } from './svg/arrow-drop-down.svg';
 export { default as ArrowNextIcon } from './svg/arrow-next.svg';
 export { default as ArrowPrevIcon } from './svg/arrow-prev.svg';
 export { default as ArrowUpwardIcon } from './svg/arrow-upward.svg';
