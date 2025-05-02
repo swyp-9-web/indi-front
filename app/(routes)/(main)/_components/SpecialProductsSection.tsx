@@ -22,7 +22,7 @@ export default function SpecialProductsSection({
       title={title}
       variant={variant}
       products={data?.result.items ?? []}
-      className="mt-15"
+      className="my-15"
     />
   );
 }
