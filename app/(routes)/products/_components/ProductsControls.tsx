@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-import SizeToggleGroup from '@/app/_components/filter/SizeToggleGroup';
+import CombinedToggleGroup from '@/app/_components/filter/CombinedToggleGroup';
 import SortDropdown from '@/app/_components/filter/SortDropdown';
 import { NORMAL_SORT_ITEMS } from '@/constants';
 
@@ -10,6 +10,15 @@ export default function ProductsControls() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+
+  const buildCategoryQuery = (value: string[]) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    params.delete('categoryTypes');
+    value.forEach((category) => params.append('categoryTypes', category));
+
+    return params.toString();
+  };
 
   const buildSizeQuery = (value: string[]) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -35,19 +44,38 @@ export default function ProductsControls() {
     router.replace(query ? `${pathname}?${query}` : pathname);
   };
 
+  const handleCategoryChange = (value: string[]) => {
+    const query = buildCategoryQuery(value);
+
+    router.replace(query ? `${pathname}?${query}` : pathname);
+  };
+
   const handleDropdownItemSelected = (item: { label: string; value: string }) => {
     const query = buildSortQuery(item.value);
 
     router.replace(query ? `${pathname}?${query}` : pathname);
   };
 
+  const handleRefreshButtonClick = () => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    params.delete('categoryTypes');
+    params.delete('sizeTypes');
+
+    const query = params.toString();
+
+    router.replace(query ? `${pathname}?${query}` : pathname);
+  };
+
   return (
     <>
-      <div className="text-custom-brand-primary mr-2.5 text-right font-semibold">사이즈</div>
+      <CombinedToggleGroup
+        onCategoryChange={handleCategoryChange}
+        onSizeChange={handleSizeChange}
+        onRefreshButtonClick={handleRefreshButtonClick}
+      />
 
-      <SizeToggleGroup onValueChange={handleSizeChange} />
-
-      <div className="ml-7">
+      <div className="ml-auto">
         <SortDropdown items={NORMAL_SORT_ITEMS} onSelect={handleDropdownItemSelected} />
       </div>
     </>
