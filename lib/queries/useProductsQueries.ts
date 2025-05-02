@@ -1,9 +1,23 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery, UseQueryOptions } from '@tanstack/react-query';
 
 import { fetchProductsList } from '../apis/products.api';
-import { ProductsListQueryParams } from '../apis/products.type';
+import { ProductsListQueryParams, ProductsListResponse } from '../apis/products.type';
 
 import { QUERY_KEYS } from './queryKeys';
+
+export const useProductsQuery = (
+  queryParams: ProductsListQueryParams,
+  options?: Omit<
+    UseQueryOptions<ProductsListResponse, Error, ProductsListResponse>,
+    'queryKey' | 'queryFn'
+  >
+) => {
+  return useQuery({
+    queryKey: QUERY_KEYS.products.list(queryParams),
+    queryFn: () => fetchProductsList(queryParams, { runtime: 'client' }),
+    ...options,
+  });
+};
 
 export const useProductsInfiniteQuery = (
   queryParams: ProductsListQueryParams,

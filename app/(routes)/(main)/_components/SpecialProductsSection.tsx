@@ -1,18 +1,27 @@
+'use client';
+
 import HighlightedProductsCarousel from '@/app/_components/product/HighlightedProductsCarousel';
-import { productListMock } from '@/lib/mocks/product-list.mock';
+import { SortOption } from '@/lib/apis/common.type';
+import { useProductsQuery } from '@/lib/queries/useProductsQueries';
 
 interface SpecialProductsSectionProps {
   title: string;
   variant: 'primary' | 'secondary';
+  sort: SortOption;
 }
 
-// TODO: 상위 컴포넌트에서 스크랩순(주목할만한), 반응갯수(반응좋은) 중 어떤 기준으로 데이터 호출할지 정의 후 useQuery로 받아온 데이터 선택적 랜더링
-export default function SpecialProductsSection({ title, variant }: SpecialProductsSectionProps) {
+export default function SpecialProductsSection({
+  title,
+  variant,
+  sort,
+}: SpecialProductsSectionProps) {
+  const { data } = useProductsQuery({ page: 1, limit: 8, sortType: sort });
+
   return (
     <HighlightedProductsCarousel
       title={title}
       variant={variant}
-      products={productListMock.result.items}
+      products={data?.result.items ?? []}
       className="mt-15"
     />
   );
