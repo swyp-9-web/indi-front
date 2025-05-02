@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '@/constants/url';
+import { API_BASE_URL } from '@/constants';
 import { createQueryParams } from '@/utils/queryParams';
 
 import { ErrorResponse } from './common.type';
