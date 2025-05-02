@@ -1,4 +1,4 @@
-export { default as AddPhotoIcon } from './svg/add_a_photo.svg';
+export { default as AddPhotoIcon } from './svg/add-a-photo.svg';
 export { default as AddIcon } from './svg/add.svg';
 export { default as ArrowDropdownIcon } from './svg/arrow-drop-down.svg';
 export { default as ArrowNextIcon } from './svg/arrow-next.svg';
@@ -9,8 +9,9 @@ export { default as CancelIcon } from './svg/cancel.svg';
 export { default as CardBookmarkFilledIcon } from './svg/card-bookmark-filled.svg';
 export { default as CardBookmarkIcon } from './svg/card-bookmark.svg';
 export { default as CheckIcon } from './svg/check.svg';
-export { default as ChevronBackwardIcon } from './svg/chevron_backward.svg';
+export { default as ChevronBackwardIcon } from './svg/chevron-backward.svg';
 export { default as CloseIcon } from './svg/close.svg';
+export { default as FindInPageIcon } from './svg/find-in-page.svg';
 export { default as NotificationUnreadIcon } from './svg/notifications-unread.svg';
 export { default as NotificationIcon } from './svg/notifications.svg';
 export { default as ProductImageCancelIcon } from './svg/product-image-cancel.svg';

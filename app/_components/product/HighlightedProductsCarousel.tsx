@@ -7,10 +7,11 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import ProductCard from '@/app/_components/shared/ProductCard';
 import { Product } from '@/lib/apis/products.type';
 import { ArrowNextIcon, ArrowPrevIcon } from '@/lib/icons';
 import { cn } from '@/lib/utils';
+
+import ProductCard from './ProductCard';
 
 interface HighlightedProductsCarouselProps {
   title: React.ReactNode;

@@ -1,31 +1,28 @@
 import { Suspense } from 'react';
 
-import InfiniteProductsGrid from '@/app/_components/product/InfiniteProductsGrid';
+import { notFound } from 'next/navigation';
+
 import ScrollToTopButton from '@/app/_components/shared/ScrollToTopButton';
-import { getCategoryLabelByValue } from '@/utils/item';
 
 import ProductsControls from './_components/ProductsControls';
 import ProductsGrid from './_components/ProductsGrid';
 
-interface CategoryPageProps {
-  params: Promise<{
-    category_value: string;
-  }>;
+interface ProductsPageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export default async function ProductsCategory({ params, searchParams }: CategoryPageProps) {
-  const [{ category_value: categoryValue }, query] = await Promise.all([params, searchParams]);
+export default async function Products({ searchParams }: ProductsPageProps) {
+  const queryParams = await searchParams;
 
-  const queryParams = { categoryTypes: categoryValue, ...query };
+  if (!queryParams?.keyword) return notFound();
 
   return (
     <main className="w-8xl mx-auto mt-25 px-20">
       <h2 className="text-custom-brand-primary text-2xl font-bold">
-        {getCategoryLabelByValue(categoryValue)}
+        &quot;{queryParams.keyword}&quot; 검색 결과
       </h2>
 
-      <div className="mt-4.5 mb-6 flex items-center justify-end">
+      <div className="mt-5 mb-2 flex flex-col gap-4">
         <ProductsControls />
       </div>
 

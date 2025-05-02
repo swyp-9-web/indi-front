@@ -1,4 +1,4 @@
-import ProductCard from '@/app/_components/shared/ProductCard';
+import ProductCard from '@/app/_components/product/ProductCard';
 import { productListMock } from '@/lib/mocks/product-list.mock';
 
 export default function DefaultProductsSection() {

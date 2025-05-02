@@ -12,7 +12,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { CATEGORY_ITEMS } from '@/constants';
 import { CancelIcon, ChevronBackwardIcon } from '@/lib/icons';
 import { FormValues, MAX_LENGTH } from '@/lib/schemas/productRegisterForm.schema';
-import { getCategoryLabelByValue } from '@/utils/itemUtils';
+import { getCategoryLabelByValue } from '@/utils/item';
 
 import PriceInputGroup from './PriceInputGroup';
 import SizeInputGroup from './SizeInputGroup';

@@ -10,7 +10,7 @@ import { Product } from '@/lib/apis/products.type';
 import { CardBookmarkFilledIcon, CardBookmarkIcon } from '@/lib/icons';
 import { cn } from '@/lib/utils';
 import { formatNumberWithComma, formatOverThousand } from '@/utils/formatNumber';
-import { getSizeLabelByValue } from '@/utils/itemUtils';
+import { getSizeLabelByValue } from '@/utils/item';
 
 interface ProductCardProps {
   textColor?: 'dark' | 'light';

@@ -11,13 +11,13 @@ export const useProductsInfiniteQuery = (
 ) => {
   return useInfiniteQuery({
     queryKey: QUERY_KEYS.products.list(queryParams),
-    queryFn: ({ pageParam = 1 }) =>
+    queryFn: ({ pageParam = 2 }) =>
       fetchProductsList({ ...queryParams, page: pageParam, limit: 20 }),
     getNextPageParam: (lastPage) => {
       const { meta } = lastPage.result;
       return meta.hasNextPage ? meta.currentPage + 1 : undefined;
     },
-    initialPageParam: 1,
+    initialPageParam: 2,
     enabled,
   });
 };
