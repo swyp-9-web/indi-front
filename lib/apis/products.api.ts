@@ -26,5 +26,5 @@ const createProductsListFetcher = (baseUrl: string) => {
   };
 };
 
-export const fetchProductsListServerSide = createProductsListFetcher(API_BASE_URL.SERVER_SIDE);
-export const fetchProductsListClientSide = createProductsListFetcher(API_BASE_URL.CLIENT_SIDE);
+export const fetchProductsListServerSide = createProductsListFetcher(API_BASE_URL.SERVER);
+export const fetchProductsListClientSide = createProductsListFetcher(API_BASE_URL.CLIENT);
