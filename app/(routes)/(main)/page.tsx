@@ -39,7 +39,7 @@ export default async function Home() {
         <SpecialProductsSection title="주목할 만한 작품" variant="primary" sort="SCRAPED_TOP" />
         <DefaultProductsGrid page={2} />
         <SpecialProductsSection title="반응 좋은 작품" variant="secondary" sort="REACTED_TOP" />
-        <DefaultProductsGrid page={3} />
+        <DefaultProductsGrid page={3} lastGrid />
       </section>
 
       <ScrollToTopButton />

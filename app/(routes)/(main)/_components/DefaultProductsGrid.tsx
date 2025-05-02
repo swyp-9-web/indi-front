@@ -1,5 +1,6 @@
 'use client';
 
+import InfiniteProductsGrid from '@/app/_components/product/InfiniteProductsGrid';
 import ProductCard from '@/app/_components/product/ProductCard';
 import { useDebounce } from '@/hooks/useDebounce';
 import { ProductsListQueryParams } from '@/lib/apis/products.type';
@@ -8,9 +9,10 @@ import { useMainPageFilter } from '@/stores/useMainPageFilter';
 
 interface DefaultProductsGridProps {
   page: number;
+  lastGrid?: boolean;
 }
 
-export default function DefaultProductsGrid({ page }: DefaultProductsGridProps) {
+export default function DefaultProductsGrid({ page, lastGrid = false }: DefaultProductsGridProps) {
   const { categories, sizes } = useMainPageFilter();
 
   const debouncedCategories = useDebounce(categories);
@@ -24,8 +26,16 @@ export default function DefaultProductsGrid({ page }: DefaultProductsGridProps) 
   const { data } = useProductsQuery({ ...queryParams, limit: 8, page });
 
   return (
-    <div className="w-8xl mx-auto my-15 flex flex-wrap gap-x-5 gap-y-10 px-20">
-      {data?.result.items.map((product) => <ProductCard key={product.id} product={product} />)}
-    </div>
+    <>
+      <div className="w-8xl mx-auto my-15 flex flex-wrap gap-x-5 gap-y-10 px-20">
+        {data?.result.items.map((product) => <ProductCard key={product.id} product={product} />)}
+      </div>
+
+      {lastGrid && data?.result.meta.hasNextPage && (
+        <div className="w-8xl mx-auto mt-10 px-20">
+          <InfiniteProductsGrid queryParams={queryParams} />
+        </div>
+      )}
+    </>
   );
 }
