@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 
 // TODO: 백엔드 API 값 나오면 그 값으로 변경하기, debounce 적용 필요
 // TODO: zustand 이용하여 filter value 리팩토링 진행
-export default function CategoryFilter() {
+export default function DefaultProductsFilter() {
   const [categories, setCategories] = useState<string[] | null>(null);
 
   const handleItemClick = (value: string | null) => {
