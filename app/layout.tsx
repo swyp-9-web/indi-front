@@ -1,4 +1,5 @@
 import localFont from 'next/font/local';
+import Script from 'next/script';
 
 import Providers from '@/app/_provider';
 
@@ -30,6 +31,12 @@ const pretendard = localFont({
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko" suppressHydrationWarning>
+      <head>
+        <Script
+          src="https://cdn.swygbro.com/public/widget/swyg-widget.js"
+          strategy="afterInteractive"
+        />
+      </head>
       <body className={pretendard.className}>
         <Providers>
           <GlobalNavBar />
