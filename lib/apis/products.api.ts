@@ -1,32 +1,30 @@
+import { API_BASE_URL } from '@/constants';
 import { createQueryParams } from '@/utils/queryParams';
 
 import { ErrorResponse } from './common.type';
 import { ProductsListQueryParams, ProductsListResponse } from './products.type';
 
-export const fetchProductsList = async (
-  queryParams: ProductsListQueryParams
-): Promise<ProductsListResponse> => {
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+const createProductsListFetcher = (baseUrl: string) => {
+  return async (queryParams: ProductsListQueryParams): Promise<ProductsListResponse> => {
+    const queryString = createQueryParams(queryParams);
 
-  if (!baseUrl) {
-    throw new Error('API URL이 환경변수에 정의되어 있지 않습니다.');
-  }
+    const res = await fetch(`${baseUrl}/api/v1/items/search?${queryString}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      cache: 'no-store',
+    });
 
-  const queryString = createQueryParams(queryParams);
+    const data = await res.json();
 
-  const res = await fetch(`${baseUrl}/api/v1/items/search?${queryString}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    cache: 'no-store',
-  });
+    if (!res.ok) {
+      throw data as ErrorResponse;
+    }
 
-  const data = await res.json();
-
-  if (!res.ok) {
-    throw data as ErrorResponse;
-  }
-
-  return data as ProductsListResponse;
+    return data as ProductsListResponse;
+  };
 };
+
+export const fetchProductsListServerSide = createProductsListFetcher(API_BASE_URL.SERVER);
+export const fetchProductsListClientSide = createProductsListFetcher(API_BASE_URL.CLIENT);

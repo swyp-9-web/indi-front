@@ -1,6 +1,6 @@
 import InfiniteProductsGrid from '@/app/_components/product/InfiniteProductsGrid';
 import ProductCard from '@/app/_components/product/ProductCard';
-import { fetchProductsList } from '@/lib/apis/products.api';
+import { fetchProductsListServerSide } from '@/lib/apis/products.api';
 import { ProductsListQueryParams } from '@/lib/apis/products.type';
 
 interface ProductsGridProps {
@@ -8,7 +8,7 @@ interface ProductsGridProps {
 }
 
 export default async function ProductsGrid({ queryParams }: ProductsGridProps) {
-  const data = await fetchProductsList({ ...queryParams, limit: 20 });
+  const data = await fetchProductsListServerSide({ ...queryParams, limit: 20 });
   const products = data.result.items;
 
   return (

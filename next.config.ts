@@ -7,6 +7,15 @@ const nextConfig: NextConfig = {
     domains: ['fastly.picsum.photos', 'kr.object.ncloudstorage.com'],
   },
 
+  async rewrites() {
+    return [
+      {
+        source: '/proxy/:path*',
+        destination: `http://211.188.54.19:8000/:path*`,
+      },
+    ];
+  },
+
   reactStrictMode: true,
   webpack: (config) => {
     config.module.rules.push({
