@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-import { fetchClientProductsList, fetchProductsList } from '../apis/products.api';
+import { fetchProductsListClientSide } from '../apis/products.api';
 import { ProductsListQueryParams } from '../apis/products.type';
 
 import { QUERY_KEYS } from './queryKeys';
@@ -12,7 +12,7 @@ export const useProductsInfiniteQuery = (
   return useInfiniteQuery({
     queryKey: QUERY_KEYS.products.list(queryParams),
     queryFn: ({ pageParam = 2 }) =>
-      fetchClientProductsList({ ...queryParams, page: pageParam, limit: 20 }),
+      fetchProductsListClientSide({ ...queryParams, page: pageParam, limit: 20 }),
     getNextPageParam: (lastPage) => {
       const { meta } = lastPage.result;
       return meta.hasNextPage ? meta.currentPage + 1 : undefined;
