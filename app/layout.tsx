@@ -66,7 +66,7 @@ export const metadata: Metadata = {
     description: '신진 작가를 위한 온라인 전시 플랫폼',
     images: [
       {
-        url: `${process.env.NEXT_PUBLIC_SITE_URL}/head/artego.png`, // 배포 이후 경로 수정 필요함
+        url: `${process.env.NEXT_PUBLIC_SITE_URL}/head/artego.png`,
         alt: 'Artego 대표 이미지',
       },
     ],
@@ -77,7 +77,7 @@ export const metadata: Metadata = {
     description: '신진 작가의 큐레이션 플랫폼, Artego에서 작품을 소개해보세요',
     images: [
       {
-        url: `${process.env.NEXT_PUBLIC_SITE_URL}/head/artego.png`, // 배포 이후 경로 수정 필요함
+        url: `${process.env.NEXT_PUBLIC_SITE_URL}/head/artego.png`,
         alt: 'Artego 대표 이미지',
       },
     ],
