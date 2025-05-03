@@ -5,6 +5,7 @@ import ProductCard from '@/app/_components/product/ProductCard';
 import { useDebounce } from '@/hooks/useDebounce';
 import { ProductsListQueryParams } from '@/lib/apis/products.type';
 import { useProductsQuery } from '@/lib/queries/useProductsQueries';
+import { cn } from '@/lib/utils';
 import { useMainPageFilter } from '@/stores/useMainPageFilter';
 
 interface DefaultProductsGridProps {
@@ -27,7 +28,12 @@ export default function DefaultProductsGrid({ page, lastGrid = false }: DefaultP
 
   return (
     <>
-      <div className="w-8xl mx-auto my-15 flex flex-wrap gap-x-5 gap-y-10 px-20">
+      <div
+        className={cn(
+          'w-8xl mx-auto my-15 flex flex-wrap gap-x-5 gap-y-10 px-20',
+          lastGrid && 'mb-0'
+        )}
+      >
         {data?.result.items.map((product) => <ProductCard key={product.id} product={product} />)}
       </div>
 
