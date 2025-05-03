@@ -5,7 +5,6 @@ import Script from 'next/script';
 import Providers from '@/app/_provider';
 
 import GlobalNavBar from './_components/layout/GlobalNavBar';
-import LoginDialog from './_components/shared/LoginDialog';
 import './globals.css';
 
 const pretendard = localFont({
@@ -99,7 +98,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <GlobalNavBar />
           <div className="pt-14" />
           {children}
-          <LoginDialog />
         </Providers>
       </body>
     </html>
