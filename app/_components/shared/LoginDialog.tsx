@@ -3,14 +3,18 @@
 import Image from 'next/image';
 
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
+import { API_BASE_URL } from '@/constants';
 import { useAuthDialog } from '@/stores/useAuthDialog';
 
 export default function LoginDialog() {
   const { isOpen, toggleIsOpen } = useAuthDialog();
 
-  // TODO: 로그인 동작 구현 필요
   const handleNaverLoginClick = () => {
-    console.log('네이버 로그인');
+    const encodedRedirectUri = encodeURIComponent(
+      `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`
+    );
+
+    window.location.href = `${API_BASE_URL.SERVER}/login/naver?redirect_uri=${encodedRedirectUri}`;
   };
 
   return (
@@ -32,7 +36,7 @@ export default function LoginDialog() {
             className="flex h-11.5 w-75 cursor-pointer items-center justify-center gap-2 rounded-full bg-[#03c75a]"
           >
             <Image src="/icons/naver-white.png" alt="네이버 로고" width={24} height={24} />
-            <span className="text-sm font-medium text-white">네이버로 시작히기</span>
+            <span className="text-sm font-medium text-white">네이버로 시작하기</span>
           </button>
         </div>
       </DialogContent>
