@@ -18,7 +18,6 @@ export const ROUTE_PATHS = {
 
   // 상품 관련 페이지
   PRODUCTS: '/products',
-  PRODUCTS_NO_RESULTS: '/products/no-results',
   PRODUCTS_CATEGORY: (value: string) => `/products/category/${value}`,
   PRODUCT_DETAIL: (id: string) => `/products/${id}`,
   REGISTER_PRODUCT: '/artists/products/register',
