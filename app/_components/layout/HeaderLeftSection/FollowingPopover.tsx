@@ -8,23 +8,24 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { ROUTE_PATHS } from '@/constants';
 import { AddIcon, CheckIcon } from '@/lib/icons';
 import { followingPreviewMock } from '@/lib/mocks/following-preview.mock';
+import { useUserSummary } from '@/lib/queries/useUserQueries';
 import { cn } from '@/lib/utils';
+import { useAuthDialog } from '@/stores/useAuthDialog';
 import { formatNumberWithComma } from '@/utils/formatNumber';
 
 import ProfileImage from '../../shared/ProfileImage';
 
-// TODO: 유저 기능 연동 필요
+// TODO: 팔로잉 프리뷰 목록 API 연동 필요
+// TODO: 작가 팔로잉 및 팔로잉 취소 API 연동 필요
 export default function FollowingPopover() {
-  const userId: string | null = '21919299';
-
   const [isOpen, setIsOpen] = useState(false);
   const [followStates, setFollowStates] = useState<Record<string, boolean>>({});
 
-  const data = followingPreviewMock;
+  const { toggleIsOpen: toggleAuthDialogOpen } = useAuthDialog();
 
-  const handleUnauthenticatedUser = () => {
-    alert('로그인 해라');
-  };
+  const { data: user } = useUserSummary();
+
+  const data = followingPreviewMock;
 
   const handleFollowButtonClick = (id: string) => {
     setFollowStates((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -41,11 +42,11 @@ export default function FollowingPopover() {
     setFollowStates(initialState);
   }, [data]);
 
-  if (!userId) {
+  if (!user || !user.result) {
     return (
       <button
         className="cursor-pointer text-sm font-medium underline-offset-2 hover:underline"
-        onClick={handleUnauthenticatedUser}
+        onClick={toggleAuthDialogOpen}
       >
         팔로잉 작가
       </button>
