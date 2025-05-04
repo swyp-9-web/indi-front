@@ -1,6 +1,7 @@
 import { API_BASE_URL } from '@/constants';
 import { createQueryParams } from '@/utils/queryParams';
 
+import { fetchWithAuth } from './common.api';
 import { ErrorResponse } from './common.type';
 import { ProductsListQueryParams, ProductsListResponse } from './products.type';
 
@@ -12,7 +13,7 @@ export const fetchProductsList = async (
 
   const baseUrl = options.runtime === 'server' ? API_BASE_URL.SERVER : API_BASE_URL.CLIENT;
 
-  const res = await fetch(`${baseUrl}/api/v1/items/search?${queryString}`, {
+  const res = await fetchWithAuth(`${baseUrl}/api/v1/items/search?${queryString}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
