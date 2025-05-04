@@ -16,12 +16,10 @@ export default async function Home() {
     queryClient.prefetchQuery({
       queryKey: QUERY_KEYS.products.list({ page: 1, limit: 8, sortType: 'SCRAPED_TOP' }),
       queryFn: async () => await fetchProductsList({ page: 1, limit: 8, sortType: 'SCRAPED_TOP' }),
-      staleTime: 60 * 60 * 1000,
     }),
     queryClient.prefetchQuery({
       queryKey: QUERY_KEYS.products.list({ page: 1, limit: 8, sortType: 'REACTED_TOP' }),
       queryFn: async () => await fetchProductsList({ page: 1, limit: 8, sortType: 'REACTED_TOP' }),
-      staleTime: 60 * 60 * 1000,
     }),
   ]);
 

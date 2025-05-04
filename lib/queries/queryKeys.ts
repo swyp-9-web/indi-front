@@ -3,8 +3,10 @@ import { stableStringify } from '@/utils/object';
 
 export const QUERY_KEYS = {
   products: {
-    all: ['products'],
     list: (queryParams: ProductsListQueryParams) => ['products', stableStringify(queryParams)],
+  },
+  following: {
+    preview: ['following', 'preview'],
   },
   user: {
     summary: ['user', 'summary'],
