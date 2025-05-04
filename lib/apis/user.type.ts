@@ -8,5 +8,5 @@ export interface UserSummary {
 }
 
 export interface UserSummaryResponse extends SuccessResponse {
-  result: UserSummary;
+  result: UserSummary | null;
 }
