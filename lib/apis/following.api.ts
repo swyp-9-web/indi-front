@@ -1,7 +1,7 @@
 import { API_BASE_URL } from '@/constants';
 
 import { fetchWithAuth } from './common.api';
-import { ErrorResponse } from './common.type';
+import { ErrorResponse, SuccessResponse } from './common.type';
 import { FollowingPreviewResponse } from './following.type';
 
 export const fetchFollowingPreview = async (
@@ -18,4 +18,32 @@ export const fetchFollowingPreview = async (
   }
 
   return data as FollowingPreviewResponse;
+};
+
+export const unfollowArtist = async (artistId: number) => {
+  const res = await fetchWithAuth(`${API_BASE_URL.CLIENT}/api/v1/follows/${artistId}`, {
+    method: 'DELETE',
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw data as ErrorResponse;
+  }
+
+  return data as SuccessResponse;
+};
+
+export const followArtist = async (artistId: number) => {
+  const res = await fetchWithAuth(`${API_BASE_URL.CLIENT}/api/v1/follows/${artistId}`, {
+    method: 'POST',
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw data as ErrorResponse;
+  }
+
+  return data as SuccessResponse;
 };
