@@ -22,6 +22,7 @@ export const useLoginCallback = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.user.summary });
+      queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] === 'products' });
     },
   });
 };
@@ -58,6 +59,7 @@ export const useLogout = () => {
     mutationFn: logoutUser,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.user.summary });
+      queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] === 'products' });
     },
   });
 };
