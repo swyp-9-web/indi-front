@@ -1,8 +1,5 @@
-import { redirect } from 'next/navigation';
-
 import InfiniteProductsGrid from '@/app/_components/product/InfiniteProductsGrid';
 import ProductCard from '@/app/_components/product/ProductCard';
-import { ROUTE_PATHS } from '@/constants';
 import { fetchProductsList } from '@/lib/apis/products.api';
 import { ProductsListQueryParams } from '@/lib/apis/products.type';
 
