@@ -7,7 +7,7 @@ export const ROUTE_PATHS = {
   // 마이페이지
   MYPAGE: '/mypage',
   MY_FOLLOWING: '/mypage/following',
-  MY_SCRAPPED: '/mypage/products/scrap',
+  MY_SCRAPPED: '/mypage/scrap',
   DELETE_ACCOUNT: '/mypage/account/delete',
 
   // ARTIST_INVITE의 경우 로직에 따라 동적 라우팅이 아니라 쿼리를 이용해서 할 수도 있음
