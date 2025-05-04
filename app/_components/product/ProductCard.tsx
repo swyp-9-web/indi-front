@@ -8,7 +8,9 @@ import Link from 'next/link';
 import { ROUTE_PATHS } from '@/constants';
 import { Product } from '@/lib/apis/products.type';
 import { CardBookmarkFilledIcon, CardBookmarkIcon } from '@/lib/icons';
+import { useUserSummary } from '@/lib/queries/useUserQueries';
 import { cn } from '@/lib/utils';
+import { useAuthDialog } from '@/stores/useAuthDialog';
 import { formatNumberWithComma, formatOverThousand } from '@/utils/formatNumber';
 import { getSizeLabelByValue } from '@/utils/item';
 
@@ -111,7 +113,16 @@ function ScrapButton({ isScraped, hasScrapCount, totalScraped }: ScrapButtonProp
   const [optimisticScraped, setOptimisticScraped] = useState(isScraped);
   const [optimisticScrapCount, setOptimisticScrapCount] = useState(totalScraped);
 
+  const { toggleIsOpen: toggleAuthDialogOpen } = useAuthDialog();
+
+  const { data: user } = useUserSummary();
+
   const handleScrapButtonClick = () => {
+    if (!user || !user.result) {
+      toggleAuthDialogOpen();
+      return;
+    }
+
     setOptimisticScraped((prev) => !prev);
     setOptimisticScrapCount((prev) => (optimisticScraped ? prev - 1 : prev + 1));
   };
