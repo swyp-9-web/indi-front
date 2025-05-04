@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import Link from 'next/link';
 
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ROUTE_PATHS } from '@/constants';
+import { FollowingPreview } from '@/lib/apis/following.type';
 import { AddIcon, CheckIcon } from '@/lib/icons';
 import { followingPreviewMock } from '@/lib/mocks/following-preview.mock';
 import { useUserSummary } from '@/lib/queries/useUserQueries';
@@ -19,28 +20,18 @@ import ProfileImage from '../../shared/ProfileImage';
 // TODO: 작가 팔로잉 및 팔로잉 취소 API 연동 필요
 export default function FollowingPopover() {
   const [isOpen, setIsOpen] = useState(false);
-  const [followStates, setFollowStates] = useState<Record<string, boolean>>({});
 
   const { toggleIsOpen: toggleAuthDialogOpen } = useAuthDialog();
 
   const { data: user } = useUserSummary();
 
-  const data = followingPreviewMock;
+  const followingData = followingPreviewMock;
+  const artists = useMemo(() => followingData?.result.followingArtists ?? [], [followingData]);
+  const followingCount = followingData?.result.totalFollowings ?? 0;
 
-  const handleFollowButtonClick = (id: string) => {
-    setFollowStates((prev) => ({ ...prev, [id]: !prev[id] }));
+  const handleFollowToggle = (id: number) => {
+    console.log('업데이트', id);
   };
-
-  useEffect(() => {
-    if (!data || !data.totalFollowings) return;
-
-    const initialState: Record<string, boolean> = {};
-    data.followings.forEach((artist: any) => {
-      initialState[artist.artistId] = true;
-    });
-
-    setFollowStates(initialState);
-  }, [data]);
 
   if (!user || !user.result) {
     return (
@@ -53,7 +44,7 @@ export default function FollowingPopover() {
     );
   }
 
-  const hasNoFollowingArtists = Number(data.totalFollowings) === 0;
+  const hasNoFollowingArtists = followingCount === 0;
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -67,75 +58,83 @@ export default function FollowingPopover() {
       </PopoverTrigger>
       <PopoverContent className="bg-custom-background border-custom-gray-100 z-10 w-108.5 translate-x-43 translate-y-[13px] rounded-none border p-0 shadow-none">
         <div className="text-custom-brand-primary h-11.5 border-b-1 px-5 py-3 text-sm font-medium">
-          팔로잉 작가 ({formatNumberWithComma(data.totalFollowings)})
+          팔로잉 작가 ({formatNumberWithComma(followingCount)})
         </div>
 
         {hasNoFollowingArtists ? (
-          <div className="text-custom-gray-200 flex h-35 w-full items-center justify-center text-xs">
-            팔로잉 중인 작가가 없습니다.
-          </div>
+          <NoFollowingArtists />
         ) : (
-          data.followings.map((artist: any) => (
-            <div
-              key={artist.artistId}
-              className="text-custom-brand-primary hover:text-custom-brand-primary focus:text-custom-brand-primary flex h-17 w-full items-center justify-between px-5 text-sm font-medium hover:bg-transparent focus:bg-transparent"
-            >
-              <Link
-                href={ROUTE_PATHS.ARTIST(artist.artistId)}
-                className="flex items-center justify-between gap-5 underline-offset-2 hover:underline"
-              >
-                <ProfileImage src={artist.artistProfileImage} className="h-12 w-12" />
-                <p>{artist.artistNickname}</p>
-              </Link>
-
-              <FollowingButton
-                isFollowing={followStates[artist.artistId]}
-                onFollowButtonClick={() => handleFollowButtonClick(artist.artistId)}
+          <>
+            {artists.map((artist) => (
+              <FollowingArtistRow
+                key={artist.id}
+                artist={artist}
+                isFollowing={true}
+                onToggleFollow={() => handleFollowToggle(artist.id)}
               />
-            </div>
-          ))
-        )}
+            ))}
 
-        {!hasNoFollowingArtists && (
-          <div className="flex h-21.5 w-full items-center justify-center border-t-1">
-            <Link
-              href={`${ROUTE_PATHS.MY_FOLLOWING}`}
-              className="bg-custom-brand-secondary text-custom-button-text flex h-11.5 w-46 items-center justify-center rounded-full text-sm font-medium"
-            >
-              팔로잉 작가 모두보기
-            </Link>
-          </div>
+            <div className="flex h-21.5 w-full items-center justify-center border-t-1">
+              <Link
+                href={`${ROUTE_PATHS.MY_FOLLOWING}`}
+                className="bg-custom-brand-secondary text-custom-button-text flex h-11.5 w-46 items-center justify-center rounded-full text-sm font-medium"
+              >
+                팔로잉 작가 모두보기
+              </Link>
+            </div>
+          </>
         )}
       </PopoverContent>
     </Popover>
   );
 }
 
-interface FollowingButtonProps {
-  isFollowing: boolean;
-  onFollowButtonClick: () => void;
+function NoFollowingArtists() {
+  return (
+    <div className="text-custom-gray-200 flex h-35 w-full items-center justify-center text-xs">
+      팔로잉 중인 작가가 없습니다.
+    </div>
+  );
 }
 
-function FollowingButton({ isFollowing, onFollowButtonClick }: FollowingButtonProps) {
+interface FollowingArtistRowProps {
+  artist: FollowingPreview;
+  isFollowing: boolean;
+  onToggleFollow: () => void;
+}
+
+function FollowingArtistRow({ artist, isFollowing, onToggleFollow }: FollowingArtistRowProps) {
   return (
-    <div className="relative">
-      {isFollowing ? (
-        <button
-          onClick={onFollowButtonClick}
-          className="border-custom-gray-100 bg-custom-ivory-100 flex h-9.5 w-24 cursor-pointer items-center justify-center gap-1.5 rounded-full border text-sm"
-        >
-          <CheckIcon className="!h-6 !w-6" />
-          <span>팔로잉</span>
-        </button>
-      ) : (
-        <button
-          onClick={onFollowButtonClick}
-          className="border-custom-gray-100 flex h-9.5 w-24 cursor-pointer items-center justify-center gap-1.5 rounded-full border text-sm"
-        >
-          <AddIcon className="!h-6 !w-6" />
-          <span>팔로우</span>
-        </button>
-      )}
+    <div className="text-custom-brand-primary hover:text-custom-brand-primary focus:text-custom-brand-primary flex h-17 w-full items-center justify-between px-5 text-sm font-medium hover:bg-transparent focus:bg-transparent">
+      <Link
+        href={ROUTE_PATHS.ARTIST(String(artist.id))}
+        className="flex items-center justify-between gap-5 underline-offset-2 hover:underline"
+      >
+        <ProfileImage src={artist.profileImgUrl} className="h-12 w-12" />
+        <p>{artist.nickname}</p>
+      </Link>
+
+      <FollowingButton isFollowing={isFollowing} onClick={onToggleFollow} />
     </div>
+  );
+}
+
+interface FollowingButtonProps {
+  isFollowing: boolean;
+  onClick: () => void;
+}
+
+function FollowingButton({ isFollowing, onClick }: FollowingButtonProps) {
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        'flex h-9.5 w-24 cursor-pointer items-center justify-center gap-1.5 rounded-full border text-sm',
+        isFollowing ? 'bg-custom-ivory-100 border-custom-gray-100' : 'border-custom-gray-100'
+      )}
+    >
+      {isFollowing ? <CheckIcon className="!h-6 !w-6" /> : <AddIcon className="!h-6 !w-6" />}
+      <span>{isFollowing ? '팔로잉' : '팔로우'}</span>
+    </button>
   );
 }
