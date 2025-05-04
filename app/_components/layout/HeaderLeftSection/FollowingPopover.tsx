@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import Link from 'next/link';
 
@@ -8,7 +8,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { ROUTE_PATHS } from '@/constants';
 import { FollowingPreview } from '@/lib/apis/following.type';
 import { AddIcon, CheckIcon } from '@/lib/icons';
-import { followingPreviewMock } from '@/lib/mocks/following-preview.mock';
+import { useFollowingPreview } from '@/lib/queries/useFollowingQueries';
 import { useUserSummary } from '@/lib/queries/useUserQueries';
 import { cn } from '@/lib/utils';
 import { useAuthDialog } from '@/stores/useAuthDialog';
@@ -16,7 +16,6 @@ import { formatNumberWithComma } from '@/utils/formatNumber';
 
 import ProfileImage from '../../shared/ProfileImage';
 
-// TODO: 팔로잉 프리뷰 목록 API 연동 필요
 // TODO: 작가 팔로잉 및 팔로잉 취소 API 연동 필요
 export default function FollowingPopover() {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,9 +23,9 @@ export default function FollowingPopover() {
   const { toggleIsOpen: toggleAuthDialogOpen } = useAuthDialog();
 
   const { data: user } = useUserSummary();
+  const { data: followingData } = useFollowingPreview();
 
-  const followingData = followingPreviewMock;
-  const artists = useMemo(() => followingData?.result.followingArtists ?? [], [followingData]);
+  const artists = followingData?.result.followingArtists ?? [];
   const followingCount = followingData?.result.totalFollowings ?? 0;
 
   const handleFollowToggle = (id: number) => {
