@@ -14,12 +14,23 @@ export default function AuthCallback() {
 
   useEffect(() => {
     const sessionId = searchParams.get('sessionId');
-
     if (!sessionId) return;
 
+    let timer: ReturnType<typeof setTimeout>;
+
     mutate(sessionId, {
-      onSuccess: () => router.replace('/'),
+      onSuccess: () => {
+        // 라우팅이 너무 빠르게 일어나 깜빡이는 느낌이 들기 때문에,
+        // 약간의 지연(0.3초)을 두고 홈으로 이동시킴
+        timer = setTimeout(() => {
+          router.replace('/');
+        }, 300);
+      },
     });
+
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
   }, [searchParams, mutate, router]);
 
   return (

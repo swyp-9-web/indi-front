@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query';
 
 import { fetchUserSummary, logoutUser, setUserCookie } from '../apis/user.api';
 import { UserSummaryResponse } from '../apis/user.type';
@@ -20,8 +20,8 @@ export const useLoginCallback = () => {
       const user = await fetchUserSummary({ runtime: 'client' });
       return user;
     },
-    onSuccess: (data) => {
-      queryClient.setQueryData(QUERY_KEYS.user.summary, data.result);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.user.summary });
     },
   });
 };
@@ -31,11 +31,17 @@ export const useLoginCallback = () => {
  *
  * 인증되지 않은 상태에서는 에러가 발생할 수 있으며, 에러 발생시 로그아웃을 진행합니다.
  */
-export const useUserSummary = () => {
+export const useUserSummary = (
+  options?: Omit<
+    UseQueryOptions<UserSummaryResponse, Error, UserSummaryResponse>,
+    'queryKey' | 'queryFn'
+  >
+) => {
   return useQuery({
     queryFn: () => fetchUserSummary({ runtime: 'client' }),
     queryKey: QUERY_KEYS.user.summary,
     staleTime: 1000 * 60 * 5,
+    ...options,
   });
 };
 
@@ -51,7 +57,7 @@ export const useLogout = () => {
   return useMutation({
     mutationFn: logoutUser,
     onSuccess: () => {
-      queryClient.removeQueries({ queryKey: QUERY_KEYS.user.summary });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.user.summary });
     },
   });
 };

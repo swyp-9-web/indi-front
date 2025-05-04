@@ -1,10 +1,18 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+import { API_BASE_URL } from '@/constants';
 import { ErrorResponse, SuccessResponse } from '@/lib/apis/common.type';
 
 export async function POST(_request: NextRequest) {
   try {
+    // 서버 세션 종료
+    await fetch(`${API_BASE_URL.SERVER}/logout`, {
+      method: 'POST',
+      credentials: 'include',
+    });
+
+    // 실제 쿠키 만료
     const successResponse: SuccessResponse = {
       result: null,
       resultCode: 200,

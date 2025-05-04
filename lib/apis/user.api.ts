@@ -1,5 +1,6 @@
 import { API_BASE_URL } from '@/constants';
 
+import { fetchWithAuth } from './common.api';
 import { ErrorResponse } from './common.type';
 import { UserSummaryResponse } from './user.type';
 
@@ -20,20 +21,20 @@ export const setUserCookie = async (sessionId: string): Promise<void> => {
 };
 
 export const fetchUserSummary = async (
-  options: {
-    runtime: 'server' | 'client';
-  } = { runtime: 'server' }
+  options: { runtime: 'server' | 'client' } = { runtime: 'server' }
 ): Promise<UserSummaryResponse> => {
   const baseUrl = options.runtime === 'server' ? API_BASE_URL.SERVER : API_BASE_URL.CLIENT;
 
-  const res = await fetch(`${baseUrl}/api/v1/users/me`, {
-    credentials: 'include',
-  });
+  const res = await fetchWithAuth(`${baseUrl}/api/v1/users/me`);
 
   const data = await res.json();
 
   if (!res.ok) {
-    throw data as ErrorResponse;
+    return {
+      result: null,
+      resultCode: data.status,
+      resultMessage: data.resultMessage,
+    };
   }
 
   return data as UserSummaryResponse;
