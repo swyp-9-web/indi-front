@@ -37,8 +37,8 @@ describe('Item 관련 유틸 함수 테스트', () => {
     it('label로 value를 가져온다', () => {
       expect(getSortValueByLabel('최신순')).toBe('CREATED_RECENT');
       expect(getSortValueByLabel('인기순')).toBe('SCRAPED_TOP');
-      expect(getSortValueByLabel('최신 작품순')).toBe('CREATED_RECENT');
-      expect(getSortValueByLabel('최신 스크랩순')).toBe('SCRAPED_RECENT');
+      expect(getSortValueByLabel('최신 작품순')).toBe('SCRAPED_RECENT');
+      expect(getSortValueByLabel('최신 스크랩순')).toBe('SCRAP_ITEM_RECENT');
     });
 
     it('없는 label을 넣으면 undefined를 반환한다', () => {

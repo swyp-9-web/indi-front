@@ -28,6 +28,6 @@ export const NORMAL_SORT_ITEMS = [
 ];
 
 export const SCRAP_SORT_ITEMS = [
-  { label: '최신 작품순', value: 'CREATED_RECENT' },
-  { label: '최신 스크랩순', value: 'SCRAPED_RECENT' },
+  { label: '최신 작품순', value: 'SCRAPED_RECENT' },
+  { label: '최신 스크랩순', value: 'SCRAP_ITEM_RECENT' },
 ];
