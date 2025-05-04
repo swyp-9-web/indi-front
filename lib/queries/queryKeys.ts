@@ -6,4 +6,7 @@ export const QUERY_KEYS = {
     all: ['products'],
     list: (queryParams: ProductsListQueryParams) => ['products', stableStringify(queryParams)],
   },
+  user: {
+    summary: ['user', 'summary'],
+  },
 };
