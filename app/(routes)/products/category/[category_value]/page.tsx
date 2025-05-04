@@ -24,7 +24,7 @@ export default async function ProductsCategory({ params, searchParams }: Categor
         {getCategoryLabelByValue(categoryValue)}
       </h2>
 
-      <div className="mt-4.5 mb-6 flex items-center justify-end">
+      <div className="mt-4.5 mb-4.5 flex items-center justify-end">
         <ProductsControls />
       </div>
 
