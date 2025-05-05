@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 /**
  * useDebounce - 입력 값을 디바운스하여 일정 시간 후 최종 값 반환
@@ -23,35 +23,43 @@ export function useDebounce<T>(value: T, delay = 300) {
 }
 
 /**
- * useDebounceAdvanced - 입력 값을 디바운스하여 일정 시간 후 최종 값 반환 + 로딩 상태
- * @param value - 디바운스할 값
+ * useDebouncedCallback - 디바운스된 콜백 함수 반환
+ * @param callback - 실행할 콜백 함수
  * @param delay - 디바운스 대기 시간 (ms)
- * @returns - [debouncedValue, isDebouncing]
+ * @returns - 디바운스된 콜백 함수
  */
-export function useDebounceAdvanced<T>(value: T, delay = 300): [T, boolean] {
-  const [debouncedValue, setDebouncedValue] = useState<T>(value);
-  const [isDebouncing, setIsDebouncing] = useState(false);
-
+export function useDebouncedCallback<TArgs extends unknown[]>(
+  callback: (...args: TArgs) => void,
+  delay = 300
+): (...args: TArgs) => void {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const callbackRef = useRef(callback);
 
+  // 최신 콜백을 참조할 수 있도록 ref에 저장
   useEffect(() => {
-    setIsDebouncing(true);
+    callbackRef.current = callback;
+  }, [callback]);
 
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-    }
-
-    timerRef.current = setTimeout(() => {
-      setDebouncedValue(value);
-      setIsDebouncing(false);
-    }, delay);
-
+  // 컴포넌트 언마운트 시 남아있는 타이머 정리
+  useEffect(() => {
     return () => {
       if (timerRef.current) {
         clearTimeout(timerRef.current);
       }
     };
-  }, [value, delay]);
+  }, []);
 
-  return [debouncedValue, isDebouncing];
+  // 딜레이 변경 전까지 동일한 디바운스 함수 사용
+  const debouncedFn = useCallback(
+    (...args: TArgs) => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+
+      timerRef.current = setTimeout(() => {
+        callbackRef.current(...args);
+      }, delay);
+    },
+    [delay]
+  );
+
+  return debouncedFn;
 }
