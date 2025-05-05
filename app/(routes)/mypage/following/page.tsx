@@ -26,7 +26,13 @@ export default function MyFollowing() {
         {`팔로잉 중인 작가(${formatOverThousand(followingCount)})`}
       </h2>
 
-      {followingCount ? <FollowingArtistList artists={artists} /> : <NoFollowingArtists />}
+      {followingCount ? (
+        <FollowingArtistList artists={artists} meta={data?.result.meta} />
+      ) : (
+        <NoFollowingArtists />
+      )}
+
+      <div className="mb-25" />
 
       <ScrollToTopButton />
     </main>

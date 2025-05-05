@@ -50,7 +50,10 @@ export const useFollowingArtists = (
   });
 };
 
-export const useInfiniteFollowingArtists = (queryParams: FollowingArtistsQueryParams) => {
+export const useInfiniteFollowingArtists = (
+  queryParams: FollowingArtistsQueryParams,
+  enabled: boolean
+) => {
   return useInfiniteQuery({
     queryKey: QUERY_KEYS.following.artists(queryParams),
     queryFn: ({ pageParam = 2 }) =>
@@ -60,5 +63,6 @@ export const useInfiniteFollowingArtists = (queryParams: FollowingArtistsQueryPa
       return meta.hasNextPage ? meta.currentPage + 1 : undefined;
     },
     initialPageParam: 2,
+    enabled,
   });
 };
