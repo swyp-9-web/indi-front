@@ -9,6 +9,7 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ROUTE_PATHS } from '@/constants';
+import { useDebouncedCallback } from '@/hooks/useDebounce';
 import { FollowingPreview } from '@/lib/apis/following.type';
 import { AddIcon, CheckIcon } from '@/lib/icons';
 import { useFollowingPreview, useToggleFollow } from '@/lib/queries/useFollowingQueries';
@@ -101,30 +102,32 @@ interface FollowingArtistRowProps {
 }
 
 function FollowingArtistRow({ artist }: FollowingArtistRowProps) {
-  const [isFollowing, setIsFollowing] = useState(true);
+  const [isFollowing, setIsFollowing] = useState(artist.isFollowing);
+  const [serverFollowState, setServerFollowState] = useState(artist.isFollowing);
 
-  const queryClient = useQueryClient();
   const { mutate: toggleFollow } = useToggleFollow();
 
-  const handleFollowButtonClick = () => {
-    const prevIsFollowing = isFollowing;
-    setIsFollowing((prev) => !prev);
+  const debouncedToggleFollow = useDebouncedCallback((nextIsFollowing: boolean) => {
+    // 변경하고 싶은 상태가 이미 서버에 반영된 값과 같으면 요청 생략
+    if (nextIsFollowing === serverFollowState) return;
 
     toggleFollow(
-      { artistId: artist.id, isFollowing: prevIsFollowing },
+      { artistId: artist.id, isFollowing: serverFollowState },
       {
-        onSuccess: async () =>
-          await queryClient.invalidateQueries({
-            predicate: (query) => query.queryKey[0] === 'following',
-          }),
+        onSuccess: () => {
+          setServerFollowState(nextIsFollowing);
+        },
         onError: async () => {
-          await queryClient.invalidateQueries({
-            predicate: (query) => query.queryKey[0] === 'following',
-          });
-          setIsFollowing(prevIsFollowing);
+          setIsFollowing(serverFollowState);
         },
       }
     );
+  }, 500);
+
+  const handleFollowButtonClick = () => {
+    const nextIsFollowing = !isFollowing;
+    setIsFollowing((prev) => !prev);
+    debouncedToggleFollow(nextIsFollowing);
   };
 
   return (
