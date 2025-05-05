@@ -2,7 +2,7 @@ import { API_BASE_URL } from '@/constants';
 import { createQueryParams } from '@/utils/queryParams';
 
 import { fetchWithAuth } from './common.api';
-import { ErrorResponse } from './common.type';
+import { ErrorResponse, SuccessResponse } from './common.type';
 import { ProductsListQueryParams, ProductsListResponse } from './products.type';
 
 export const fetchProductsList = async (
@@ -26,4 +26,32 @@ export const fetchProductsList = async (
   }
 
   return data as ProductsListResponse;
+};
+
+export const scrapProducts = async (productId: number) => {
+  const res = await fetchWithAuth(`${API_BASE_URL.CLIENT}/api/v1/scraps/${productId}`, {
+    method: 'POST',
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw data as ErrorResponse;
+  }
+
+  return data as SuccessResponse;
+};
+
+export const unScrapProducts = async (productId: number) => {
+  const res = await fetchWithAuth(`${API_BASE_URL.CLIENT}/api/v1/scraps/${productId}`, {
+    method: 'DELETE',
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw data as ErrorResponse;
+  }
+
+  return data as SuccessResponse;
 };
