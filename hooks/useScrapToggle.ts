@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { useDebouncedCallback } from '@/hooks/useDebounce';
 import { useToggleProductScrap } from '@/lib/queries/useProductsQueries';
 
+import { useRequireAuth } from './useRequireAuth';
+
 /**
  * 제품 스크랩 상태를 토글하는 커스텀 훅
  * @param productId - 제품 ID
@@ -43,7 +45,7 @@ export function useScrapToggle(
     500
   );
 
-  const toggleIsScraped = () => {
+  const toggleScrapState = () => {
     const nextIsScrapped = !isScraped;
     const prevScrapCount = scrapCount;
     const nextScrapCount = isScraped ? scrapCount - 1 : scrapCount + 1;
@@ -52,6 +54,15 @@ export function useScrapToggle(
     setScrapCount(nextScrapCount);
 
     debouncedToggleScrap(nextIsScrapped, prevScrapCount);
+  };
+
+  // 인증 상태 확인
+  const { checkAuth } = useRequireAuth();
+
+  const toggleIsScraped = () => {
+    checkAuth(() => {
+      toggleScrapState();
+    });
   };
 
   return {

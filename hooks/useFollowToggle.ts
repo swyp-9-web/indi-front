@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { useDebouncedCallback } from '@/hooks/useDebounce';
 import { useToggleFollow } from '@/lib/queries/useFollowingQueries';
 
+import { useRequireAuth } from './useRequireAuth';
+
 /**
  * 작가 팔로우 상태를 토글하는 커스텀 훅
  * @param artistId - 작가 ID
@@ -33,10 +35,18 @@ export function useFollowToggle(artistId: number, initialIsFollowing: boolean) {
     );
   }, 500);
 
-  const toggleIsFollowing = () => {
+  const toggleFollowState = () => {
     const nextIsFollowing = !isFollowing;
     setIsFollowing(nextIsFollowing);
     debouncedToggleFollow(nextIsFollowing);
+  };
+
+  const { checkAuth } = useRequireAuth();
+
+  const toggleIsFollowing = () => {
+    checkAuth(() => {
+      toggleFollowState();
+    });
   };
 
   return {

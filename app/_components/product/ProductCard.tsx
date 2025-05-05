@@ -7,9 +7,7 @@ import { ROUTE_PATHS } from '@/constants';
 import { useScrapToggle } from '@/hooks/useScrapToggle';
 import { Product } from '@/lib/apis/products.type';
 import { CardBookmarkFilledIcon, CardBookmarkIcon } from '@/lib/icons';
-import { useUserSummary } from '@/lib/queries/useUserQueries';
 import { cn } from '@/lib/utils';
-import { useAuthDialog } from '@/stores/useAuthDialog';
 import { formatNumberWithComma, formatOverThousand } from '@/utils/formatNumber';
 import { getSizeLabelByValue } from '@/utils/item';
 
@@ -116,20 +114,8 @@ function ScrapButton({ product, hasScrapCount }: ScrapButtonProps) {
     product.totalScraped
   );
 
-  const { toggleIsOpen: toggleAuthDialogOpen } = useAuthDialog();
-  const { data: user } = useUserSummary();
-
-  const handleScrapButtonClick = () => {
-    if (!user || !user.result) {
-      toggleAuthDialogOpen();
-      return;
-    }
-
-    toggleIsScraped();
-  };
-
   return (
-    <button onClick={handleScrapButtonClick} className="cursor-pointer">
+    <button onClick={toggleIsScraped} className="cursor-pointer">
       {isScraped ? <CardBookmarkFilledIcon /> : <CardBookmarkIcon />}
       {hasScrapCount && (
         <p className="text-custom-background text-xs">{formatOverThousand(scrapCount)}</p>
