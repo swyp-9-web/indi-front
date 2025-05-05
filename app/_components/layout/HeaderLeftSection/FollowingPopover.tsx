@@ -3,14 +3,14 @@
 import { useState } from 'react';
 
 import Link from 'next/link';
-
-import { useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ROUTE_PATHS } from '@/constants';
+import { useFollowToggle } from '@/hooks/useFollowToggle';
 import { FollowingPreview } from '@/lib/apis/following.type';
 import { AddIcon, CheckIcon } from '@/lib/icons';
-import { useFollowingPreview, useToggleFollow } from '@/lib/queries/useFollowingQueries';
+import { useFollowingPreview } from '@/lib/queries/useFollowingQueries';
 import { useUserSummary } from '@/lib/queries/useUserQueries';
 import { cn } from '@/lib/utils';
 import { useAuthDialog } from '@/stores/useAuthDialog';
@@ -21,6 +21,8 @@ import ProfileImage from '../../shared/ProfileImage';
 export default function FollowingPopover() {
   const [isOpen, setIsOpen] = useState(false);
 
+  const router = useRouter();
+
   const { toggleIsOpen: toggleAuthDialogOpen } = useAuthDialog();
 
   const { data: user } = useUserSummary();
@@ -28,6 +30,11 @@ export default function FollowingPopover() {
 
   const artists = followingData?.result.followingArtists ?? [];
   const followingCount = followingData?.result.totalFollowings ?? 0;
+
+  const handleAllFollowingClick = () => {
+    setIsOpen(false);
+    router.push(ROUTE_PATHS.MY_FOLLOWING);
+  };
 
   if (!user || !user.result) {
     return (
@@ -66,12 +73,12 @@ export default function FollowingPopover() {
             ))}
 
             <div className="flex h-21.5 w-full items-center justify-center border-t-1">
-              <Link
-                href={`${ROUTE_PATHS.MY_FOLLOWING}`}
-                className="bg-custom-brand-secondary text-custom-button-text flex h-11.5 w-46 items-center justify-center rounded-full text-sm font-medium"
+              <button
+                onClick={handleAllFollowingClick}
+                className="bg-custom-brand-secondary text-custom-button-text flex h-11.5 w-46 cursor-pointer items-center justify-center rounded-full text-sm font-medium"
               >
                 팔로잉 작가 모두보기
-              </Link>
+              </button>
             </div>
           </>
         )}
@@ -93,31 +100,7 @@ interface FollowingArtistRowProps {
 }
 
 function FollowingArtistRow({ artist }: FollowingArtistRowProps) {
-  const [isFollowing, setIsFollowing] = useState(true);
-
-  const queryClient = useQueryClient();
-  const { mutate: toggleFollow } = useToggleFollow();
-
-  const handleFollowButtonClick = () => {
-    const prevIsFollowing = isFollowing;
-    setIsFollowing((prev) => !prev);
-
-    toggleFollow(
-      { artistId: artist.id, isFollowing: prevIsFollowing },
-      {
-        onSuccess: async () =>
-          await queryClient.invalidateQueries({
-            predicate: (query) => query.queryKey[0] === 'following',
-          }),
-        onError: async () => {
-          await queryClient.invalidateQueries({
-            predicate: (query) => query.queryKey[0] === 'following',
-          });
-          setIsFollowing(prevIsFollowing);
-        },
-      }
-    );
-  };
+  const { isFollowing, toggleIsFollowing } = useFollowToggle(artist.id, artist.isFollowing);
 
   return (
     <div className="text-custom-brand-primary hover:text-custom-brand-primary focus:text-custom-brand-primary flex h-17 w-full items-center justify-between px-5 text-sm font-medium hover:bg-transparent focus:bg-transparent">
@@ -129,7 +112,7 @@ function FollowingArtistRow({ artist }: FollowingArtistRowProps) {
         <p>{artist.nickname}</p>
       </Link>
 
-      <FollowingButton isFollowing={isFollowing} onClick={handleFollowButtonClick} />
+      <FollowingButton isFollowing={isFollowing} onClick={toggleIsFollowing} />
     </div>
   );
 }

@@ -21,17 +21,18 @@ export const useProductsQuery = (
 
 export const useProductsInfiniteQuery = (
   queryParams: ProductsListQueryParams,
-  enabled: boolean
+  enabled: boolean,
+  initialPage = 2
 ) => {
   return useInfiniteQuery({
     queryKey: QUERY_KEYS.products.list(queryParams),
-    queryFn: ({ pageParam = 2 }) =>
-      fetchProductsList({ ...queryParams, page: pageParam, limit: 20 }, { runtime: 'client' }),
+    queryFn: ({ pageParam = initialPage }) =>
+      fetchProductsList({ page: pageParam, limit: 20, ...queryParams }, { runtime: 'client' }),
     getNextPageParam: (lastPage) => {
       const { meta } = lastPage.result;
       return meta.hasNextPage ? meta.currentPage + 1 : undefined;
     },
-    initialPageParam: 2,
+    initialPageParam: initialPage,
     enabled,
   });
 };

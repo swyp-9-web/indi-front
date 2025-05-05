@@ -39,7 +39,7 @@ export default function DefaultProductsGrid({ page, lastGrid = false }: DefaultP
 
       {lastGrid && data?.result.meta.hasNextPage && (
         <div className="w-8xl mx-auto mt-10 px-20">
-          <InfiniteProductsGrid queryParams={queryParams} />
+          <InfiniteProductsGrid queryParams={{ ...queryParams, limit: 24 }} />
         </div>
       )}
     </>

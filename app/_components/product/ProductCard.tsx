@@ -18,16 +18,23 @@ interface ProductCardProps {
   textColor?: 'dark' | 'light';
   hasScrapCount?: boolean;
   product: Product;
+  size?: 'normal' | 'small';
 }
 
 export default function ProductCard({
   textColor = 'dark',
   hasScrapCount = false,
   product,
+  size = 'normal',
 }: ProductCardProps) {
   return (
     <article className="relative">
-      <figure className="bg-custom-gray-100 relative flex h-76.25 w-76.25 items-center justify-center rounded-xl">
+      <figure
+        className={cn(
+          'bg-custom-gray-100 relative flex h-76.25 w-76.25 items-center justify-center rounded-xl',
+          size === 'small' && 'h-65 w-65'
+        )}
+      >
         {product.thumbnailImgUrl ? (
           <Image
             fill

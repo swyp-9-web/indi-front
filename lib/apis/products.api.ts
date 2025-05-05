@@ -15,9 +15,7 @@ export const fetchProductsList = async (
 
   const res = await fetchWithAuth(`${baseUrl}/api/v1/items/search?${queryString}`, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
     cache: 'no-store',
   });
 
