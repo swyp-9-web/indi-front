@@ -28,14 +28,12 @@ export const createQueryParams = (
   if (params.page) sp.set('page', params.page.toString());
   if (params.limit) sp.set('limit', params.limit.toString());
 
-  if ('sortType' in params) {
-    if (params.sortType) sp.set('sortType', params.sortType);
-    if (params.keyword) sp.set('keyword', params.keyword);
+  if ('sortType' in params && params.sortType) sp.set('sortType', params.sortType);
+  if ('keyword' in params && params.keyword) sp.set('keyword', params.keyword);
 
-    appendParam(sp, 'artistId', params.artistId?.toString());
-    appendParam(sp, 'sizeTypes', params.sizeTypes);
-    appendParam(sp, 'categoryTypes', params.categoryTypes);
-  }
+  if ('artistId' in params) appendParam(sp, 'artistId', params.artistId?.toString());
+  if ('sizeTypes' in params) appendParam(sp, 'sizeTypes', params.sizeTypes);
+  if ('categoryTypes' in params) appendParam(sp, 'categoryTypes', params.categoryTypes);
 
   return sp.toString();
 };
