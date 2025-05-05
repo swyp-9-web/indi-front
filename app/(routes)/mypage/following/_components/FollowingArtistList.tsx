@@ -1,14 +1,18 @@
+import { FollowingArtist } from '@/lib/apis/following.type';
+
 import FollowingArtistRow from './FollowingArtistRow';
 import InfiniteArtistList from './InfiniteArtistList';
 
-export default function FollowingArtistList() {
+interface FollowingArtistListProps {
+  artists: FollowingArtist[];
+}
+
+export default function FollowingArtistList({ artists }: FollowingArtistListProps) {
   return (
     <ul className="flex flex-col gap-15">
-      <FollowingArtistRow />
-      <FollowingArtistRow />
-      <FollowingArtistRow />
-      <FollowingArtistRow />
-      <FollowingArtistRow />
+      {artists.map((artist) => (
+        <FollowingArtistRow key={artist.id} artist={artist} />
+      ))}
 
       <InfiniteArtistList />
     </ul>
