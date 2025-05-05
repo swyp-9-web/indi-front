@@ -1,15 +1,12 @@
 'use client';
 
-import { useState } from 'react';
-
 import Image from 'next/image';
 import Link from 'next/link';
 
 import { ROUTE_PATHS } from '@/constants';
-import { useDebouncedCallback } from '@/hooks/useDebounce';
+import { useScrapToggle } from '@/hooks/useScrapToggle';
 import { Product } from '@/lib/apis/products.type';
 import { CardBookmarkFilledIcon, CardBookmarkIcon } from '@/lib/icons';
-import { useToggleProductScrap } from '@/lib/queries/useProductsQueries';
 import { useUserSummary } from '@/lib/queries/useUserQueries';
 import { cn } from '@/lib/utils';
 import { useAuthDialog } from '@/stores/useAuthDialog';
@@ -113,31 +110,14 @@ interface ScrapButtonProps {
 }
 
 function ScrapButton({ product, hasScrapCount }: ScrapButtonProps) {
-  const [isScraped, setIsScraped] = useState(product.scrap.isScrapped);
-  const [scrapCount, setScrapCount] = useState(product.totalScraped);
-
-  const [serverScrapState, setServerScrapState] = useState(product.scrap.isScrapped);
+  const { isScraped, scrapCount, toggleIsScraped } = useScrapToggle(
+    product.id,
+    product.scrap.isScrapped,
+    product.totalScraped
+  );
 
   const { toggleIsOpen: toggleAuthDialogOpen } = useAuthDialog();
   const { data: user } = useUserSummary();
-  const { mutate: toggleScrap } = useToggleProductScrap();
-
-  const debouncedToggleScrap = useDebouncedCallback(
-    (nextIsScraped: boolean, previousScrapCount: number) => {
-      if (isScraped === serverScrapState) return;
-
-      toggleScrap(
-        { productId: product.id, isScraped: serverScrapState },
-        {
-          onSuccess: () => setServerScrapState(nextIsScraped),
-          onError: () => {
-            setIsScraped(serverScrapState);
-            setScrapCount(previousScrapCount);
-          },
-        }
-      );
-    }
-  );
 
   const handleScrapButtonClick = () => {
     if (!user || !user.result) {
@@ -145,14 +125,7 @@ function ScrapButton({ product, hasScrapCount }: ScrapButtonProps) {
       return;
     }
 
-    const nextIsScraped = !isScraped;
-    const previousScrapCount = scrapCount;
-    const nextScrapCount = isScraped ? previousScrapCount - 1 : previousScrapCount + 1;
-
-    setIsScraped(nextIsScraped);
-    setScrapCount(nextScrapCount);
-
-    debouncedToggleScrap(nextIsScraped, previousScrapCount);
+    toggleIsScraped();
   };
 
   return (
