@@ -6,6 +6,7 @@ import ProductCard from '@/app/_components/product/ProductCard';
 import ProfileImage from '@/app/_components/shared/ProfileImage';
 import { ROUTE_PATHS } from '@/constants';
 import { useDebouncedCallback } from '@/hooks/useDebounce';
+import { useFollowToggle } from '@/hooks/useFollowToggle';
 import { FollowingArtist } from '@/lib/apis/following.type';
 import { Product } from '@/lib/apis/products.type';
 import { AddIcon, CheckIcon } from '@/lib/icons';
@@ -31,33 +32,7 @@ interface FollowingArtistInfoProps {
 }
 
 function FollowingArtistInfo({ artist }: FollowingArtistInfoProps) {
-  const [isFollowing, setIsFollowing] = useState(artist.isFollowing);
-  const [serverFollowState, setServerFollowState] = useState(artist.isFollowing);
-
-  const { mutate: toggleFollow } = useToggleFollow();
-
-  const debouncedToggleFollow = useDebouncedCallback((nextIsFollowing: boolean) => {
-    // 변경하고 싶은 상태가 이미 서버에 반영된 값과 같으면 요청 생략
-    if (nextIsFollowing === serverFollowState) return;
-
-    toggleFollow(
-      { artistId: artist.id, isFollowing: serverFollowState },
-      {
-        onSuccess: () => {
-          setServerFollowState(nextIsFollowing);
-        },
-        onError: async () => {
-          setIsFollowing(serverFollowState);
-        },
-      }
-    );
-  }, 500);
-
-  const handleFollowButtonClick = () => {
-    const nextIsFollowing = !isFollowing;
-    setIsFollowing((prev) => !prev);
-    debouncedToggleFollow(nextIsFollowing);
-  };
+  const { isFollowing, toggleIsFollowing } = useFollowToggle(artist.id, artist.isFollowing);
 
   return (
     <div className="flex flex-col items-center justify-between">
@@ -87,7 +62,7 @@ function FollowingArtistInfo({ artist }: FollowingArtistInfoProps) {
           </Link>
 
           <button
-            onClick={handleFollowButtonClick}
+            onClick={toggleIsFollowing}
             className={cn(
               'flex h-12 w-32 cursor-pointer items-center justify-center rounded-full border text-sm',
               isFollowing ? 'bg-custom-ivory-100 border-custom-gray-100' : 'border-custom-gray-100'

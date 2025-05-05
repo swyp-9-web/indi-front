@@ -5,14 +5,12 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { useQueryClient } from '@tanstack/react-query';
-
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ROUTE_PATHS } from '@/constants';
-import { useDebouncedCallback } from '@/hooks/useDebounce';
+import { useFollowToggle } from '@/hooks/useFollowToggle';
 import { FollowingPreview } from '@/lib/apis/following.type';
 import { AddIcon, CheckIcon } from '@/lib/icons';
-import { useFollowingPreview, useToggleFollow } from '@/lib/queries/useFollowingQueries';
+import { useFollowingPreview } from '@/lib/queries/useFollowingQueries';
 import { useUserSummary } from '@/lib/queries/useUserQueries';
 import { cn } from '@/lib/utils';
 import { useAuthDialog } from '@/stores/useAuthDialog';
@@ -102,33 +100,7 @@ interface FollowingArtistRowProps {
 }
 
 function FollowingArtistRow({ artist }: FollowingArtistRowProps) {
-  const [isFollowing, setIsFollowing] = useState(artist.isFollowing);
-  const [serverFollowState, setServerFollowState] = useState(artist.isFollowing);
-
-  const { mutate: toggleFollow } = useToggleFollow();
-
-  const debouncedToggleFollow = useDebouncedCallback((nextIsFollowing: boolean) => {
-    // 변경하고 싶은 상태가 이미 서버에 반영된 값과 같으면 요청 생략
-    if (nextIsFollowing === serverFollowState) return;
-
-    toggleFollow(
-      { artistId: artist.id, isFollowing: serverFollowState },
-      {
-        onSuccess: () => {
-          setServerFollowState(nextIsFollowing);
-        },
-        onError: async () => {
-          setIsFollowing(serverFollowState);
-        },
-      }
-    );
-  }, 500);
-
-  const handleFollowButtonClick = () => {
-    const nextIsFollowing = !isFollowing;
-    setIsFollowing((prev) => !prev);
-    debouncedToggleFollow(nextIsFollowing);
-  };
+  const { isFollowing, toggleIsFollowing } = useFollowToggle(artist.id, artist.isFollowing);
 
   return (
     <div className="text-custom-brand-primary hover:text-custom-brand-primary focus:text-custom-brand-primary flex h-17 w-full items-center justify-between px-5 text-sm font-medium hover:bg-transparent focus:bg-transparent">
@@ -140,7 +112,7 @@ function FollowingArtistRow({ artist }: FollowingArtistRowProps) {
         <p>{artist.nickname}</p>
       </Link>
 
-      <FollowingButton isFollowing={isFollowing} onClick={handleFollowButtonClick} />
+      <FollowingButton isFollowing={isFollowing} onClick={toggleIsFollowing} />
     </div>
   );
 }
