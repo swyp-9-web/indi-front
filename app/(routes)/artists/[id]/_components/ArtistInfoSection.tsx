@@ -4,10 +4,11 @@ import { redirect } from 'next/navigation';
 import ProfileImage from '@/app/_components/shared/ProfileImage';
 import { ROUTE_PATHS } from '@/constants';
 import { fetchArtistDetail, fetchUserSummary } from '@/lib/apis/user.api';
-import { AddIcon, CheckIcon, LinkIcon, ShareIcon } from '@/lib/icons';
-import { cn } from '@/lib/utils';
+import { LinkIcon, ShareIcon } from '@/lib/icons';
 import { formatOverThousand } from '@/utils/formatNumber';
 import { detectPlatformFromUrl } from '@/utils/url';
+
+import { ArtistButtonGroups, EditProfileButton, UserButtonGroups } from './ArtistInfoButtons';
 
 interface ArtistInfoSectionProps {
   artistId: number;
@@ -37,72 +38,26 @@ export default async function ArtistInfoSection({ artistId }: ArtistInfoSectionP
       <p className="text-custom-brand-primary mx-auto mt-7.5 mb-3 w-60 text-center text-2xl font-bold">
         {artist.nickname}
       </p>
-      {isMyPage && (
-        <button className="text-custom-brand-primary mx-auto block cursor-pointer text-sm font-medium underline underline-offset-2">
-          작가 프로필 수정
-        </button>
-      )}
+      {isMyPage && <EditProfileButton />}
 
-      {isMyPage && (
-        <div className="mt-10 flex w-full flex-col gap-2.5">
-          <button className="border-custom-gray-100 flex h-12 w-full cursor-pointer items-center justify-center rounded-full border text-sm font-medium">
-            주문제작 의뢰 보기
-          </button>
-          <button className="border-custom-gray-100 flex h-12 w-full cursor-pointer items-center justify-center rounded-full border text-sm font-medium">
-            임시저장된 글
-          </button>
-          <button className="bg-custom-brand-secondary text-custom-gray-900 flex h-12 w-full cursor-pointer items-center justify-center rounded-full text-sm font-medium">
-            작품 등록
-          </button>
-        </div>
-      )}
+      {isMyPage && <ArtistButtonGroups />}
 
-      {!isMyPage && (
-        <div className="mt-10 flex w-full flex-col gap-2.5">
-          <button
-            className={cn(
-              'border-custom-gray-100 flex h-12 w-full cursor-pointer items-center justify-center rounded-full border text-sm font-medium',
-              artist.isFollowing && 'bg-custom-ivory-100'
-            )}
-          >
-            {artist.isFollowing ? (
-              <CheckIcon className="!h-6 !w-6" />
-            ) : (
-              <AddIcon className="!h-6 !w-6" />
-            )}
-            <span>{artist.isFollowing ? '팔로잉' : '팔로우'}</span>
-          </button>
-          <button className="bg-custom-brand-secondary text-custom-gray-900 flex h-12 w-full cursor-pointer items-center justify-center rounded-full text-sm font-medium">
-            주문제작 의뢰하기
-          </button>
-        </div>
-      )}
+      {!isMyPage && <UserButtonGroups artist={artist} />}
 
       <div className="mt-7.5 flex w-full flex-wrap gap-5.5">
-        <div className="w-22">
-          <h5 className="text-custom-gray-300 text-xs">작품</h5>
-          <div className="text-custom-brand-primary mt-0.5 text-lg font-bold">
-            {formatOverThousand(artist.totalItems)}
+        {[
+          { label: '작품', value: artist.totalItems },
+          { label: '스크랩수', value: artist.totalScraps },
+          { label: '받은반응', value: artist.totalReactions },
+          { label: '팔로잉', value: artist.totalFollower },
+        ].map((item) => (
+          <div key={item.label} className="w-22">
+            <h5 className="text-custom-gray-300 text-xs">{item.label}</h5>
+            <div className="text-custom-brand-primary mt-0.5 text-lg font-bold">
+              {formatOverThousand(item.value)}
+            </div>
           </div>
-        </div>
-        <div className="w-22">
-          <h5 className="text-custom-gray-300 text-xs">스크랩수</h5>
-          <div className="text-custom-brand-primary mt-0.5 text-lg font-bold">
-            {formatOverThousand(artist.totalScraps)}
-          </div>
-        </div>
-        <div className="w-22">
-          <h5 className="text-custom-gray-300 text-xs">받은 반응</h5>
-          <div className="text-custom-brand-primary mt-0.5 text-lg font-bold">
-            {formatOverThousand(artist.totalReactions)}
-          </div>
-        </div>
-        <div className="w-22">
-          <h5 className="text-custom-gray-300 text-xs">팔로잉</h5>
-          <div className="text-custom-brand-primary mt-0.5 text-lg font-bold">
-            {formatOverThousand(artist.totalFollower)}
-          </div>
-        </div>
+        ))}
       </div>
 
       <div className="mt-7.5">
