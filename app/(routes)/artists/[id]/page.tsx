@@ -1,5 +1,7 @@
 import { Suspense } from 'react';
 
+import ScrollToTopButton from '@/app/_components/shared/ScrollToTopButton';
+
 import ArtistInfoSection from './_components/ArtistInfoSection';
 import ArtistProductsGrid from './_components/ArtistProductsGrid';
 
@@ -34,6 +36,8 @@ export default async function Artist({ params, searchParams }: CategoryPageProps
       >
         <ArtistProductsGrid artistId={Number(artistId)} sortType={sortType ?? 'CREATED_RECENT'} />
       </Suspense>
+
+      <ScrollToTopButton />
     </main>
   );
 }
