@@ -1,5 +1,6 @@
 import ProductCard from '@/app/_components/product/ProductCard';
 
+import NoArtistProducts from './NoArtistProducts';
 import ProductsControls from './ProductsControls';
 
 const mockProduct = {
@@ -28,17 +29,23 @@ const mockProduct = {
 };
 
 export default function ArtistProductsGrid() {
+  const productCount = 0;
+
   return (
     <>
       <div className="mb-2 flex justify-end">
         <ProductsControls />
       </div>
-      <div className="flex flex-wrap gap-x-5 gap-y-10">
-        <ProductCard product={mockProduct} hasScrapCount />
-        <ProductCard product={mockProduct} hasScrapCount />
-        <ProductCard product={mockProduct} hasScrapCount />
-        <ProductCard product={mockProduct} hasScrapCount />
-      </div>
+      {productCount ? (
+        <div className="flex flex-wrap gap-x-5 gap-y-10">
+          <ProductCard product={mockProduct} hasScrapCount />
+          <ProductCard product={mockProduct} hasScrapCount />
+          <ProductCard product={mockProduct} hasScrapCount />
+          <ProductCard product={mockProduct} hasScrapCount />
+        </div>
+      ) : (
+        <NoArtistProducts />
+      )}
     </>
   );
 }
