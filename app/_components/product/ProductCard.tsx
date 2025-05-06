@@ -1,15 +1,13 @@
-'use client';
-
 import Image from 'next/image';
 import Link from 'next/link';
 
 import { ROUTE_PATHS } from '@/constants';
-import { useScrapToggle } from '@/hooks/useScrapToggle';
 import { Product } from '@/lib/apis/products.type';
-import { CardBookmarkFilledIcon, CardBookmarkIcon } from '@/lib/icons';
 import { cn } from '@/lib/utils';
-import { formatNumberWithComma, formatOverThousand } from '@/utils/formatNumber';
+import { formatNumberWithComma } from '@/utils/formatNumber';
 import { getSizeLabelByValue } from '@/utils/item';
+
+import ScrapButton from './ScrapButton';
 
 interface ProductCardProps {
   textColor?: 'dark' | 'light';
@@ -99,27 +97,5 @@ function SizeBadge({ sizeValue }: SizeBadgeProps) {
     <div className="text-custom-brand-primary bg-custom-background absolute top-4 left-4 rounded-full px-2.5 py-1.5 text-xs font-normal">
       {sizeLabel}
     </div>
-  );
-}
-
-interface ScrapButtonProps {
-  product: Product;
-  hasScrapCount: boolean;
-}
-
-function ScrapButton({ product, hasScrapCount }: ScrapButtonProps) {
-  const { isScraped, scrapCount, toggleIsScraped } = useScrapToggle(
-    product.id,
-    product.scrap.isScrapped,
-    product.totalScraped
-  );
-
-  return (
-    <button onClick={toggleIsScraped} className="cursor-pointer">
-      {isScraped ? <CardBookmarkFilledIcon /> : <CardBookmarkIcon />}
-      {hasScrapCount && (
-        <p className="text-custom-background text-xs">{formatOverThousand(scrapCount)}</p>
-      )}
-    </button>
   );
 }
