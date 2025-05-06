@@ -30,8 +30,8 @@ export const createQueryParams = (
 
   if ('sortType' in params && params.sortType) sp.set('sortType', params.sortType);
   if ('keyword' in params && params.keyword) sp.set('keyword', params.keyword);
+  if ('artistId' in params && params.artistId) sp.set('artistId', params.artistId?.toString());
 
-  if ('artistId' in params) appendParam(sp, 'artistId', params.artistId?.toString());
   if ('sizeTypes' in params) appendParam(sp, 'sizeTypes', params.sizeTypes);
   if ('categoryTypes' in params) appendParam(sp, 'categoryTypes', params.categoryTypes);
 

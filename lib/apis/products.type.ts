@@ -54,7 +54,7 @@ export interface ProductsListResponse extends SuccessResponse {
 export interface ProductsListQueryParams {
   page?: number;
   limit?: number;
-  artistId?: number[] | number;
+  artistId?: number;
   sortType?: string;
   sizeTypes?: string[] | string;
   categoryTypes?: string[] | string;
