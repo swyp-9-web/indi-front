@@ -26,7 +26,8 @@ export type SortOption =
   | 'CREATED_OLDEST'
   | 'REACTED_TOP'
   | 'SCRAPED_TOP'
-  | 'SCRAPED_RECENT';
+  | 'SCRAPED_RECENT'
+  | 'SCRAP_ITEM_RECENT';
 
 export type ProductCategory =
   | 'TEXTILE_ART'

@@ -1,11 +1,10 @@
 'use client';
 
-import { useState } from 'react';
-
 import Image from 'next/image';
 import Link from 'next/link';
 
 import { ROUTE_PATHS } from '@/constants';
+import { useScrapToggle } from '@/hooks/useScrapToggle';
 import { Product } from '@/lib/apis/products.type';
 import { CardBookmarkFilledIcon, CardBookmarkIcon } from '@/lib/icons';
 import { cn } from '@/lib/utils';
@@ -16,16 +15,23 @@ interface ProductCardProps {
   textColor?: 'dark' | 'light';
   hasScrapCount?: boolean;
   product: Product;
+  size?: 'normal' | 'small';
 }
 
 export default function ProductCard({
   textColor = 'dark',
   hasScrapCount = false,
   product,
+  size = 'normal',
 }: ProductCardProps) {
   return (
     <article className="relative">
-      <figure className="bg-custom-gray-100 relative flex h-76.25 w-76.25 items-center justify-center rounded-xl">
+      <figure
+        className={cn(
+          'bg-custom-gray-100 relative flex h-76.25 w-76.25 items-center justify-center rounded-xl',
+          size === 'small' && 'h-65 w-65'
+        )}
+      >
         {product.thumbnailImgUrl ? (
           <Image
             fill
@@ -41,11 +47,7 @@ export default function ProductCard({
       <SizeBadge sizeValue={product.size} />
 
       <div className="absolute top-2.5 right-2.5 flex flex-col items-center justify-center gap-0">
-        <ScrapButton
-          isScraped={product.scrap.isScrapped}
-          hasScrapCount={hasScrapCount}
-          totalScraped={product.totalScraped}
-        />
+        <ScrapButton product={product} hasScrapCount={hasScrapCount} />
       </div>
 
       <div className="mt-2.5">
@@ -101,26 +103,22 @@ function SizeBadge({ sizeValue }: SizeBadgeProps) {
 }
 
 interface ScrapButtonProps {
-  isScraped: boolean;
+  product: Product;
   hasScrapCount: boolean;
-  totalScraped: number;
 }
 
-// TODO: 스크랩 버튼 클릭 시 API 요청 필요, debounce 적용 필요
-function ScrapButton({ isScraped, hasScrapCount, totalScraped }: ScrapButtonProps) {
-  const [optimisticScraped, setOptimisticScraped] = useState(isScraped);
-  const [optimisticScrapCount, setOptimisticScrapCount] = useState(totalScraped);
-
-  const handleScrapButtonClick = () => {
-    setOptimisticScraped((prev) => !prev);
-    setOptimisticScrapCount((prev) => (optimisticScraped ? prev - 1 : prev + 1));
-  };
+function ScrapButton({ product, hasScrapCount }: ScrapButtonProps) {
+  const { isScraped, scrapCount, toggleIsScraped } = useScrapToggle(
+    product.id,
+    product.scrap.isScrapped,
+    product.totalScraped
+  );
 
   return (
-    <button onClick={handleScrapButtonClick} className="cursor-pointer">
-      {optimisticScraped ? <CardBookmarkFilledIcon /> : <CardBookmarkIcon />}
+    <button onClick={toggleIsScraped} className="cursor-pointer">
+      {isScraped ? <CardBookmarkFilledIcon /> : <CardBookmarkIcon />}
       {hasScrapCount && (
-        <p className="text-custom-background text-xs">{formatOverThousand(optimisticScrapCount)}</p>
+        <p className="text-custom-background text-xs">{formatOverThousand(scrapCount)}</p>
       )}
     </button>
   );

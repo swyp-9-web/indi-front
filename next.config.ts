@@ -2,9 +2,8 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   images: {
-    // fastly.picsum.photos : 팔로잉 목록 데이터 (임시)
     // kr.object.ncloudstorage.com : 더미 데이터 (임시)
-    domains: ['fastly.picsum.photos', 'kr.object.ncloudstorage.com'],
+    domains: ['kr.object.ncloudstorage.com'],
   },
 
   async rewrites() {

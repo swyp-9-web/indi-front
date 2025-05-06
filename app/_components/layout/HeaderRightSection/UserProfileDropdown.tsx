@@ -9,21 +9,28 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ROUTE_PATHS } from '@/constants';
+import { UserSummary } from '@/lib/apis/user.type';
+import { useLogout } from '@/lib/queries/useUserQueries';
 
 import ProfileImage from '../../shared/ProfileImage';
 
-// TODO: 유저 프로필 확인 및 로그아웃 기능 추가 필요
-export default function UserProfileDropdown() {
-  const userProfileSrc: string | null = null;
+interface UserProfileDropdownProps {
+  user: UserSummary | null;
+}
+
+export default function UserProfileDropdown({ user }: UserProfileDropdownProps) {
+  const userProfileSrc: string | undefined = user?.profileImgUrl;
+
+  const { mutate } = useLogout();
 
   const handleLogoutButtonClick = () => {
-    alert('현재 로그아웃이 구현되지 않았습니다.');
+    mutate();
   };
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="cursor-pointer">
-        <ProfileImage src={userProfileSrc} />
+        <ProfileImage src={userProfileSrc ?? null} />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-custom-background border-custom-gray-100 z-10 translate-x-10 translate-y-1 rounded-none border p-0 shadow-none">
         <DropdownMenuItem

@@ -1,10 +1,9 @@
-import { redirect } from 'next/navigation';
-
 import InfiniteProductsGrid from '@/app/_components/product/InfiniteProductsGrid';
 import ProductCard from '@/app/_components/product/ProductCard';
-import { ROUTE_PATHS } from '@/constants';
 import { fetchProductsList } from '@/lib/apis/products.api';
 import { ProductsListQueryParams } from '@/lib/apis/products.type';
+
+import NoResults from './NoResults';
 
 interface ProductsGridProps {
   queryParams: ProductsListQueryParams;
@@ -18,9 +17,7 @@ export default async function ProductsGrid({ queryParams }: ProductsGridProps) {
     'keyword' in queryParams && !Object.keys(queryParams).some((key) => key !== 'keyword');
 
   if (hasOnlyKeyword && products.length === 0) {
-    redirect(
-      `${ROUTE_PATHS.PRODUCTS_NO_RESULTS}?keyword=${encodeURIComponent(queryParams.keyword as string)}`
-    );
+    return <NoResults keyword={queryParams.keyword} />;
   }
 
   return (

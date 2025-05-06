@@ -1,3 +1,4 @@
+import { FollowingArtistsQueryParams } from '@/lib/apis/following.type';
 import { ProductsListQueryParams } from '@/lib/apis/products.type';
 
 /**
@@ -10,7 +11,9 @@ import { ProductsListQueryParams } from '@/lib/apis/products.type';
  * @param params - 상품 목록 조회에 필요한 필터 조건 객체
  * @returns URL에 사용할 수 있는 쿼리 문자열 (예: page=1&limit=20&sizeTypes=SMALL&sizeTypes=LARGE)
  */
-export const createQueryParams = (params: ProductsListQueryParams): string => {
+export const createQueryParams = (
+  params: ProductsListQueryParams | FollowingArtistsQueryParams
+): string => {
   const sp = new URLSearchParams();
 
   const appendParam = (sp: URLSearchParams, key: string, value?: string | string[]) => {
@@ -24,12 +27,13 @@ export const createQueryParams = (params: ProductsListQueryParams): string => {
 
   if (params.page) sp.set('page', params.page.toString());
   if (params.limit) sp.set('limit', params.limit.toString());
-  if (params.sortType) sp.set('sortType', params.sortType);
-  if (params.keyword) sp.set('keyword', params.keyword);
 
-  appendParam(sp, 'artistId', params.artistId?.toString());
-  appendParam(sp, 'sizeTypes', params.sizeTypes);
-  appendParam(sp, 'categoryTypes', params.categoryTypes);
+  if ('sortType' in params && params.sortType) sp.set('sortType', params.sortType);
+  if ('keyword' in params && params.keyword) sp.set('keyword', params.keyword);
+
+  if ('artistId' in params) appendParam(sp, 'artistId', params.artistId?.toString());
+  if ('sizeTypes' in params) appendParam(sp, 'sizeTypes', params.sizeTypes);
+  if ('categoryTypes' in params) appendParam(sp, 'categoryTypes', params.categoryTypes);
 
   return sp.toString();
 };

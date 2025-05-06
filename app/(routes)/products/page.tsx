@@ -22,7 +22,7 @@ export default async function Products({ searchParams }: ProductsPageProps) {
         &quot;{queryParams.keyword}&quot; 검색 결과
       </h2>
 
-      <div className="mt-5 mb-2 flex flex-col gap-4">
+      <div className="mt-5 mb-4.5 flex flex-col gap-4">
         <ProductsControls />
       </div>
 

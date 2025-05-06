@@ -1,7 +1,8 @@
 import { API_BASE_URL } from '@/constants';
 import { createQueryParams } from '@/utils/queryParams';
 
-import { ErrorResponse } from './common.type';
+import { fetchWithAuth } from './common.api';
+import { ErrorResponse, SuccessResponse } from './common.type';
 import { ProductsListQueryParams, ProductsListResponse } from './products.type';
 
 export const fetchProductsList = async (
@@ -12,11 +13,9 @@ export const fetchProductsList = async (
 
   const baseUrl = options.runtime === 'server' ? API_BASE_URL.SERVER : API_BASE_URL.CLIENT;
 
-  const res = await fetch(`${baseUrl}/api/v1/items/search?${queryString}`, {
+  const res = await fetchWithAuth(`${baseUrl}/api/v1/items/search?${queryString}`, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
     cache: 'no-store',
   });
 
@@ -27,4 +26,32 @@ export const fetchProductsList = async (
   }
 
   return data as ProductsListResponse;
+};
+
+export const scrapProducts = async (productId: number) => {
+  const res = await fetchWithAuth(`${API_BASE_URL.CLIENT}/api/v1/scraps/${productId}`, {
+    method: 'POST',
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw data as ErrorResponse;
+  }
+
+  return data as SuccessResponse;
+};
+
+export const unScrapProducts = async (productId: number) => {
+  const res = await fetchWithAuth(`${API_BASE_URL.CLIENT}/api/v1/scraps/${productId}`, {
+    method: 'DELETE',
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw data as ErrorResponse;
+  }
+
+  return data as SuccessResponse;
 };

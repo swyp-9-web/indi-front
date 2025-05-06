@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { useDebounce, useDebounceAdvanced } from './useDebounce';
+import { useDebounce, useDebouncedCallback } from './useDebounce';
 
 describe('useDebounce', () => {
   it('should update the value after the delay', () => {
@@ -93,108 +93,91 @@ describe('useDebounce', () => {
   });
 });
 
-describe('useDebounceAdvanced', () => {
-  it('should update the value after the delay', () => {
+describe('useDebouncedCallback', () => {
+  it('should debounce the callback execution', () => {
     vi.useFakeTimers();
+    const callback = vi.fn();
 
-    const { result, rerender } = renderHook(
-      ({ value, delay }) => useDebounceAdvanced(value, delay),
-      {
-        initialProps: { value: 'initial', delay: 300 },
-      }
-    );
+    const { result } = renderHook(() => useDebouncedCallback(callback, 300));
 
     act(() => {
-      rerender({ value: 'changed', delay: 300 });
+      result.current('first');
+      result.current('second');
     });
 
-    let [debouncedValue] = result.current;
+    expect(callback).not.toHaveBeenCalled();
 
     act(() => {
       vi.advanceTimersByTime(299);
     });
-    [debouncedValue] = result.current;
-    expect(debouncedValue).toBe('initial');
+    expect(callback).not.toHaveBeenCalled();
 
     act(() => {
       vi.advanceTimersByTime(1);
     });
-    [debouncedValue] = result.current;
-    expect(debouncedValue).toBe('changed');
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith('second');
 
     vi.useRealTimers();
   });
 
-  it('should manage the isDebouncing state properly', () => {
+  it('should reset timer on multiple calls', () => {
     vi.useFakeTimers();
+    const callback = vi.fn();
 
-    const { result, rerender } = renderHook(
-      ({ value, delay }) => useDebounceAdvanced(value, delay),
-      {
-        initialProps: { value: 'initial', delay: 300 },
-      }
-    );
-
-    let [, isDebouncing] = result.current;
-
-    expect(isDebouncing).toBe(true);
+    const { result } = renderHook(() => useDebouncedCallback(callback, 300));
 
     act(() => {
-      rerender({ value: 'changed', delay: 300 });
+      result.current('a');
     });
 
-    [, isDebouncing] = result.current;
-    expect(isDebouncing).toBe(true);
+    act(() => {
+      vi.advanceTimersByTime(150);
+      result.current('b');
+    });
 
     act(() => {
       vi.advanceTimersByTime(299);
     });
-    [, isDebouncing] = result.current;
-    expect(isDebouncing).toBe(true);
+    expect(callback).not.toHaveBeenCalled();
 
     act(() => {
       vi.advanceTimersByTime(1);
     });
-    [, isDebouncing] = result.current;
-    expect(isDebouncing).toBe(false);
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith('b');
 
     vi.useRealTimers();
   });
 
-  it('should handle dynamic delay changes properly', () => {
+  it('should execute immediately if delay is 0', () => {
     vi.useFakeTimers();
+    const callback = vi.fn();
 
-    const { result, rerender } = renderHook(
-      ({ value, delay }) => useDebounceAdvanced(value, delay),
-      {
-        initialProps: { value: 'initial', delay: 300 },
-      }
-    );
-
-    rerender({ value: 'changed', delay: 500 });
+    const { result } = renderHook(() => useDebouncedCallback(callback, 0));
 
     act(() => {
-      vi.advanceTimersByTime(499);
+      result.current('instant');
     });
-    let [debouncedValue, isDebouncing] = result.current;
-    expect(debouncedValue).toBe('initial');
-    expect(isDebouncing).toBe(true);
 
     act(() => {
-      vi.advanceTimersByTime(1);
+      vi.advanceTimersByTime(0);
     });
-    [debouncedValue, isDebouncing] = result.current;
-    expect(debouncedValue).toBe('changed');
-    expect(isDebouncing).toBe(false);
+
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith('instant');
 
     vi.useRealTimers();
   });
 
   it('should clear the timer on unmount', () => {
     vi.useFakeTimers();
+    const callback = vi.fn();
 
-    const { unmount } = renderHook(({ value, delay }) => useDebounceAdvanced(value, delay), {
-      initialProps: { value: 'initial', delay: 300 },
+    const { result, unmount } = renderHook(() => useDebouncedCallback(callback, 300));
+
+    act(() => {
+      result.current('value');
     });
 
     unmount();
@@ -203,29 +186,7 @@ describe('useDebounceAdvanced', () => {
       vi.advanceTimersByTime(500);
     });
 
-    vi.useRealTimers();
-  });
-
-  it('should update immediately if delay is 0', () => {
-    vi.useFakeTimers();
-
-    const { result, rerender } = renderHook(
-      ({ value, delay }) => useDebounceAdvanced(value, delay),
-      {
-        initialProps: { value: 'initial', delay: 0 },
-      }
-    );
-
-    act(() => {
-      rerender({ value: 'changed', delay: 0 });
-    });
-
-    act(() => {
-      vi.advanceTimersByTime(0);
-    });
-
-    const [debouncedValue] = result.current;
-    expect(debouncedValue).toBe('changed');
+    expect(callback).not.toHaveBeenCalled();
 
     vi.useRealTimers();
   });
