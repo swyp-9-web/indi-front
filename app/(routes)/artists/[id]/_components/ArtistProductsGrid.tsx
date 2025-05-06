@@ -1,3 +1,4 @@
+import InfiniteProductsGrid from '@/app/_components/product/InfiniteProductsGrid';
 import ProductCard from '@/app/_components/product/ProductCard';
 import { fetchProductsList } from '@/lib/apis/products.api';
 
@@ -10,7 +11,9 @@ interface ArtistProductsGridProps {
 }
 
 export default async function ArtistProductsGrid({ sortType, artistId }: ArtistProductsGridProps) {
-  const data = await fetchProductsList({ sortType, limit: 15, artistId });
+  const queryParams = { sortType, limit: 15, artistId };
+
+  const data = await fetchProductsList(queryParams);
   const products = data.result.items ?? [];
 
   return (
@@ -20,7 +23,7 @@ export default async function ArtistProductsGrid({ sortType, artistId }: ArtistP
       </div>
 
       {products ? (
-        <div className="flex flex-wrap gap-x-5 gap-y-10">
+        <div className="mb-10 flex flex-wrap gap-x-5 gap-y-10">
           {products.map((product) => (
             <ProductCard key={product.id} product={product} hasScrapCount />
           ))}
@@ -28,6 +31,10 @@ export default async function ArtistProductsGrid({ sortType, artistId }: ArtistP
       ) : (
         <NoArtistProducts />
       )}
+
+      {data.result.meta.hasNextPage && <InfiniteProductsGrid queryParams={queryParams} />}
+
+      <div className="mb-25" />
     </section>
   );
 }
