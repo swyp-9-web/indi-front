@@ -23,7 +23,7 @@ export default async function ArtistInfoSection({ artistId }: ArtistInfoSectionP
     fetchUserSummary(),
   ]);
 
-  const isMyPage = artistId === userRes.result?.userId;
+  const isMyPage = artistId === userRes.result?.id;
   const artist = artistRes.result;
 
   return (

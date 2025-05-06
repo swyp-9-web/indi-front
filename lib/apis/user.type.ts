@@ -1,7 +1,7 @@
 import { SuccessResponse } from './common.type';
 
 export interface UserSummary {
-  userId: number;
+  id: number;
   profileImgUrl: string;
   nickname: string;
   role: 'USER' | 'ARTIST';
