@@ -1,14 +1,30 @@
 import Image from 'next/image';
-import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
 import ProfileImage from '@/app/_components/shared/ProfileImage';
+import { ROUTE_PATHS } from '@/constants';
+import { fetchArtistDetail, fetchUserSummary } from '@/lib/apis/user.api';
 import { AddIcon, CheckIcon, LinkIcon, ShareIcon } from '@/lib/icons';
 import { cn } from '@/lib/utils';
+import { formatOverThousand } from '@/utils/formatNumber';
 import { detectPlatformFromUrl } from '@/utils/url';
 
-export default function ArtistInfoSection() {
-  const isArtist = false;
-  const isFollowing = false;
+interface ArtistInfoSectionProps {
+  artistId: number;
+}
+
+export default async function ArtistInfoSection({ artistId }: ArtistInfoSectionProps) {
+  const [artistRes, userRes] = await Promise.all([
+    fetchArtistDetail(artistId, {
+      onError: (_error) => {
+        return redirect(ROUTE_PATHS.HOME);
+      },
+    }),
+    fetchUserSummary(),
+  ]);
+
+  const isMyPage = artistId === userRes.result?.userId;
+  const artist = artistRes.result;
 
   return (
     <section className="relative mt-10 w-66.25">
@@ -16,18 +32,18 @@ export default function ArtistInfoSection() {
         <ShareIcon />
       </button>
 
-      <ProfileImage src={null} className="mx-auto h-25 w-25" />
+      <ProfileImage src={artist.profileImgUrl ?? null} className="mx-auto h-25 w-25" />
 
       <p className="text-custom-brand-primary mx-auto mt-7.5 mb-3 w-60 text-center text-2xl font-bold">
-        작가명작가명작가명작가명작가명작가
+        {artist.nickname}
       </p>
-      {isArtist && (
+      {isMyPage && (
         <button className="text-custom-brand-primary mx-auto block cursor-pointer text-sm font-medium underline underline-offset-2">
           작가 프로필 수정
         </button>
       )}
 
-      {isArtist && (
+      {isMyPage && (
         <div className="mt-10 flex w-full flex-col gap-2.5">
           <button className="border-custom-gray-100 flex h-12 w-full cursor-pointer items-center justify-center rounded-full border text-sm font-medium">
             주문제작 의뢰 보기
@@ -41,16 +57,20 @@ export default function ArtistInfoSection() {
         </div>
       )}
 
-      {!isArtist && (
+      {!isMyPage && (
         <div className="mt-10 flex w-full flex-col gap-2.5">
           <button
             className={cn(
               'border-custom-gray-100 flex h-12 w-full cursor-pointer items-center justify-center rounded-full border text-sm font-medium',
-              isFollowing && 'bg-custom-ivory-100'
+              artist.isFollowing && 'bg-custom-ivory-100'
             )}
           >
-            {isFollowing ? <CheckIcon className="!h-6 !w-6" /> : <AddIcon className="!h-6 !w-6" />}
-            <span>{isFollowing ? '팔로잉' : '팔로우'}</span>
+            {artist.isFollowing ? (
+              <CheckIcon className="!h-6 !w-6" />
+            ) : (
+              <AddIcon className="!h-6 !w-6" />
+            )}
+            <span>{artist.isFollowing ? '팔로잉' : '팔로우'}</span>
           </button>
           <button className="bg-custom-brand-secondary text-custom-gray-900 flex h-12 w-full cursor-pointer items-center justify-center rounded-full text-sm font-medium">
             주문제작 의뢰하기
@@ -61,48 +81,49 @@ export default function ArtistInfoSection() {
       <div className="mt-7.5 flex w-full flex-wrap gap-5.5">
         <div className="w-22">
           <h5 className="text-custom-gray-300 text-xs">작품</h5>
-          <div className="text-custom-brand-primary mt-0.5 text-lg font-bold">999+</div>
+          <div className="text-custom-brand-primary mt-0.5 text-lg font-bold">
+            {formatOverThousand(artist.totalItems)}
+          </div>
         </div>
         <div className="w-22">
           <h5 className="text-custom-gray-300 text-xs">스크랩수</h5>
-          <div className="text-custom-brand-primary mt-0.5 text-lg font-bold">999+</div>
+          <div className="text-custom-brand-primary mt-0.5 text-lg font-bold">
+            {formatOverThousand(artist.totalScraps)}
+          </div>
         </div>
         <div className="w-22">
           <h5 className="text-custom-gray-300 text-xs">받은 반응</h5>
-          <div className="text-custom-brand-primary mt-0.5 text-lg font-bold">999+</div>
+          <div className="text-custom-brand-primary mt-0.5 text-lg font-bold">
+            {formatOverThousand(artist.totalReactions)}
+          </div>
         </div>
         <div className="w-22">
           <h5 className="text-custom-gray-300 text-xs">팔로잉</h5>
-          <div className="text-custom-brand-primary mt-0.5 text-lg font-bold">999+</div>
+          <div className="text-custom-brand-primary mt-0.5 text-lg font-bold">
+            {formatOverThousand(artist.totalFollower)}
+          </div>
         </div>
       </div>
 
       <div className="mt-7.5">
-        <h5 className="text-custom-gray-300 text-xs">팔로잉</h5>
-        <p className="text-custom-brand-primary mt-1 text-sm">
-          작가 소개.작가 소개.작가 소개.작가 소개.작가 소개.작가 소개.작가 소개.작가 소개.작가
-          소개.작가 소개.작가 소개.작가 소개.작가 소개.작가 소개.작가 소개.작가 소개.작가 소개.
-          소개.작가 소개.작가 소개. 소개
-        </p>
+        <h5 className="text-custom-gray-300 text-xs">작가 소개</h5>
+        <p className="text-custom-brand-primary mt-1 text-sm">{artist.aboutMe}</p>
       </div>
 
       <div className="mt-7.5 mb-30 w-full">
         <h5 className="text-custom-gray-300 text-xs">웹사이트</h5>
         <ul className="mt-2 flex flex-col gap-1.5">
-          {[
-            'https://www.dsffdsaasffsasafdadfsdsafdafadsfasdfasdf',
-            'https://kr.pinterest.com/',
-            'https://www.facebook.com/',
-            'https://www.behance.net/',
-            'https://blog.naver.com/',
-            'https://www.instagram.com/',
-          ].map((url) => {
+          {[artist.homeLink, ...artist.snsLinks].map((url) => {
+            if (!url) return null;
+
             const platform = detectPlatformFromUrl(url);
 
             return (
               <li key={url}>
-                <Link
-                  href="#"
+                <a
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="border-custom-gray-100 flex w-full items-center gap-2 rounded-lg border px-2.5 py-2"
                 >
                   {platform ? (
@@ -111,7 +132,7 @@ export default function ArtistInfoSection() {
                     <LinkIcon className="shrink-0" />
                   )}
                   <span className="truncate text-sm">{platform ? platform.label : url}</span>
-                </Link>
+                </a>
               </li>
             );
           })}

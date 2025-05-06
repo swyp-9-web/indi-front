@@ -22,7 +22,7 @@ export default async function Artist({ params, searchParams }: CategoryPageProps
           </div>
         }
       >
-        <ArtistInfoSection />
+        <ArtistInfoSection artistId={Number(artistId)} />
       </Suspense>
 
       <Suspense
