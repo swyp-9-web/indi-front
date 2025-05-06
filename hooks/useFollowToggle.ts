@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
+import { revalidateArtistPath } from '@/app/actions/revalidate';
 import { useDebouncedCallback } from '@/hooks/useDebounce';
 import { useToggleFollow } from '@/lib/queries/useFollowingQueries';
 
@@ -36,6 +37,9 @@ export function useFollowToggle(
         onSuccess: async () => {
           // 성공 시 서버 상태를 요청한 상태로 변경
           setServerFollowState(nextIsFollowing);
+
+          // 팔로우 변경시 작가 피드 페이지 갱신, 바로 반영되지는 않고 페이지 재요청시 갱신됨
+          await revalidateArtistPath(artistId);
 
           // TanStack Query를 사용하는 모든 query invalidate
           // e.g. 작가 피드 페이지 팔로우 기능 변경 시 layout과 팔로우 목록 페이지 invalidate
