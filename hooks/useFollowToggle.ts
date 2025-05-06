@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import { useQueryClient } from '@tanstack/react-query';
+
 import { useDebouncedCallback } from '@/hooks/useDebounce';
 import { useToggleFollow } from '@/lib/queries/useFollowingQueries';
 
@@ -10,9 +12,17 @@ import { useRequireAuth } from './useRequireAuth';
  * @param artistId - 작가 ID
  * @param initialIsFollowing - 초기 팔로우 상태
  */
-export function useFollowToggle(artistId: number, initialIsFollowing: boolean) {
+export function useFollowToggle(
+  artistId: number,
+  initialIsFollowing: boolean,
+  options?: {
+    invalidateFollowingQueries?: boolean;
+  }
+) {
   const [isFollowing, setIsFollowing] = useState(initialIsFollowing); // UI 상태
   const [serverFollowState, setServerFollowState] = useState(initialIsFollowing); // 서버와 동기화 된 상태
+
+  const queryClient = useQueryClient();
 
   const { mutate: toggleFollow } = useToggleFollow();
 
@@ -23,9 +33,17 @@ export function useFollowToggle(artistId: number, initialIsFollowing: boolean) {
     toggleFollow(
       { artistId, isFollowing: serverFollowState },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
           // 성공 시 서버 상태를 요청한 상태로 변경
           setServerFollowState(nextIsFollowing);
+
+          // TanStack Query를 사용하는 모든 query invalidate
+          // e.g. 작가 피드 페이지 팔로우 기능 변경 시 layout과 팔로우 목록 페이지 invalidate
+          if (options?.invalidateFollowingQueries) {
+            queryClient.invalidateQueries({
+              predicate: (query) => query.queryKey[0] === 'following',
+            });
+          }
         },
         onError: () => {
           // 요청 실패 시 서버 상태와 동일한 상태로 롤백

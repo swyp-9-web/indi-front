@@ -42,7 +42,9 @@ interface UserButtonGroupsProps {
 }
 
 export function UserButtonGroups({ artist }: UserButtonGroupsProps) {
-  const { isFollowing, toggleIsFollowing } = useFollowToggle(artist.id, artist.isFollowing);
+  const { isFollowing, toggleIsFollowing } = useFollowToggle(artist.id, artist.isFollowing, {
+    invalidateFollowingQueries: true,
+  });
 
   return (
     <div className="mt-10 flex w-full flex-col gap-2.5">
