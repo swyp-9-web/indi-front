@@ -64,8 +64,8 @@ function FollowingArtistInfo({ artist }: FollowingArtistInfoProps) {
           <button
             onClick={toggleIsFollowing}
             className={cn(
-              'flex h-12 w-32 cursor-pointer items-center justify-center rounded-full border text-sm',
-              isFollowing ? 'bg-custom-ivory-100 border-custom-gray-100' : 'border-custom-gray-100'
+              'border-custom-gray-100 flex h-12 w-32 cursor-pointer items-center justify-center rounded-full border text-sm font-medium',
+              isFollowing && 'bg-custom-ivory-100'
             )}
           >
             {isFollowing ? <CheckIcon className="!h-6 !w-6" /> : <AddIcon className="!h-6 !w-6" />}
