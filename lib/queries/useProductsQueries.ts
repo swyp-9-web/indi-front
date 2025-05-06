@@ -1,6 +1,6 @@
-import { useInfiniteQuery, useQuery, UseQueryOptions } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery, UseQueryOptions } from '@tanstack/react-query';
 
-import { fetchProductsList } from '../apis/products.api';
+import { fetchProductsList, scrapProducts, unScrapProducts } from '../apis/products.api';
 import { ProductsListQueryParams, ProductsListResponse } from '../apis/products.type';
 
 import { QUERY_KEYS } from './queryKeys';
@@ -34,5 +34,13 @@ export const useProductsInfiniteQuery = (
     },
     initialPageParam: initialPage,
     enabled,
+  });
+};
+
+export const useToggleProductScrap = () => {
+  return useMutation({
+    mutationFn: async ({ productId, isScraped }: { productId: number; isScraped: boolean }) => {
+      return isScraped ? await unScrapProducts(productId) : await scrapProducts(productId);
+    },
   });
 };
