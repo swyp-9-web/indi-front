@@ -127,8 +127,8 @@ function FollowingButton({ isFollowing, onClick }: FollowingButtonProps) {
     <button
       onClick={onClick}
       className={cn(
-        'flex h-9.5 w-24 cursor-pointer items-center justify-center gap-1.5 rounded-full border text-sm',
-        isFollowing ? 'bg-custom-ivory-100 border-custom-gray-100' : 'border-custom-gray-100'
+        'border-custom-gray-100 flex h-9.5 w-24 cursor-pointer items-center justify-center gap-1.5 rounded-full border text-sm font-medium',
+        isFollowing && 'bg-custom-ivory-100'
       )}
     >
       {isFollowing ? <CheckIcon className="!h-6 !w-6" /> : <AddIcon className="!h-6 !w-6" />}
