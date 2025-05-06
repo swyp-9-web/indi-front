@@ -11,7 +11,7 @@ export default function ArtistInfoSection() {
   const isFollowing = false;
 
   return (
-    <>
+    <section className="relative mt-10 w-66.25">
       <button className="absolute top-0 right-0 h-6 w-6 cursor-pointer">
         <ShareIcon />
       </button>
@@ -117,6 +117,6 @@ export default function ArtistInfoSection() {
           })}
         </ul>
       </div>
-    </>
+    </section>
   );
 }

@@ -14,12 +14,20 @@ export default async function Artist({ params, searchParams }: CategoryPageProps
   const [{ id: artistId }, { sortType }] = await Promise.all([params, searchParams]);
 
   return (
-    <main className="w-8xl mx-auto mt-25 flex items-start gap-15 px-20">
-      <ArtistInfoSection />
+    <main className="w-8xl mx-auto mt-15 flex items-start gap-15 px-20">
+      <Suspense
+        fallback={
+          <div className="mt-25 flex w-66.25 items-center justify-center">
+            <div className="border-custom-gray-200 h-12 w-12 animate-spin rounded-full border-4 border-t-transparent" />
+          </div>
+        }
+      >
+        <ArtistInfoSection />
+      </Suspense>
 
       <Suspense
         fallback={
-          <div className="mt-25 flex items-center justify-center">
+          <div className="mt-25 flex flex-1 items-center justify-center">
             <div className="border-custom-gray-200 h-12 w-12 animate-spin rounded-full border-4 border-t-transparent" />
           </div>
         }
