@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
 import { revalidateArtistTag } from '@/app/actions/revalidate';
 import { useDebouncedCallback } from '@/hooks/useDebounce';
+import { FollowingArtistsResponse, FollowingPreviewResponse } from '@/lib/apis/following.type';
+import { QUERY_KEYS } from '@/lib/queries/queryKeys';
 import { useToggleFollow } from '@/lib/queries/useFollowingQueries';
 
 import { useRequireAuth } from './useRequireAuth';
@@ -24,6 +26,13 @@ export function useFollowToggle(
   const [isFollowing, setIsFollowing] = useState(initialIsFollowing); // UI 상태
   const [serverFollowState, setServerFollowState] = useState(initialIsFollowing); // 서버와 동기화 된 상태
 
+  // 캐싱된 값(initialIsFollowing)이 변경되었을 때, 리렌더링을 위한 useEffect
+  // SSR 페이지(작가 피드 페이지)의 값 변경 반영 및 setQueryData로 변경된 값 반영
+  useEffect(() => {
+    setIsFollowing(initialIsFollowing);
+    setServerFollowState(initialIsFollowing);
+  }, [initialIsFollowing]);
+
   const queryClient = useQueryClient();
 
   const { mutate: toggleFollow } = useToggleFollow();
@@ -41,6 +50,38 @@ export function useFollowToggle(
 
           // 팔로우 변경시 작가 피드 페이지 갱신, 바로 반영되지는 않고 페이지 재요청시 갱신됨
           await revalidateArtistTag(String(artistId));
+
+          queryClient.setQueryData(
+            QUERY_KEYS.following.preview,
+            (prevData: FollowingPreviewResponse | undefined) => {
+              if (!prevData) return prevData;
+              return {
+                ...prevData,
+                result: {
+                  ...prevData.result,
+                  followingArtists: prevData.result.followingArtists.map((artist) =>
+                    artist.id === artistId ? { ...artist, isFollowing: nextIsFollowing } : artist
+                  ),
+                },
+              };
+            }
+          );
+
+          queryClient.setQueryData(
+            QUERY_KEYS.following.artists({ limit: 5, page: 1 }),
+            (prevData: FollowingArtistsResponse | undefined) => {
+              if (!prevData) return prevData;
+              return {
+                ...prevData,
+                result: {
+                  ...prevData.result,
+                  artists: prevData.result.artists.map((artist) =>
+                    artist.id === artistId ? { ...artist, isFollowing: nextIsFollowing } : artist
+                  ),
+                },
+              };
+            }
+          );
 
           // TanStack Query를 사용하는 모든 query invalidate
           // e.g. 작가 피드 페이지 팔로우 기능 변경 시 layout과 팔로우 목록 페이지 invalidate
