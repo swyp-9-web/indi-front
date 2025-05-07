@@ -61,7 +61,9 @@ export const fetchArtistDetail = async (
 
   const baseUrl = mergedOptions.runtime === 'server' ? API_BASE_URL.SERVER : API_BASE_URL.CLIENT;
 
-  const res = await fetchWithAuth(`${baseUrl}/api/v1/users/artists/${artistId}`);
+  const res = await fetchWithAuth(`${baseUrl}/api/v1/users/artists/${artistId}`, {
+    next: { tags: [`artist-${artistId}`] },
+  });
 
   const data = await res.json();
 
