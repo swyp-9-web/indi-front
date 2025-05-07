@@ -96,13 +96,19 @@ export function useFollowToggle(
             queryClient.invalidateQueries({ queryKey: QUERY_KEYS.following.preview });
           }
         },
-        onError: () => {
-          // 요청 실패 시 서버 상태와 동일한 상태로 롤백
-          setIsFollowing(serverFollowState);
+        onError: async () => {
+          // 요청 실패 시 UI 상태 롤백
+          setServerFollowState(serverFollowState);
+
+          // 요청 실패 시 서버 상태와 동기화 진행
+          await revalidateArtistTag(String(artistId));
+          queryClient.invalidateQueries({
+            predicate: (query) => query.queryKey[0] === 'following',
+          });
         },
       }
     );
-  }, 500);
+  }, 200);
 
   const toggleFollowState = () => {
     const nextIsFollowing = !isFollowing;
