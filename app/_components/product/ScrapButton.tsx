@@ -11,17 +11,13 @@ interface ScrapButtonProps {
 }
 
 export default function ScrapButton({ product, hasScrapCount }: ScrapButtonProps) {
-  const { isScraped, scrapCount, toggleIsScraped } = useScrapToggle(
-    product.id,
-    product.scrap.isScrapped,
-    product.totalScraped
-  );
+  const { isScraped, toggleIsScraped } = useScrapToggle(product.id, product.scrap.isScrapped);
 
   return (
     <button onClick={toggleIsScraped} className="cursor-pointer">
       {isScraped ? <CardBookmarkFilledIcon /> : <CardBookmarkIcon />}
       {hasScrapCount && (
-        <p className="text-custom-background text-xs">{formatOverThousand(scrapCount)}</p>
+        <p className="text-custom-background text-xs">{formatOverThousand(product.totalScraped)}</p>
       )}
     </button>
   );
