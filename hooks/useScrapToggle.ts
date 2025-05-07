@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import { useQueryClient } from '@tanstack/react-query';
+
 import { useDebouncedCallback } from '@/hooks/useDebounce';
 import { useToggleProductScrap } from '@/lib/queries/useProductsQueries';
 
@@ -14,6 +16,8 @@ export function useScrapToggle(productId: number, initialIsScraped: boolean) {
   const [isScraped, setIsScrapped] = useState(initialIsScraped); // UI 상태
   const [serverScrapState, setServerScrapState] = useState(initialIsScraped); // 서버와 동기화 된 상태
 
+  const queryClient = useQueryClient();
+
   const { mutate: toggleScrap } = useToggleProductScrap();
 
   const debouncedToggleScrap = useDebouncedCallback((nextIsScrapped: boolean) => {
@@ -26,6 +30,9 @@ export function useScrapToggle(productId: number, initialIsScraped: boolean) {
         onSuccess: () => {
           // 성공 시 서버 상태를 요청한 상태로 변경
           setServerScrapState(nextIsScrapped);
+
+          // 스크랩 관련 query invalidate
+          queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] === 'products' });
         },
         onError: () => {
           // 요청 실패 시 서버 상태와 동일한 상태로 롤백
