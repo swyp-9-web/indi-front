@@ -18,6 +18,7 @@ export function useFollowToggle(
   initialIsFollowing: boolean,
   options?: {
     invalidateFollowingQueries?: boolean;
+    invalidateFollowingPreview?: boolean;
   }
 ) {
   const [isFollowing, setIsFollowing] = useState(initialIsFollowing); // UI 상태
@@ -47,6 +48,11 @@ export function useFollowToggle(
             queryClient.invalidateQueries({
               predicate: (query) => query.queryKey[0] === 'following',
             });
+          }
+
+          // 팔로우 페이지의 첫 번째 목록에서 변화가 생기는 경우 preview invalidate
+          if (options?.invalidateFollowingPreview) {
+            queryClient.invalidateQueries({ queryKey: QUERY_KEYS.following.preview });
           }
         },
         onError: () => {

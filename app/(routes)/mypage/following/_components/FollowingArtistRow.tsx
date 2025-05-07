@@ -1,16 +1,12 @@
-import { useState } from 'react';
-
 import Link from 'next/link';
 
 import ProductCard from '@/app/_components/product/ProductCard';
 import ProfileImage from '@/app/_components/shared/ProfileImage';
 import { ROUTE_PATHS } from '@/constants';
-import { useDebouncedCallback } from '@/hooks/useDebounce';
 import { useFollowToggle } from '@/hooks/useFollowToggle';
 import { FollowingArtist } from '@/lib/apis/following.type';
 import { Product } from '@/lib/apis/products.type';
 import { AddIcon, CheckIcon } from '@/lib/icons';
-import { useToggleFollow } from '@/lib/queries/useFollowingQueries';
 import { cn } from '@/lib/utils';
 import { formatOverThousand } from '@/utils/formatNumber';
 
@@ -32,7 +28,9 @@ interface FollowingArtistInfoProps {
 }
 
 function FollowingArtistInfo({ artist }: FollowingArtistInfoProps) {
-  const { isFollowing, toggleIsFollowing } = useFollowToggle(artist.id, artist.isFollowing);
+  const { isFollowing, toggleIsFollowing } = useFollowToggle(artist.id, artist.isFollowing, {
+    invalidateFollowingPreview: true,
+  });
 
   return (
     <div className="flex flex-col items-center justify-between">
