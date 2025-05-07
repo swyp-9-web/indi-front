@@ -12,8 +12,20 @@ import { useRequireAuth } from './useRequireAuth';
 
 /**
  * 작가 팔로우 상태를 토글하는 커스텀 훅
- * @param artistId - 작가 ID
- * @param initialIsFollowing - 초기 팔로우 상태
+ *
+ * - 클라이언트에서 UI용 팔로우 상태와 서버 상태를 분리하여 관리합니다.
+ * - 중복 요청 방지를 위해 delay 200의 debounce 처리가 포함되어 있습니다.
+ * - 성공 시 React Query 캐시를 직접 수정하거나 invalidate합니다. (invalidate 관련 옵션 제공)
+ * - SSR 페이지에서 initial 값이 변경되었을 때 로컬 상태를 동기화합니다.
+ *
+ * @param artistId - 팔로우/언팔로우할 작가의 ID
+ * @param initialIsFollowing - 초기 팔로우 상태 (React Query 캐시 또는 SSR에서 전달받은 값)
+ * @param options - 캐시 무효화 옵션 객체
+ * @param options.invalidateFollowingQueries - true인 경우, 'following'으로 시작하는 모든 쿼리를 invalidate합니다 (예: layout 갱신)
+ * @param options.invalidateFollowingPreview - true인 경우, following preview 쿼리를 invalidate합니다 (예: preview 리스트 갱신)
+ *
+ * @returns isFollowing - 현재 UI에 표시할 팔로우 상태
+ * @returns toggleIsFollowing - 로그인 체크 후 팔로우 상태를 토글하는 함수
  */
 export function useFollowToggle(
   artistId: number,
@@ -51,6 +63,7 @@ export function useFollowToggle(
           // 팔로우 변경시 작가 피드 페이지 갱신, 바로 반영되지는 않고 페이지 재요청시 갱신됨
           await revalidateArtistTag(String(artistId));
 
+          // 팔로잉 프리뷰 쿼리 데이터 변경
           queryClient.setQueryData(
             QUERY_KEYS.following.preview,
             (prevData: FollowingPreviewResponse | undefined) => {
@@ -67,6 +80,7 @@ export function useFollowToggle(
             }
           );
 
+          // 팔로잉 목록 쿼리 데이터 변경
           queryClient.setQueryData(
             QUERY_KEYS.following.artists({ limit: 5, page: 1 }),
             (prevData: FollowingArtistsResponse | undefined) => {
