@@ -39,7 +39,16 @@ export default async function ArtistInfoSection({ artistId }: ArtistInfoSectionP
       <p className="text-custom-brand-primary mx-auto mt-7.5 mb-3 w-60 text-center text-2xl font-bold">
         {artist.nickname}
       </p>
-      {isMyPage && <EditProfileButton />}
+      {isMyPage && (
+        <EditProfileButton
+          initialValues={{
+            nickname: artist.nickname,
+            aboutMe: artist.aboutMe,
+            homeLink: artist.homeLink,
+            snsLinks: artist.snsLinks,
+          }}
+        />
+      )}
 
       {isMyPage && <ArtistButtonGroups />}
 
