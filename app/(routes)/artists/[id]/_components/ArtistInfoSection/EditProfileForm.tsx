@@ -20,11 +20,14 @@ import {
   MAX_LENGTH,
 } from '@/lib/schemas/artistProfileEditForm.schema';
 
+import ProfileImageInput from './ProfileImageInput';
+
 interface EditProfileFormProps {
   initialValues: FormValues;
+  profileImgUrl: string;
 }
 
-export default function EditProfileForm({ initialValues }: EditProfileFormProps) {
+export default function EditProfileForm({ initialValues, profileImgUrl }: EditProfileFormProps) {
   const form = useForm<FormValues>({
     resolver: zodResolver(artistProfileEditFormSchema),
     defaultValues: initialValues,
@@ -52,7 +55,8 @@ export default function EditProfileForm({ initialValues }: EditProfileFormProps)
     <form onSubmit={form.handleSubmit((data) => console.log(data))}>
       <Form {...form}>
         <div className="mb-7.5 flex items-start gap-7.5">
-          <div className="bg-custom-gray-100 h-25 w-25 rounded-full">이미지 입력</div>
+          {/* 프로필 이미지 입력 (react-hook-form 과 연결 X) */}
+          <ProfileImageInput profileImgUrl={profileImgUrl} />
 
           <div className="flex-1">
             {/* 작가 이름 입력 필드 */}
@@ -214,7 +218,7 @@ export default function EditProfileForm({ initialValues }: EditProfileFormProps)
 
         <button
           type="submit"
-          className="bg-custom-brand-secondary text-custom-gray-900 flex h-12 w-full cursor-pointer items-center justify-center rounded-full text-sm font-medium"
+          className="bg-custom-brand-secondary text-custom-gray-900 mt-10 flex h-12 w-full cursor-pointer items-center justify-center rounded-full text-sm font-medium"
         >
           완료
         </button>

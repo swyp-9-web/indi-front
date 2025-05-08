@@ -34,7 +34,7 @@ export default async function ArtistInfoSection({ artistId }: ArtistInfoSectionP
         <ShareIcon />
       </button>
 
-      <ProfileImage src={artist.profileImgUrl ?? null} className="mx-auto h-25 w-25" />
+      <ProfileImage src={artist.profileImgUrl} className="mx-auto h-25 w-25" />
 
       <p className="text-custom-brand-primary mx-auto mt-7.5 mb-3 w-60 text-center text-2xl font-bold">
         {artist.nickname}
@@ -47,6 +47,7 @@ export default async function ArtistInfoSection({ artistId }: ArtistInfoSectionP
             homeLink: artist.homeLink,
             snsLinks: artist.snsLinks,
           }}
+          profileImagUrl={artist.profileImgUrl}
         />
       )}
 

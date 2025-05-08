@@ -13,9 +13,13 @@ import EditProfileForm from './EditProfileForm';
 
 interface EditProfileDialogButtonProps {
   initialValues: FormValues;
+  profileImagUrl: string;
 }
 
-export default function EditProfileDialogButton({ initialValues }: EditProfileDialogButtonProps) {
+export default function EditProfileDialogButton({
+  initialValues,
+  profileImagUrl,
+}: EditProfileDialogButtonProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -30,7 +34,7 @@ export default function EditProfileDialogButton({ initialValues }: EditProfileDi
           </DialogTitle>
         </DialogHeader>
 
-        <EditProfileForm initialValues={initialValues} />
+        <EditProfileForm initialValues={initialValues} profileImgUrl={profileImagUrl} />
       </DialogContent>
     </Dialog>
   );
