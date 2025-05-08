@@ -7,6 +7,7 @@ import { useDebouncedCallback } from '@/hooks/useDebounce';
 import { FollowingArtistsResponse, FollowingPreviewResponse } from '@/lib/apis/following.type';
 import { QUERY_KEYS } from '@/lib/queries/queryKeys';
 import { useToggleFollow } from '@/lib/queries/useFollowingQueries';
+import toast from '@/lib/toast';
 
 import { useRequireAuth } from './useRequireAuth';
 
@@ -109,6 +110,10 @@ export function useFollowToggle(
           if (options?.invalidateFollowingPreview) {
             queryClient.invalidateQueries({ queryKey: QUERY_KEYS.following.preview });
           }
+
+          toast.default(
+            nextIsFollowing ? '작가 팔로우를 시작했습니다' : '작가 팔로우를 취소했습니다'
+          );
         },
         onError: async () => {
           // 요청 실패 시 UI 상태 롤백
@@ -119,6 +124,8 @@ export function useFollowToggle(
           queryClient.invalidateQueries({
             predicate: (query) => query.queryKey[0] === 'following',
           });
+
+          toast.error('잠시 후 다시 시도해주세요');
         },
       }
     );

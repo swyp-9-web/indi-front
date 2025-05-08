@@ -3,6 +3,7 @@ import localFont from 'next/font/local';
 import Script from 'next/script';
 
 import Providers from '@/app/_provider';
+import { Toaster } from '@/components/ui/sonner';
 
 import GlobalNavBar from './_components/layout/GlobalNavBar';
 import LoginDialog from './_components/shared/LoginDialog';
@@ -100,6 +101,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="pt-14" />
           {children}
           <LoginDialog />
+          <Toaster position="bottom-center" />
         </Providers>
       </body>
     </html>
