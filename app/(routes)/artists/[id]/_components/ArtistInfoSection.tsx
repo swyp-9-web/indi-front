@@ -8,7 +8,8 @@ import { LinkIcon, ShareIcon } from '@/lib/icons';
 import { formatOverThousand } from '@/utils/formatNumber';
 import { detectPlatformFromUrl } from '@/utils/url';
 
-import { ArtistButtonGroups, EditProfileButton, UserButtonGroups } from './ArtistInfoButtons';
+import { ArtistButtonGroups, UserButtonGroups } from './ArtistInfoButtonGroups';
+import EditProfileButton from './EditProfileButton';
 
 interface ArtistInfoSectionProps {
   artistId: number;

@@ -8,14 +8,6 @@ import { ArtistDetail } from '@/lib/apis/user.type';
 import { AddIcon, CheckIcon } from '@/lib/icons';
 import { cn } from '@/lib/utils';
 
-export function EditProfileButton() {
-  return (
-    <button className="text-custom-brand-primary mx-auto block cursor-pointer text-sm font-medium underline underline-offset-2">
-      작가 프로필 수정
-    </button>
-  );
-}
-
 export function ArtistButtonGroups() {
   return (
     <div className="mt-10 flex w-full flex-col gap-2.5">
