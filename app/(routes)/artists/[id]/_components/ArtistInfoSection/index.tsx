@@ -75,34 +75,36 @@ export default async function ArtistInfoSection({ artistId }: ArtistInfoSectionP
         <p className="text-custom-brand-primary mt-1 text-sm">{artist.aboutMe}</p>
       </div>
 
-      <div className="mt-7.5 mb-30 w-full">
-        <h5 className="text-custom-gray-300 text-xs">웹사이트</h5>
-        <ul className="mt-2 flex flex-col gap-1.5">
-          {[artist.homeLink, ...artist.snsLinks].map((url) => {
-            if (!url) return null;
+      {!artist.homeLink && !artist.snsLinks && (
+        <div className="mt-7.5 mb-30 w-full">
+          <h5 className="text-custom-gray-300 text-xs">웹사이트</h5>
+          <ul className="mt-2 flex flex-col gap-1.5">
+            {[artist.homeLink, ...artist.snsLinks].map((url) => {
+              if (!url) return null;
 
-            const platform = detectPlatformFromUrl(url);
+              const platform = detectPlatformFromUrl(url);
 
-            return (
-              <li key={url}>
-                <a
-                  href={url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="border-custom-gray-100 flex w-full items-center gap-2 rounded-lg border px-2.5 py-2"
-                >
-                  {platform ? (
-                    <Image src={platform.iconSrc} alt={platform.label} width={20} height={20} />
-                  ) : (
-                    <LinkIcon className="shrink-0" />
-                  )}
-                  <span className="truncate text-sm">{platform ? platform.label : url}</span>
-                </a>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+              return (
+                <li key={url}>
+                  <a
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="border-custom-gray-100 flex w-full items-center gap-2 rounded-lg border px-2.5 py-2"
+                  >
+                    {platform ? (
+                      <Image src={platform.iconSrc} alt={platform.label} width={20} height={20} />
+                    ) : (
+                      <LinkIcon className="shrink-0" />
+                    )}
+                    <span className="truncate text-sm">{platform ? platform.label : url}</span>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
     </section>
   );
 }
