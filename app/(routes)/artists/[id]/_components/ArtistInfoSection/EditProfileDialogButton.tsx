@@ -23,7 +23,7 @@ export default function EditProfileDialogButton({ initialValues }: EditProfileDi
           작가 프로필 수정
         </button>
       </DialogTrigger>
-      <DialogContent className="max-h-[90dvh] gap-7.5 overflow-y-auto p-7.5">
+      <DialogContent className="scrollbar-hidden max-h-230 overflow-y-auto p-7.5">
         <DialogHeader>
           <DialogTitle className="text-custom-brand-primary text-2xl font-bold">
             작가 프로필 수정
