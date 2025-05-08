@@ -9,7 +9,7 @@ import { formatOverThousand } from '@/utils/formatNumber';
 import { detectPlatformFromUrl } from '@/utils/url';
 
 import { ArtistButtonGroups, UserButtonGroups } from './ArtistInfoButtonGroups';
-import EditProfileButton from './EditProfileButton';
+import EditProfileDialogButton from './EditProfileDialogButton';
 
 interface ArtistInfoSectionProps {
   artistId: number;
@@ -40,7 +40,7 @@ export default async function ArtistInfoSection({ artistId }: ArtistInfoSectionP
         {artist.nickname}
       </p>
       {isMyPage && (
-        <EditProfileButton
+        <EditProfileDialogButton
           initialValues={{
             nickname: artist.nickname,
             aboutMe: artist.aboutMe,
