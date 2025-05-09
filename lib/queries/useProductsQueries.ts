@@ -1,6 +1,17 @@
-import { useInfiniteQuery, useMutation, useQuery, UseQueryOptions } from '@tanstack/react-query';
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+  UseQueryOptions,
+} from '@tanstack/react-query';
 
-import { fetchProductsList, scrapProducts, unScrapProducts } from '../apis/products.api';
+import {
+  fetchProductsList,
+  registerProduct,
+  scrapProducts,
+  unScrapProducts,
+} from '../apis/products.api';
 import { ProductsListQueryParams, ProductsListResponse } from '../apis/products.type';
 
 import { QUERY_KEYS } from './queryKeys';
@@ -41,6 +52,23 @@ export const useToggleProductScrap = () => {
   return useMutation({
     mutationFn: async ({ productId, isScraped }: { productId: number; isScraped: boolean }) => {
       return isScraped ? await unScrapProducts(productId) : await scrapProducts(productId);
+    },
+  });
+};
+
+/**
+ * 작품 등록을 위한 mutation 훅입니다.
+ *
+ * 서버에 formData를 body로 보내프로필을 수정합니다.
+ * 상품 등록에 성공한 경우 상품 정보를 invalidate 합니다.
+ */
+export const useRegisterProduct = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: registerProduct,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] === 'products' });
     },
   });
 };

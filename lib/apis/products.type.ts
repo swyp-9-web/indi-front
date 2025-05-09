@@ -50,6 +50,12 @@ export interface ProductsListResponse extends SuccessResponse {
   };
 }
 
+export interface ProductRegisterResponse extends SuccessResponse {
+  result: {
+    itemId: number;
+  };
+}
+
 // 상품 리스트 API 요청 시에 사용되는 쿼리 파라미터 값들에 대한 타입
 export interface ProductsListQueryParams {
   page?: number;
