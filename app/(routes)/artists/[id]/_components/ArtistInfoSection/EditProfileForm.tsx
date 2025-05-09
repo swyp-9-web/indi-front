@@ -62,6 +62,22 @@ export default function EditProfileForm({ artist, onClose }: EditProfileFormProp
   const { mutate, isPending } = useEditArtistProfile(artist.id);
 
   const handleSubmit = (formValues: FormValues) => {
+    // 프로필 이미지 유효성 검사
+    if (artistProfileImg instanceof File) {
+      const FILE_MAX_SIZE = 5 * 1024 * 1024;
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+
+      if (artistProfileImg.size > FILE_MAX_SIZE) {
+        toast.error('프로필 이미지는 5MB 이하만 업로드할 수 있습니다');
+        return;
+      }
+
+      if (!allowedTypes.includes(artistProfileImg.type)) {
+        toast.error('PNG, JPG, JPEG 형식의 파일만 업로드할 수 있습니다');
+        return;
+      }
+    }
+
     // snsLinks에서 빈 값 제거
     const filteredSnsLinks = formValues.snsLinks?.filter((link) => link.trim() !== '') ?? [];
 
