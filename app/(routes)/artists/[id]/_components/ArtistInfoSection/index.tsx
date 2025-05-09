@@ -8,7 +8,7 @@ import { LinkIcon, ShareIcon } from '@/lib/icons';
 import { formatOverThousand } from '@/utils/formatNumber';
 import { detectPlatformFromUrl } from '@/utils/url';
 
-import { ArtistButtonGroups, UserButtonGroups } from './ArtistInfoButtonGroups';
+import { ArtistButtonGroups, ShareLinkButton, UserButtonGroups } from './ArtistInfoButtonGroups';
 import EditProfileDialogButton from './EditProfileDialogButton';
 
 interface ArtistInfoSectionProps {
@@ -30,9 +30,7 @@ export default async function ArtistInfoSection({ artistId }: ArtistInfoSectionP
 
   return (
     <section className="relative mt-10 w-66.25">
-      <button className="absolute top-0 right-0 h-6 w-6 cursor-pointer">
-        <ShareIcon />
-      </button>
+      <ShareLinkButton />
 
       <ProfileImage src={artist.profileImgUrl} className="mx-auto h-25 w-25" />
 

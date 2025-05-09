@@ -1,3 +1,5 @@
+import { useRouter } from 'next/navigation';
+
 import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query';
 
 import { revalidateArtistTag } from '@/app/actions/revalidate';
@@ -56,12 +58,15 @@ export const useUserSummary = (
  */
 export const useLogout = () => {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   return useMutation({
     mutationFn: logoutUser,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.user.summary });
+      queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] === 'following' });
       queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] === 'products' });
+      router.refresh();
     },
   });
 };
