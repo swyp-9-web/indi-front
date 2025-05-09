@@ -6,12 +6,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { AddPhotoIcon, ProductImageCancelIcon } from '@/lib/icons';
 
-interface ImageUploadSectionProps {
+interface ImageUploadInputProps {
   images: (string | File)[];
   onChangeImages: (images: (string | File)[]) => void;
 }
 
-export default function ImageUploadSection({ images, onChangeImages }: ImageUploadSectionProps) {
+export default function ImageUploadInput({ images, onChangeImages }: ImageUploadInputProps) {
   const [previewUrls, setPreviewUrls] = useState<Map<File, string>>(new Map()); // File(key): url(value)
 
   // 새로 업로드한 파일을 images 배열에 추가하고, 최대 8개까지만 유지합니다.

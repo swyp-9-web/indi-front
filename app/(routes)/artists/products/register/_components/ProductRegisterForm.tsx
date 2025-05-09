@@ -8,8 +8,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Form } from '@/components/ui/form';
 import { FormValues, productRegisterFormSchema } from '@/lib/schemas/productRegisterForm.schema';
 
-import ImageUploadSection from './ImageUploadSection';
-import ProductInfoSection from './ProductInfoSection';
+import ImageUploadInput from './ImageUploadInput';
+import ProductInfoInputs from './ProductInfoInputs';
 
 interface ProductRegisterFormProps {
   initialValues: Partial<FormValues> | null;
@@ -73,8 +73,8 @@ export default function ProductRegisterForm({
     <Form {...form}>
       <form className="w-full" onSubmit={form.handleSubmit(handleSubmit)}>
         <div className="flex items-start gap-5">
-          <ImageUploadSection images={productImages} onChangeImages={handleChangeImagesInput} />
-          <ProductInfoSection form={form} />
+          <ImageUploadInput images={productImages} onChangeImages={handleChangeImagesInput} />
+          <ProductInfoInputs form={form} />
         </div>
 
         <div className="mb-20 flex items-center justify-center gap-2.5">

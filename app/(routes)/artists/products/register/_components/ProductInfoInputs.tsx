@@ -17,11 +17,11 @@ import { getCategoryLabelByValue } from '@/utils/item';
 import PriceInputGroup from './PriceInputGroup';
 import SizeInputGroup from './SizeInputGroup';
 
-interface ProductInfoSectionProps {
+interface ProductInfoInputsProps {
   form: UseFormReturn<FormValues>;
 }
 
-export default function ProductInfoSection({ form }: ProductInfoSectionProps) {
+export default function ProductInfoInputs({ form }: ProductInfoInputsProps) {
   return (
     <div className="border-custom-gray-100 mb-15 flex-1 rounded-lg border px-7.5 py-7.5">
       <h3 className="text-custom-brand-primary mb-7.5 text-lg font-bold">작품 정보</h3>
