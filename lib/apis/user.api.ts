@@ -2,7 +2,7 @@ import { API_BASE_URL } from '@/constants';
 
 import { fetchWithAuth } from './common.api';
 import { ErrorResponse } from './common.type';
-import { UserSummaryResponse } from './user.type';
+import { ArtistDetailResponse, UserSummaryResponse } from './user.type';
 
 export const setUserCookie = async (sessionId: string): Promise<void> => {
   const res = await fetch('/api/auth/callback', {
@@ -51,4 +51,29 @@ export const logoutUser = async () => {
   if (!res.ok) {
     throw data as ErrorResponse;
   }
+};
+
+export const fetchArtistDetail = async (
+  artistId: number,
+  options: { runtime?: 'server' | 'client'; onError?: (error: ErrorResponse) => void }
+): Promise<ArtistDetailResponse> => {
+  const mergedOptions = { runtime: 'server', ...options };
+
+  const baseUrl = mergedOptions.runtime === 'server' ? API_BASE_URL.SERVER : API_BASE_URL.CLIENT;
+
+  const res = await fetchWithAuth(`${baseUrl}/api/v1/users/artists/${artistId}`, {
+    next: { tags: [`artist-${artistId}`] },
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    if (mergedOptions.onError) {
+      mergedOptions.onError(data as ErrorResponse);
+    } else {
+      throw data as ErrorResponse;
+    }
+  }
+
+  return data as ArtistDetailResponse;
 };

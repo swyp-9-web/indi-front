@@ -24,7 +24,16 @@ export default function DefaultProductsGrid({ page, lastGrid = false }: DefaultP
     sizeTypes: debouncedSizes,
   };
 
-  const { data } = useProductsQuery({ ...queryParams, limit: 8, page });
+  const { data, isLoading } = useProductsQuery({ ...queryParams, limit: 8, page });
+
+  if (isLoading)
+    return (
+      <div className="w-8xl mx-auto my-15 flex h-199.5 items-center justify-center px-20">
+        <div className="mt-25 flex items-center justify-center">
+          <div className="border-custom-gray-200 h-12 w-12 animate-spin rounded-full border-4 border-t-transparent" />
+        </div>
+      </div>
+    );
 
   return (
     <>

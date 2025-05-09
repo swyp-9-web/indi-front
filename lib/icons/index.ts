@@ -20,3 +20,4 @@ export { default as ProductImageCancelIcon } from './svg/product-image-cancel.sv
 export { default as RefreshIcon } from './svg/refresh.svg';
 export { default as SearchIcon } from './svg/search.svg';
 export { default as ShareIcon } from './svg/share.svg';
+export { default as SmsIcon } from './svg/sms.svg';
