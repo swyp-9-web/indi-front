@@ -13,9 +13,18 @@ import ProductInfoSection from './ProductInfoSection';
 
 interface ProductRegisterFormProps {
   initialValues: Partial<FormValues> | null;
+  initialImgUrls?: string[];
 }
 
-export default function ProductRegisterForm({ initialValues }: ProductRegisterFormProps) {
+export default function ProductRegisterForm({
+  initialValues,
+  initialImgUrls,
+}: ProductRegisterFormProps) {
+  const [productImages, setProductImages] = useState<(string | File)[]>(initialImgUrls ?? []);
+  const [imageOrder, setImageOrder] = useState<string[]>(initialImgUrls ?? []);
+
+  const [submitType, setSubmitType] = useState<'save' | 'upload'>('upload');
+
   const form = useForm<FormValues>({
     resolver: zodResolver(productRegisterFormSchema),
     defaultValues: initialValues ?? {
@@ -33,9 +42,13 @@ export default function ProductRegisterForm({ initialValues }: ProductRegisterFo
     },
   });
 
-  const [submitType, setSubmitType] = useState<'save' | 'upload'>('upload');
+  const handleChangeImagesInput = (images: (string | File)[]) => {
+    setProductImages(images);
 
-  // TODO: 실제 API 요청과 연동 필요
+    const newImageOrder = images.map((item) => (typeof item === 'string' ? item : item.name));
+    setImageOrder(newImageOrder);
+  };
+
   const handleSubmit = async (formValues: FormValues) => {
     console.log(submitType);
 
@@ -50,6 +63,7 @@ export default function ProductRegisterForm({ initialValues }: ProductRegisterFo
         height: formValues.size?.height ? formValues.size.height : 0,
         depth: formValues.size?.depth ? formValues.size.depth : 0,
       },
+      imageOrder,
     };
 
     console.log(requestPayload);
@@ -59,7 +73,7 @@ export default function ProductRegisterForm({ initialValues }: ProductRegisterFo
     <Form {...form}>
       <form className="w-full" onSubmit={form.handleSubmit(handleSubmit)}>
         <div className="flex items-start gap-5">
-          {/* <ImageUploadSection form={form} /> */}
+          <ImageUploadSection images={productImages} onChangeImages={handleChangeImagesInput} />
           <ProductInfoSection form={form} />
         </div>
 
