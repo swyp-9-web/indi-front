@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -13,24 +13,34 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { ArtistDetail } from '@/lib/apis/user.type';
 import { AddIcon, CancelIcon } from '@/lib/icons';
+import { useEditArtistProfile } from '@/lib/queries/useUserQueries';
 import {
   artistProfileEditFormSchema,
   FormValues,
   MAX_LENGTH,
 } from '@/lib/schemas/artistProfileEditForm.schema';
+import toast from '@/lib/toast';
 
 import ProfileImageInput from './ProfileImageInput';
 
 interface EditProfileFormProps {
-  initialValues: FormValues;
-  profileImgUrl: string;
+  artist: ArtistDetail;
+  onClose: () => void;
 }
 
-export default function EditProfileForm({ initialValues, profileImgUrl }: EditProfileFormProps) {
+export default function EditProfileForm({ artist, onClose }: EditProfileFormProps) {
+  const [artistProfileImg, setArtistProfileImg] = useState<File | string>(artist.profileImgUrl);
+
   const form = useForm<FormValues>({
     resolver: zodResolver(artistProfileEditFormSchema),
-    defaultValues: initialValues,
+    defaultValues: {
+      nickname: artist.nickname,
+      aboutMe: artist.aboutMe,
+      homeLink: artist.homeLink,
+      snsLinks: artist.snsLinks,
+    },
   });
 
   const {
@@ -49,14 +59,42 @@ export default function EditProfileForm({ initialValues, profileImgUrl }: EditPr
     }
   }, [snsLinksFields, append]);
 
-  // TODO: form 제출하기 전에 snsLinks에 ["", "https://~~~"] 이런식이면 ""를 날려야함
+  const { mutate, isPending } = useEditArtistProfile(artist.id);
+
+  const handleSubmit = (formValues: FormValues) => {
+    // snsLinks에서 빈 값 제거
+    const filteredSnsLinks = formValues.snsLinks?.filter((link) => link.trim() !== '') ?? [];
+
+    const requestPayload = {
+      ...formValues,
+      snsLinks: filteredSnsLinks,
+    };
+
+    const formData = new FormData();
+    formData.append('request', JSON.stringify(requestPayload));
+
+    // 기존 이미지에서 바뀌지 않는 경우 (string), formData에 포함하지 않음
+    if (artistProfileImg instanceof File) {
+      formData.append('profileImage', artistProfileImg);
+    }
+
+    mutate(formData, {
+      onSuccess: () => {
+        toast.default('프로필이 성공적으로 수정되었습니다');
+        onClose();
+      },
+      onError: () => {
+        toast.error('잠시 후 다시 시도해주세요');
+      },
+    });
+  };
 
   return (
-    <form onSubmit={form.handleSubmit((data) => console.log(data))}>
+    <form onSubmit={form.handleSubmit(handleSubmit)}>
       <Form {...form}>
         <div className="mb-7.5 flex items-start gap-7.5">
           {/* 프로필 이미지 입력 (react-hook-form 과 연결 X) */}
-          <ProfileImageInput profileImgUrl={profileImgUrl} />
+          <ProfileImageInput profileImgUrl={artist.profileImgUrl} onChange={setArtistProfileImg} />
 
           <div className="flex-1">
             {/* 작가 이름 입력 필드 */}
@@ -178,7 +216,7 @@ export default function EditProfileForm({ initialValues, profileImgUrl }: EditPr
                   <FormControl>
                     <div className="relative">
                       <Input
-                        className="border-custom-gray-100 h-12 pr-12 pl-4.5 font-medium shadow-none placeholder:text-sm"
+                        className="border-custom-gray-100 placeholder:text-custom-gray-200 text-custom-gray-900 h-12 pr-12 pl-4.5 font-medium shadow-none placeholder:text-sm placeholder:font-medium"
                         placeholder="URL을 입력해주세요."
                         {...field}
                       />
@@ -218,6 +256,7 @@ export default function EditProfileForm({ initialValues, profileImgUrl }: EditPr
 
         <button
           type="submit"
+          disabled={isPending}
           className="bg-custom-brand-secondary text-custom-gray-900 mt-10 flex h-12 w-full cursor-pointer items-center justify-center rounded-full text-sm font-medium"
         >
           완료

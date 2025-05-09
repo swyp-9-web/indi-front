@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+
 import {
   Dialog,
   DialogContent,
@@ -7,21 +9,19 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { FormValues } from '@/lib/schemas/artistProfileEditForm.schema';
+import { ArtistDetail } from '@/lib/apis/user.type';
 
 import EditProfileForm from './EditProfileForm';
 
 interface EditProfileDialogButtonProps {
-  initialValues: FormValues;
-  profileImagUrl: string;
+  artist: ArtistDetail;
 }
 
-export default function EditProfileDialogButton({
-  initialValues,
-  profileImagUrl,
-}: EditProfileDialogButtonProps) {
+export default function EditProfileDialogButton({ artist }: EditProfileDialogButtonProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={() => setIsOpen((prev) => !prev)}>
       <DialogTrigger asChild>
         <button className="text-custom-brand-primary mx-auto block cursor-pointer text-sm font-medium underline underline-offset-2">
           작가 프로필 수정
@@ -34,7 +34,7 @@ export default function EditProfileDialogButton({
           </DialogTitle>
         </DialogHeader>
 
-        <EditProfileForm initialValues={initialValues} profileImgUrl={profileImagUrl} />
+        <EditProfileForm artist={artist} onClose={() => setIsOpen((prev) => !prev)} />
       </DialogContent>
     </Dialog>
   );

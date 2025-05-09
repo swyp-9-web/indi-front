@@ -7,7 +7,7 @@ import { ProfileEditIcon } from '@/lib/icons';
 
 interface ProfileImageInputProps {
   profileImgUrl: string;
-  onChange?: (file: File) => void;
+  onChange: (file: File) => void;
 }
 
 export default function ProfileImageInput({ profileImgUrl, onChange }: ProfileImageInputProps) {
@@ -27,7 +27,7 @@ export default function ProfileImageInput({ profileImgUrl, onChange }: ProfileIm
     previousObjectUrl.current = newUrl;
 
     setPreviewUrl(newUrl);
-    onChange?.(file);
+    onChange(file);
   };
 
   // 언마운트시 URL revoke
