@@ -11,9 +11,12 @@ export const artistProfileEditFormSchema = z.object({
     .min(1, '작가이름을 입력해 주세요.')
     .max(MAX_LENGTH.nickname, `작가이름은 ${MAX_LENGTH.nickname}자 이하로 입력해주세요.`),
 
-  aboutMe: z.string().refine((val) => val.replace(/\s/g, '').length <= MAX_LENGTH.aboutMe, {
-    message: `자기소개는 공백 제외 ${MAX_LENGTH.aboutMe}자 이하여야 합니다.`,
-  }),
+  aboutMe: z
+    .string()
+    .min(1, '자기소개를 입력해 주세요.')
+    .refine((val) => val.replace(/\s/g, '').length <= MAX_LENGTH.aboutMe, {
+      message: `자기소개는 공백 제외 ${MAX_LENGTH.aboutMe}자 이하여야 합니다.`,
+    }),
 
   homeLink: z
     .string()
