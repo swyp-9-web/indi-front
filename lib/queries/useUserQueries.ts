@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query';
 
-import { fetchUserSummary, logoutUser, setUserCookie } from '../apis/user.api';
+import { revalidateArtistTag } from '@/app/actions/revalidate';
+
+import { editArtistProfile, fetchUserSummary, logoutUser, setUserCookie } from '../apis/user.api';
 import { UserSummaryResponse } from '../apis/user.type';
 
 import { QUERY_KEYS } from './queryKeys';
@@ -60,6 +62,24 @@ export const useLogout = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.user.summary });
       queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] === 'products' });
+    },
+  });
+};
+
+/**
+ * 작가 프로필 수정을 위한 mutation 훅입니다.
+ *
+ * 서버에 formData를 body로 보내 프로필을 수정합니다.
+ * 수정에 성공한 경우 작가 프로필 페이지의 프로필 정보와 유저 정보를 invalidate합니다.
+ */
+export const useEditArtistProfile = (artistId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: editArtistProfile,
+    onSuccess: () => {
+      revalidateArtistTag(String(artistId));
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.user.summary });
     },
   });
 };

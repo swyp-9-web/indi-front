@@ -17,6 +17,7 @@ export { default as LinkIcon } from './svg/link.svg';
 export { default as NotificationUnreadIcon } from './svg/notifications-unread.svg';
 export { default as NotificationIcon } from './svg/notifications.svg';
 export { default as ProductImageCancelIcon } from './svg/product-image-cancel.svg';
+export { default as ProfileEditIcon } from './svg/profile-edit.svg';
 export { default as RefreshIcon } from './svg/refresh.svg';
 export { default as SearchIcon } from './svg/search.svg';
 export { default as ShareIcon } from './svg/share.svg';
