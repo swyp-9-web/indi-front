@@ -3,10 +3,15 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { useRouter } from 'next/navigation';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Form } from '@/components/ui/form';
+import { ROUTE_PATHS } from '@/constants';
+import { useRegisterProduct } from '@/lib/queries/useProductsQueries';
 import { FormValues, productRegisterFormSchema } from '@/lib/schemas/productRegisterForm.schema';
+import toast from '@/lib/toast';
 
 import ImageUploadInput from './ImageUploadInput';
 import ProductInfoInputs from './ProductInfoInputs';
@@ -20,6 +25,8 @@ export default function ProductRegisterForm({
   initialValues,
   initialImgUrls,
 }: ProductRegisterFormProps) {
+  const router = useRouter();
+
   const [productImages, setProductImages] = useState<(string | File)[]>(initialImgUrls ?? []);
   const [imageOrder, setImageOrder] = useState<string[]>(initialImgUrls ?? []);
 
@@ -28,8 +35,8 @@ export default function ProductRegisterForm({
   const form = useForm<FormValues>({
     resolver: zodResolver(productRegisterFormSchema),
     defaultValues: initialValues ?? {
-      name: '',
-      category: '',
+      title: '',
+      categoryType: '',
       size: {
         width: '',
         height: '',
@@ -49,24 +56,50 @@ export default function ProductRegisterForm({
     setImageOrder(newImageOrder);
   };
 
+  const { mutate: registerProduct } = useRegisterProduct();
+
   const handleSubmit = async (formValues: FormValues) => {
-    console.log(submitType);
+    const formData = new FormData();
 
     const { priceType: _priceType, ...formValuesWithoutPriceType } = formValues;
 
-    // 백엔드 요청으로 인한 값이 없는 경우 0으로 변환해서 form data로 전송
     const requestPayload = {
       ...formValuesWithoutPriceType,
+
+      // 빈 값인 경우 0으로 반환 (백엔드 요청)
       price: formValues.price ? formValues.price : 0,
       size: {
         width: formValues.size?.width ? formValues.size.width : 0,
         height: formValues.size?.height ? formValues.size.height : 0,
         depth: formValues.size?.depth ? formValues.size.depth : 0,
       },
+
+      // 상품 등록 상태 (OPEN, TEMP 등...)
+      statusType: 'OPEN',
+
+      // 이미지 파일의 순서를 서버에 전달하기 위한 필드
       imageOrder,
     };
 
-    console.log(requestPayload);
+    formData.append('request', JSON.stringify(requestPayload));
+
+    productImages.forEach((item) => {
+      if (item instanceof File) {
+        formData.append('images', item);
+      }
+    });
+
+    registerProduct(formData, {
+      onSuccess: (data) => {
+        const productId = data.result.itemId;
+        router.replace(ROUTE_PATHS.PRODUCT_DETAIL(String(productId)));
+
+        toast.default('상품을 등록하였습니다');
+      },
+      onError: () => {
+        toast.error('잠시 후 다시 시도해주세요');
+      },
+    });
   };
 
   return (

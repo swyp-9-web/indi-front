@@ -30,7 +30,7 @@ export default function ProductInfoInputs({ form }: ProductInfoInputsProps) {
         {/* 작품명 */}
         <FormField
           control={form.control}
-          name="name"
+          name="title"
           render={({ field }) => (
             <FormItem className="relative block">
               <FormLabel className="data-[error=true]:text-custom-brand-primary mb-1.5 gap-0 text-sm font-semibold">
@@ -68,7 +68,7 @@ export default function ProductInfoInputs({ form }: ProductInfoInputsProps) {
         {/* 카테고리 */}
         <FormField
           control={form.control}
-          name="category"
+          name="categoryType"
           render={({ field }) => (
             <FormItem className="relative block">
               <FormLabel className="data-[error=true]:text-custom-brand-primary mb-1.5 gap-0 text-sm font-semibold">

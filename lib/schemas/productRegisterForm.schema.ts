@@ -25,14 +25,14 @@ const sizeSchema = z
 
 export const productRegisterFormSchema = z
   .object({
-    name: z
+    title: z
       .string()
       .min(1, { message: '작품명을 입력해 주세요.' })
       .refine((val) => val.replace(/\s/g, '').length <= MAX_LENGTH.name, {
         message: '작품명은 공백 제외 40자 이내여야 합니다.',
       }),
 
-    category: z.string().min(1, { message: '카테고리를 선택해 주세요.' }),
+    categoryType: z.string().min(1, { message: '카테고리를 선택해 주세요.' }),
 
     size: sizeSchema,
 
