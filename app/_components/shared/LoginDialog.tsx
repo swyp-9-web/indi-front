@@ -78,24 +78,20 @@ export default function LoginDialog() {
 
           {/* 더미 로그인 컴포넌트 */}
           {showDummyLogin && (
-            <div className="flex gap-2.5">
+            <>
               <button
                 onClick={() => handleDummyLogin('USER')}
-                className="border-custom-gray-100 text-custom-brand-primary flex h-11.5 w-full cursor-pointer items-center justify-center gap-2 rounded-full border text-center text-xs font-medium"
+                className="border-custom-gray-100 text-custom-brand-primary flex h-11.5 w-full cursor-pointer items-center justify-center gap-2 rounded-full border text-center text-sm font-medium"
               >
-                USER 로그인
-                <br />
-                (관리자)
+                USER 로그인 (관리자)
               </button>
               <button
                 onClick={() => handleDummyLogin('ARTIST')}
-                className="border-custom-gray-100 text-custom-brand-primary flex h-11.5 w-full cursor-pointer items-center justify-center gap-2 rounded-full border text-center text-xs font-medium"
+                className="border-custom-gray-100 text-custom-brand-primary flex h-11.5 w-full cursor-pointer items-center justify-center gap-2 rounded-full border text-center text-sm font-medium"
               >
-                ARTIST 로그인
-                <br />
-                (관리자)
+                ARTIST 로그인 (관리자)
               </button>
-            </div>
+            </>
           )}
         </div>
       </DialogContent>

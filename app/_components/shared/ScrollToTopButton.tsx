@@ -32,7 +32,7 @@ export default function ScrollToTopButton() {
     <button
       onClick={scrollToTop}
       aria-label="Scroll to top"
-      className="border-custom-gray-100 bg-custom-ivory-100 fixed right-12.5 bottom-12.5 flex h-15 w-15 cursor-pointer items-center justify-center rounded-full border"
+      className="border-custom-gray-100 bg-custom-ivory-100 fixed right-12.5 bottom-12.5 z-50 flex h-15 w-15 cursor-pointer items-center justify-center rounded-full border"
     >
       <ArrowUpwardIcon />
     </button>
