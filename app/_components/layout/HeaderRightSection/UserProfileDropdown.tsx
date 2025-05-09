@@ -40,7 +40,7 @@ export default function UserProfileDropdown({ user }: UserProfileDropdownProps) 
           <Link href={ROUTE_PATHS.MYPAGE}>마이페이지</Link>
         </DropdownMenuItem>
 
-        {user && (
+        {user && user.role === 'ARTIST' && (
           <DropdownMenuItem
             asChild
             className="text-custom-brand-primary hover:text-custom-brand-primary focus:text-custom-brand-primary h-11.5 w-30 cursor-pointer px-5 py-4 text-sm font-medium underline-offset-2 hover:bg-transparent hover:underline focus:bg-transparent"
