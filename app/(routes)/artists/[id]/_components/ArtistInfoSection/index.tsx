@@ -63,7 +63,9 @@ export default async function ArtistInfoSection({ artistId }: ArtistInfoSectionP
 
       <div className="mt-7.5">
         <h5 className="text-custom-gray-300 text-xs">작가 소개</h5>
-        <p className="text-custom-brand-primary mt-1 text-sm">{artist.aboutMe}</p>
+        <p className="text-custom-brand-primary mt-1 text-sm whitespace-pre-line">
+          {artist.aboutMe}
+        </p>
       </div>
 
       {artist.homeLink && artist.snsLinks.length === 0 && (
