@@ -50,14 +50,11 @@ export default function ProductRegisterForm() {
 
   const { mutate: registerProduct } = useRegisterProduct();
 
-  const handleSubmit = async (formValues: FormValues) => {
-    if (mode !== 'CREATE' || submitType === 'TEMP') return;
-
-    const formData = new FormData();
-
+  // formValues를 기반으로 FormData의 'request' key에 들어갈 JSON payload를 생성하는 함수
+  const createRequestPayload = (formValues: FormValues) => {
     const { priceType: _priceType, ...formValuesWithoutPriceType } = formValues;
 
-    const requestPayload = {
+    return {
       ...formValuesWithoutPriceType,
 
       // 빈 값인 경우 0으로 반환 (백엔드 요청)
@@ -74,16 +71,11 @@ export default function ProductRegisterForm() {
       // 이미지 파일의 순서를 서버에 전달하기 위한 필드
       imageOrder,
     };
+  };
 
-    formData.append('request', JSON.stringify(requestPayload));
-
-    productImages.forEach((item) => {
-      if (item instanceof File) {
-        formData.append('images', item);
-      }
-    });
-
-    registerProduct(formData, {
+  // 신규 상품 등록 요청 (submitType: OPEN, mode: CREATE)
+  const handleCreateSubmit = (formData: FormData) => {
+    return registerProduct(formData, {
       onSuccess: (data) => {
         const productId = data.result.itemId;
         router.replace(ROUTE_PATHS.PRODUCT_DETAIL(String(productId)));
@@ -98,6 +90,36 @@ export default function ProductRegisterForm() {
     });
   };
 
+  // 기존 상품 수정 요청 (submitType: OPEN, mode: EDIT)
+  const handleEditSubmit = (formData: FormData) => {
+    console.log(formData);
+  };
+
+  // 최종 form 제출 핸들러
+  const handleSubmit = async (formValues: FormValues) => {
+    if (submitType === 'TEMP') return;
+
+    const requestPayload = createRequestPayload(formValues);
+
+    // mutate에 사용할 formData 생성
+    const formData = new FormData();
+
+    formData.append('request', JSON.stringify(requestPayload));
+    productImages.forEach((item) => {
+      if (item instanceof File) {
+        formData.append('images', item);
+      }
+    });
+
+    if (submitType === 'OPEN') {
+      if (mode === 'CREATE') {
+        handleCreateSubmit(formData);
+      } else if (mode === 'EDIT') {
+        handleEditSubmit(formData);
+      }
+    }
+  };
+
   return (
     <Form {...form}>
       <form className="w-full" onSubmit={form.handleSubmit(handleSubmit)}>
@@ -107,13 +129,16 @@ export default function ProductRegisterForm() {
         </div>
 
         <div className="mb-20 flex items-center justify-center gap-2.5">
-          <button
-            type="submit"
-            onClick={() => setSubmitType('TEMP')}
-            className="border-custom-gray-100 flex h-11.5 w-42 cursor-pointer items-center justify-center rounded-full border text-sm font-medium"
-          >
-            임시저장
-          </button>
+          {mode !== 'EDIT' && (
+            <button
+              type="submit"
+              onClick={() => setSubmitType('TEMP')}
+              className="border-custom-gray-100 flex h-11.5 w-42 cursor-pointer items-center justify-center rounded-full border text-sm font-medium"
+            >
+              임시저장
+            </button>
+          )}
+
           <button
             type="submit"
             onClick={() => setSubmitType('OPEN')}
