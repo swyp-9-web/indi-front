@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Form } from '@/components/ui/form';
 import { ROUTE_PATHS } from '@/constants';
-import { useRegisterProduct } from '@/lib/queries/useProductsQueries';
+import { useEditProduct, useRegisterProduct } from '@/lib/queries/useProductsQueries';
 import { FormValues, productRegisterFormSchema } from '@/lib/schemas/productRegisterForm.schema';
 import toast from '@/lib/toast';
 import { useProductRegisterForm } from '@/stores/useProductRegisterForm';
@@ -17,7 +17,8 @@ import ProductInfoInputs from './ProductInfoInputs';
 
 export default function ProductRegisterForm() {
   const router = useRouter();
-  const { mode, initialValues, initialImgUrls, resetFormState } = useProductRegisterForm();
+  const { mode, initialValues, initialImgUrls, productId, resetFormState } =
+    useProductRegisterForm();
 
   const [productImages, setProductImages] = useState<(string | File)[]>(initialImgUrls);
   const [imageOrder, setImageOrder] = useState<string[]>(initialImgUrls);
@@ -49,6 +50,7 @@ export default function ProductRegisterForm() {
   };
 
   const { mutate: registerProduct } = useRegisterProduct();
+  const { mutate: editProduct } = useEditProduct();
 
   // formValues를 기반으로 FormData의 'request' key에 들어갈 JSON payload를 생성하는 함수
   const createRequestPayload = (formValues: FormValues) => {
@@ -82,7 +84,7 @@ export default function ProductRegisterForm() {
 
         resetFormState();
 
-        toast.default('상품을 등록하였습니다');
+        toast.default('작품을 등록하였습니다');
       },
       onError: () => {
         toast.error('잠시 후 다시 시도해주세요');
@@ -92,7 +94,32 @@ export default function ProductRegisterForm() {
 
   // 기존 상품 수정 요청 (submitType: OPEN, mode: EDIT)
   const handleEditSubmit = (formData: FormData) => {
-    console.log(formData);
+    // productId 타입 가드, zustand 상태가 올바르지 않은 경우
+    if (!productId) {
+      console.error(
+        'useProductRegisterForm의 productId가 올바르지 않습니다. productId:',
+        productId
+      );
+      toast.error('잠시 후 다시 시도해주세요');
+      return;
+    }
+
+    return editProduct(
+      { formData, productId },
+      {
+        onSuccess: (data) => {
+          const productId = data.result.itemId;
+          router.replace(ROUTE_PATHS.PRODUCT_DETAIL(String(productId)));
+
+          resetFormState();
+
+          toast.default('작품 정보를 수정하였습니다');
+        },
+        onError: () => {
+          toast.error('잠시 후 다시 시도해주세요');
+        },
+      }
+    );
   };
 
   // 최종 form 제출 핸들러
