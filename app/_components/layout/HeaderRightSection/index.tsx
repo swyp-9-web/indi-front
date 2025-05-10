@@ -3,6 +3,7 @@
 import Link from 'next/link';
 
 import { ROUTE_PATHS } from '@/constants';
+import { useProductRegisterPage } from '@/hooks/useProductRegisterPage';
 import { BookmarkIcon } from '@/lib/icons';
 import { useUserSummary } from '@/lib/queries/useUserQueries';
 import { useAuthDialog } from '@/stores/useAuthDialog';
@@ -12,6 +13,7 @@ import UserProfileDropdown from './UserProfileDropdown';
 
 export default function HeaderRightSection() {
   const { toggleIsOpen } = useAuthDialog();
+  const enterRegisterPage = useProductRegisterPage();
 
   const { data } = useUserSummary();
 
@@ -20,12 +22,12 @@ export default function HeaderRightSection() {
   return (
     <div className="flex flex-1 justify-end">
       {user && user.role === 'ARTIST' && (
-        <Link
-          href={ROUTE_PATHS.REGISTER_PRODUCT}
-          className="text-custom-gray-900 bg-custom-brand-secondary mr-5 flex h-9.5 w-37.5 items-center justify-center rounded-full text-sm font-medium"
+        <button
+          onClick={enterRegisterPage.create}
+          className="text-custom-gray-900 bg-custom-brand-secondary mr-5 flex h-9.5 w-37.5 cursor-pointer items-center justify-center rounded-full text-sm font-medium"
         >
           작품 등록하기
-        </Link>
+        </button>
       )}
 
       {user && (

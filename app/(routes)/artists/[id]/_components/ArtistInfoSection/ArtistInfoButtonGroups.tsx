@@ -1,9 +1,7 @@
 'use client';
 
-import Link from 'next/link';
-
-import { ROUTE_PATHS } from '@/constants';
 import { useFollowToggle } from '@/hooks/useFollowToggle';
+import { useProductRegisterPage } from '@/hooks/useProductRegisterPage';
 import { ArtistDetail } from '@/lib/apis/user.type';
 import { AddIcon, CheckIcon, ShareIcon } from '@/lib/icons';
 import toast from '@/lib/toast';
@@ -27,6 +25,7 @@ export function ShareLinkButton() {
 }
 
 export function ArtistButtonGroups() {
+  const enterRegisterPage = useProductRegisterPage();
   return (
     <div className="mt-10 flex w-full flex-col gap-2.5">
       <button className="border-custom-gray-100 flex h-12 w-full cursor-pointer items-center justify-center rounded-full border text-sm font-medium">
@@ -37,12 +36,12 @@ export function ArtistButtonGroups() {
         임시저장된 글
       </button>
 
-      <Link
-        href={ROUTE_PATHS.REGISTER_PRODUCT}
+      <button
+        onClick={enterRegisterPage.create}
         className="bg-custom-brand-secondary text-custom-gray-900 flex h-12 w-full items-center justify-center rounded-full text-sm font-medium"
       >
         작품 등록
-      </Link>
+      </button>
     </div>
   );
 }
