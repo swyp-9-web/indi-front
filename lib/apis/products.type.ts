@@ -42,6 +42,37 @@ export interface Product {
   };
 }
 
+export interface ProductDetail {
+  result: {
+    itemId: number;
+    title: string;
+    description: string;
+    imgUrls: string[];
+    price: number;
+    size: {
+      width: number;
+      height: number;
+      depth: number;
+    };
+    material: string;
+    categoryType: string;
+    artist: {
+      profileImgUrl: string;
+      name: string;
+      description: string;
+    };
+    reaction: {
+      totalCount: number;
+      likes: number;
+      wants: number;
+      revisits: number;
+    };
+  };
+
+  resultCode: number;
+  resultMessage: string;
+}
+
 export interface ProductsListResponse extends SuccessResponse {
   result: {
     items: Product[];

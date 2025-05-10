@@ -1,183 +1,131 @@
-'use client';
+import Link from 'next/link';
 
-import { useEffect, useState } from 'react';
-
-import Image from 'next/image';
-import { useParams } from 'next/navigation';
-
+import CommentSection from '@/app/_components/product/detail/CommentSection';
+import ProductDetailAuthorInfo from '@/app/_components/product/detail/ProductDetailAuthorInfo';
+import ProductDetailGallery from '@/app/_components/product/detail/ProductDetailGallery';
+import RecommendButtons from '@/app/_components/product/detail/RecommendButtons';
+import ScrapAndShare from '@/app/_components/product/detail/ScrapAndShare';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { ROUTE_PATHS } from '@/constants/route-paths';
+import { fetchProductDetail } from '@/lib/apis/products.api';
+import type { ProductDetail } from '@/lib/apis/products.type';
+import { ArrowNextIcon } from '@/lib/icons/index';
+import { SmsIcon } from '@/lib/icons/index';
+import { CloseIcon } from '@/lib/icons/index';
+import { formatNumberWithComma, formatOverThousand } from '@/utils/formatNumber';
+import { getCategoryLabelByValue } from '@/utils/item';
 
-interface ProductDetailProps {
-  images: string[];
-  title: string;
-  price: number;
-  sizes: string[];
-  description: string;
-  material: string;
-  dimensions: { width: number; height: number; depth: number };
-  author: { name: string; avatarUrl: string; following: boolean };
-  likes: number;
-  views: number;
-  commentsCount: number;
-}
+export default async function ProductDetail({ params }: { params: { id: string } }) {
+  const { id } = await params;
 
-interface CommentType {
-  id: string;
-  author: { name: string; avatarUrl: string };
-  content: string;
-  createdAt: string;
-}
-
-export default function ProductDetail() {
-  const { id: productId } = useParams();
-  const [product, setProduct] = useState<ProductDetailProps | null>(null);
-  const [comments, setComments] = useState<CommentType[]>([]);
-  const [selectedSize, setSelectedSize] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    async function loadData() {
-      try {
-        const prodRes = await fetch(`/api/products/${productId}`);
-        if (!prodRes.ok) throw new Error('상품 정보를 가져오는 중 오류 발생');
-        const prodData: ProductDetailProps = await prodRes.json();
-        setProduct(prodData);
-        setSelectedSize(prodData.sizes[0] ?? '');
-        const commRes = await fetch(`/api/products/${productId}/comments`);
-        if (!commRes.ok) throw new Error('댓글 정보를 가져오는 중 오류 발생');
-        const commData: CommentType[] = await commRes.json();
-        setComments(commData);
-      } catch (e: unknown) {
-        if (e instanceof Error) setError(e.message);
-      } finally {
-        setLoading(false);
-      }
-    }
-    if (productId) loadData();
-  }, [productId]);
-
-  if (loading) return <div className="mx-auto max-w-4xl p-6">로딩 중...</div>;
-  if (error) return <div className="mx-auto max-w-4xl p-6">에러: {error}</div>;
-  if (!product) return <div className="mx-auto max-w-4xl p-6">상품을 찾을 수 없습니다.</div>;
-  const { images, title, price, sizes, description, material, dimensions, author, likes, views } =
-    product;
-
-  if (images.length === 0) {
-    return <div className="mx-auto max-w-4xl p-6">이미지 정보가 없습니다.</div>;
-  }
+  const response: ProductDetail = await fetchProductDetail(Number(id), {
+    runtime: 'server',
+  });
+  const product = response.result;
 
   return (
-    <div className="mx-auto max-w-4xl space-y-8 p-6">
-      {/* Breadcrumb */}
-      <nav className="flex items-center space-x-2 text-sm text-gray-500">
-        <span>전체</span>
-        <span>/</span>
-        <span>시각 예술</span>
-      </nav>
-
-      {/* Top Section */}
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        {/* Image Gallery */}
-
-        {/* Info */}
-        <div className="space-y-4">
-          <h1 className="text-3xl font-bold">{title}</h1>
-          <p className="text-2xl text-gray-900">{price.toLocaleString()}원</p>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">사이즈(cm)</label>
-            <select
-              value={selectedSize}
-              onChange={(e) => setSelectedSize(e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            >
-              {sizes.map((size) => (
-                <option key={size} value={size}>
-                  {size}
-                </option>
-              ))}
-            </select>
+    <div className="mx-20 my-[6.25rem] flex flex-col">
+      <div className="mx-auto max-w-7xl">
+        <div className="flex gap-10">
+          <div className="flex flex-col gap-5">
+            {/* Categori */}
+            <div className="flex items-center gap-[5px]">
+              <Button
+                variant="link"
+                className="text-custom-brand-primary m-0 h-auto p-0 text-[12px]"
+              >
+                <Link href={ROUTE_PATHS.PRODUCTS}>전체</Link>
+              </Button>
+              <ArrowNextIcon className="!h-3 !w-3 text-[12px]" />
+              <Button
+                variant="link"
+                className="text-custom-brand-primary m-0 h-auto p-0 text-[12px]"
+              >
+                <Link href={ROUTE_PATHS.PRODUCTS_CATEGORY(product.categoryType)}>
+                  {getCategoryLabelByValue(product.categoryType)}
+                </Link>
+              </Button>
+            </div>
+            {/* Gallery */}
+            <ProductDetailGallery images={product.imgUrls} title={product.title} />
           </div>
 
-          <Button className="mt-4 w-full">장바구니에 담기</Button>
-
-          <div className="flex items-center justify-between text-sm text-gray-500">
-            <span>♥ {likes}</span>
-            <span>👁️ {views}</span>
-            <span>💬 {comments.length}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Description Section */}
-      <section className="space-y-2">
-        <h2 className="text-xl font-semibold">작품설명</h2>
-        <p className="text-gray-700">{description}</p>
-      </section>
-
-      {/* Details Section */}
-      <section className="grid grid-cols-2 gap-6">
-        <div>
-          <h3 className="font-medium">재질</h3>
-          <p className="mt-1 text-gray-700">{material}</p>
-        </div>
-        <div>
-          <h3 className="font-medium">크기</h3>
-          <p className="mt-1 text-gray-700">
-            가로 {dimensions.width}cm x 세로 {dimensions.height}cm x 폭 {dimensions.depth}cm
-          </p>
-        </div>
-      </section>
-
-      {/* Author Info */}
-      <Card>
-        <CardContent className="flex items-center space-x-4">
-          <Image
-            src={author.avatarUrl}
-            alt={author.name}
-            width={48}
-            height={48}
-            className="rounded-full"
-          />
-          <div className="flex-1">
-            <p className="font-medium">{author.name}</p>
-            <Button size="sm">{author.following ? '언팔로우' : '팔로우'}</Button>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Comments Section */}
-      <section>
-        <h2 className="text-xl font-semibold">댓글 ({comments.length})</h2>
-        <div className="space-y-4">
-          {comments.length > 0 ? (
-            comments.map((comment) => (
-              <div key={comment.id} className="flex items-start space-x-4">
-                <Image
-                  src={comment.author.avatarUrl}
-                  alt={comment.author.name}
-                  width={40}
-                  height={40}
-                  className="rounded-full"
-                />
-                <div>
-                  <p className="font-medium">
-                    {comment.author.name}{' '}
-                    <span className="text-sm text-gray-500">
-                      {new Date(comment.createdAt).toLocaleString()}
-                    </span>
-                  </p>
-                  <p className="text-gray-700">{comment.content}</p>
+          <div className="flex max-w-[33.37rem] flex-col">
+            <div className="mb-2.5 flex gap-5">
+              <Button className="text-custom-brand-primary h-auto bg-transparent p-0 shadow-none hover:cursor-pointer hover:bg-transparent hover:underline">
+                작품 수정하기
+              </Button>
+              <Button className="text-custom-brand-primary h-auto bg-transparent p-0 shadow-none hover:cursor-pointer hover:bg-transparent hover:underline">
+                작품 삭제하기
+              </Button>
+            </div>
+            <div className="mb-5 flex gap-[2.3rem]">
+              <h1 className="text-custom-brand-primary w-[26.62rem] text-2xl font-bold">
+                {product.title}
+              </h1>
+              {/* 스크랩 api 없어서 컴포넌트만 작성 */}
+              {/* <ScrapAndShare product={product} hasCount={false} /> */}
+            </div>
+            <div className="text-custom-brand-primary mb-[1.87rem] text-2xl font-bold">
+              {formatNumberWithComma(product.price)}원
+            </div>
+            <div className="mb-[3.75rem] flex gap-1.5">
+              <div className="border-custom-gray-100 flex items-center justify-center gap-1 rounded-4xl border-[1px] px-2.5 py-1.5">
+                <div className="flex -space-x-2">
+                  <div className="bg-custom-brand-secondary border-custom-background z-10 flex h-6 w-6 items-center justify-center rounded-full border-[1px] text-[14px]">
+                    💖
+                  </div>
+                  <div className="bg-custom-brand-secondary flex h-6 w-6 items-center justify-center rounded-full text-[14px]">
+                    👀
+                  </div>
                 </div>
+                {formatOverThousand(product.reaction.totalCount)}+
               </div>
-            ))
-          ) : (
-            <p className="text-gray-500">첫 댓글을 남겨보세요!</p>
-          )}
+              <div className="border-custom-gray-100 flex items-center justify-center gap-1 rounded-4xl border-[1px] px-2.5 py-1.5">
+                <SmsIcon />
+                {formatOverThousand(product.reaction.totalCount)}+
+              </div>
+            </div>
+
+            <div className="text-custom-gray-300 mb-1 text-[12px]">사이즈(cm)</div>
+            <div className="text-custom-brand-primary mb-3 flex text-[14px] font-semibold">
+              가로{formatNumberWithComma(product.size.width)}
+              <CloseIcon />
+              세로{formatNumberWithComma(product.size.height)}
+              <CloseIcon />폭{formatNumberWithComma(product.size.depth)}
+            </div>
+
+            <div className="text-custom-gray-300 mb-1 text-[12px]">재질</div>
+            <div className="text-custom-brand-primary mb-[3.75rem] flex text-[14px] font-semibold">
+              {product.material}
+            </div>
+
+            <ProductDetailAuthorInfo
+              AuthorSrc={product.artist.profileImgUrl}
+              AuthorName={product.artist.name}
+              AuthorDescription={product.artist.description}
+            />
+            <div className="text-custom-gray-300 mt-[3.75rem] mb-2.5 text-[12px]">작품설명</div>
+
+            <div className="border-custom-gray-100 mb-[1.87rem] h-[1px] w-full border-[1px]" />
+
+            <div className="text-custom-brand-primary mb-10 w-full text-[1rem]">
+              {product.description}
+            </div>
+
+            <div className="border-custom-gray-100 mb-[1.87rem] h-[1px] w-full border-[1px]" />
+
+            <div className="text-custom-gray-300 mb-2.5 text-[12px]">이 작품을 추천해요!</div>
+            <RecommendButtons
+              likes={product.reaction.likes}
+              wants={product.reaction.wants}
+              revisits={product.reaction.revisits}
+            />
+          </div>
         </div>
-      </section>
+
+        {/* <CommentSection /> */}
+      </div>
     </div>
   );
 }
