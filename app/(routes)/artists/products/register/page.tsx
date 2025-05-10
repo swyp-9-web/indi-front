@@ -12,7 +12,7 @@ import ProductRegisterForm from './_components/ProductRegisterForm';
 
 export default function RegisterProduct() {
   const router = useRouter();
-  const { mode, resetFormState } = useProductRegisterForm();
+  const { mode } = useProductRegisterForm();
 
   // useProductRegisterPage 훅을 활용해 접근하지 않은 경우 redirect
   useEffect(() => {
@@ -23,9 +23,7 @@ export default function RegisterProduct() {
       console.error('잘못된 접근입니다. useProductRegisterPage를 통해 접근해주세요.');
       toast.error('잘못된 접근입니다');
     }
-
-    return () => resetFormState();
-  }, [mode, router, resetFormState]);
+  }, [mode, router]);
 
   if (!mode) return null;
 

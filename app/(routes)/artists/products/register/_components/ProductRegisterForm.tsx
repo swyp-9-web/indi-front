@@ -17,7 +17,7 @@ import ProductInfoInputs from './ProductInfoInputs';
 
 export default function ProductRegisterForm() {
   const router = useRouter();
-  const { mode, initialValues, initialImgUrls } = useProductRegisterForm();
+  const { mode, initialValues, initialImgUrls, resetFormState } = useProductRegisterForm();
 
   const [productImages, setProductImages] = useState<(string | File)[]>(initialImgUrls);
   const [imageOrder, setImageOrder] = useState<string[]>(initialImgUrls);
@@ -51,7 +51,7 @@ export default function ProductRegisterForm() {
   const { mutate: registerProduct } = useRegisterProduct();
 
   const handleSubmit = async (formValues: FormValues) => {
-    if (mode !== 'CREATE') return;
+    if (mode !== 'CREATE' || submitType === 'TEMP') return;
 
     const formData = new FormData();
 
@@ -87,6 +87,8 @@ export default function ProductRegisterForm() {
       onSuccess: (data) => {
         const productId = data.result.itemId;
         router.replace(ROUTE_PATHS.PRODUCT_DETAIL(String(productId)));
+
+        resetFormState();
 
         toast.default('상품을 등록하였습니다');
       },
