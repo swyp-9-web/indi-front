@@ -4,9 +4,16 @@ import { ROUTE_PATHS } from '@/constants';
 import { useProductRegisterForm } from '@/stores/useProductRegisterForm';
 
 /**
- * 상품 등록 페이지를 관리하는 커스텀 훅입니다.
+ * 상품 등록/수정 및 임시저장 페이지 진입을 위한 커스텀 훅입니다.
  *
- * 반드시 해당 훅을 통헤서 상품 등록 페이지 (`ROUTE_PATHS.REGISTER_PRODUCT`에 진입할 수 있습니다.)
+ * 반드시 해당 훅을 통헤서 상품 등록 페이지 (`ROUTE_PATHS.REGISTER_PRODUCT`)로 이동해야 하며,
+ * 페이지 진입 시 mode 설정 및 초기 폼 데이터 초기화 로직을 포함합니다.
+ *
+ * 또한, 반드시 상품이 등록/수정/임시저장이 된 이후에는 `useProductRegisterForm`의 reset을 실행해 오류를 방지해야합니다.
+ *
+ * @example
+ *  const enterRegisterPage = useProductRegisterPage();
+ *  enterRegisterPage.create(); // 신규 등록 모드로 진입
  */
 export function useProductRegisterPage() {
   const router = useRouter();
