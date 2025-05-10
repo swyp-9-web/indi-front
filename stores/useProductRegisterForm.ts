@@ -42,6 +42,7 @@ export const useProductRegisterForm = create<ProductRegisterFormStore>((set) => 
   resetFormState: () =>
     set({
       mode: null,
+      productId: null,
       initialValues: null,
       initialImgUrls: [],
     }),
