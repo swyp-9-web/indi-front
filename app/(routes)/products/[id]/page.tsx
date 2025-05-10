@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { ROUTE_PATHS } from '@/constants/route-paths';
 import { fetchProductDetail } from '@/lib/apis/products.api';
 import type { ProductDetail } from '@/lib/apis/products.type';
+import { fetchItemReactions } from '@/lib/apis/reaction.api';
 import { ArrowNextIcon } from '@/lib/icons/index';
 import { SmsIcon } from '@/lib/icons/index';
 import { CloseIcon } from '@/lib/icons/index';
@@ -17,6 +18,9 @@ import { getCategoryLabelByValue } from '@/utils/item';
 
 export default async function ProductDetail({ params }: { params: { id: string } }) {
   const { id } = await params;
+  const {
+    result: { reactions },
+  } = await fetchItemReactions(Number(id), { runtime: 'server' });
 
   const response: ProductDetail = await fetchProductDetail(Number(id), {
     runtime: 'server',
@@ -117,9 +121,11 @@ export default async function ProductDetail({ params }: { params: { id: string }
 
             <div className="text-custom-gray-300 mb-2.5 text-[12px]">이 작품을 추천해요!</div>
             <RecommendButtons
-              likes={product.reaction.likes}
-              wants={product.reaction.wants}
-              revisits={product.reaction.revisits}
+              likesCount={product.reaction.likes}
+              wantsCount={product.reaction.wants}
+              revisitsCount={product.reaction.revisits}
+              itemId={Number(id)}
+              initialReactions={reactions}
             />
           </div>
         </div>

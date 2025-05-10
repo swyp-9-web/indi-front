@@ -2,8 +2,14 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   images: {
-    // kr.object.ncloudstorage.com : 더미 데이터 (임시)
-    domains: ['kr.object.ncloudstorage.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'kr.object.ncloudstorage.com',
+        port: '',
+        pathname: '/artego-bucket/**',
+      },
+    ],
   },
 
   async rewrites() {

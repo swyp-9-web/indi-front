@@ -3,7 +3,12 @@ import { createQueryParams } from '@/utils/queryParams';
 
 import { fetchWithAuth } from './common.api';
 import { ErrorResponse, SuccessResponse } from './common.type';
-import { ProductDetail, ProductsListQueryParams, ProductsListResponse } from './products.type';
+import {
+  ProductDetail,
+  ProductRegisterResponse,
+  ProductsListQueryParams,
+  ProductsListResponse,
+} from './products.type';
 
 export const fetchProductsList = async (
   queryParams: ProductsListQueryParams,
@@ -70,4 +75,19 @@ export const unScrapProducts = async (productId: number) => {
   }
 
   return data as SuccessResponse;
+};
+
+export const registerProduct = async (formData: FormData) => {
+  const res = await fetchWithAuth(`${API_BASE_URL.CLIENT}/api/v1/items`, {
+    method: 'POST',
+    body: formData,
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw data as ErrorResponse;
+  }
+
+  return data as ProductRegisterResponse;
 };

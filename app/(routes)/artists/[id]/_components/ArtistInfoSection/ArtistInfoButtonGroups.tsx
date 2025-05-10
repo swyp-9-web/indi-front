@@ -5,13 +5,23 @@ import Link from 'next/link';
 import { ROUTE_PATHS } from '@/constants';
 import { useFollowToggle } from '@/hooks/useFollowToggle';
 import { ArtistDetail } from '@/lib/apis/user.type';
-import { AddIcon, CheckIcon } from '@/lib/icons';
+import { AddIcon, CheckIcon, ShareIcon } from '@/lib/icons';
+import toast from '@/lib/toast';
 import { cn } from '@/lib/utils';
 
-export function EditProfileButton() {
+export function ShareLinkButton() {
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast.default('링크가 복사되었습니다!');
+    } catch {
+      toast.error('링크 복사에 실패했습니다');
+    }
+  };
+
   return (
-    <button className="text-custom-brand-primary mx-auto block cursor-pointer text-sm font-medium underline underline-offset-2">
-      작가 프로필 수정
+    <button onClick={handleCopyLink} className="absolute top-0 right-0 h-6 w-6 cursor-pointer">
+      <ShareIcon />
     </button>
   );
 }
