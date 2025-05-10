@@ -74,3 +74,18 @@ export const registerProduct = async (formData: FormData) => {
 
   return data as ProductRegisterResponse;
 };
+
+export const editProduct = async (formData: FormData, productId: number) => {
+  const res = await fetchWithAuth(`${API_BASE_URL.CLIENT}/api/v1/items/${productId}`, {
+    method: 'PATCH',
+    body: formData,
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw data as ErrorResponse;
+  }
+
+  return data as ProductRegisterResponse;
+};

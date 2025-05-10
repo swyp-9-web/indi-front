@@ -7,6 +7,7 @@ import {
 } from '@tanstack/react-query';
 
 import {
+  editProduct,
   fetchProductsList,
   registerProduct,
   scrapProducts,
@@ -59,14 +60,32 @@ export const useToggleProductScrap = () => {
 /**
  * 작품 등록을 위한 mutation 훅입니다.
  *
- * 서버에 formData를 body로 보내프로필을 수정합니다.
- * 상품 등록에 성공한 경우 상품 정보를 invalidate 합니다.
+ * 서버에 formData를 body로 보내 작품을 등록합니다.
+ * 작품 등록에 성공한 경우 작품 정보를 invalidate 합니다.
  */
 export const useRegisterProduct = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: registerProduct,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] === 'products' });
+    },
+  });
+};
+
+/**
+ * 작품 수정을 위한 mutation 훅입니다.
+ *
+ * 서버에 formData를 body로 보내 작품을 수정합니다.
+ * 작품 등록에 성공한 경우 작품 정보를 invalidate 합니다.
+ */
+export const useEditProduct = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ formData, productId }: { formData: FormData; productId: number }) =>
+      editProduct(formData, productId),
     onSuccess: () => {
       queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] === 'products' });
     },
