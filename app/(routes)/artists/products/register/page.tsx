@@ -23,7 +23,7 @@ export default function RegisterProduct() {
       console.error('잘못된 접근입니다. useProductRegisterPage를 통해 접근해주세요.');
       toast.error('잘못된 접근입니다');
     }
-  }, [mode, router]);
+  }, [router]);
 
   if (!mode) return null;
 
