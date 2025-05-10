@@ -1,5 +1,3 @@
-'use client';
-
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -12,23 +10,17 @@ import { ROUTE_PATHS } from '@/constants';
 import { useRegisterProduct } from '@/lib/queries/useProductsQueries';
 import { FormValues, productRegisterFormSchema } from '@/lib/schemas/productRegisterForm.schema';
 import toast from '@/lib/toast';
+import { useProductRegisterForm } from '@/stores/useProductRegisterForm';
 
 import ImageUploadInput from './ImageUploadInput';
 import ProductInfoInputs from './ProductInfoInputs';
 
-interface ProductRegisterFormProps {
-  initialValues: Partial<FormValues> | null;
-  initialImgUrls?: string[];
-}
-
-export default function ProductRegisterForm({
-  initialValues,
-  initialImgUrls,
-}: ProductRegisterFormProps) {
+export default function ProductRegisterForm() {
   const router = useRouter();
+  const { mode, initialValues, initialImgUrls } = useProductRegisterForm();
 
-  const [productImages, setProductImages] = useState<(string | File)[]>(initialImgUrls ?? []);
-  const [imageOrder, setImageOrder] = useState<string[]>(initialImgUrls ?? []);
+  const [productImages, setProductImages] = useState<(string | File)[]>(initialImgUrls);
+  const [imageOrder, setImageOrder] = useState<string[]>(initialImgUrls);
 
   const [submitType, setSubmitType] = useState<'TEMP' | 'OPEN'>('OPEN');
 
@@ -59,6 +51,8 @@ export default function ProductRegisterForm({
   const { mutate: registerProduct } = useRegisterProduct();
 
   const handleSubmit = async (formValues: FormValues) => {
+    if (mode !== 'CREATE') return;
+
     const formData = new FormData();
 
     const { priceType: _priceType, ...formValuesWithoutPriceType } = formValues;
