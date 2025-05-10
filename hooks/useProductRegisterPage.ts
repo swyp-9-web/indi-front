@@ -17,7 +17,7 @@ import { useProductRegisterForm } from '@/stores/useProductRegisterForm';
  */
 export function useProductRegisterPage() {
   const router = useRouter();
-  const { setMode, setInitialFormValues } = useProductRegisterForm();
+  const { setMode, setInitialFormValues, setProductId } = useProductRegisterForm();
 
   const enterRegisterPage = {
     create: () => {
@@ -28,6 +28,7 @@ export function useProductRegisterPage() {
 
     edit: ({ productId }: { productId: number }) => {
       setMode('EDIT');
+      setProductId(productId);
 
       // TODO: productId를 통해 세부 정보를 불러와서 initialValue를 설정
       console.log(productId);
