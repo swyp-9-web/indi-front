@@ -42,35 +42,36 @@ export interface Product {
   };
 }
 
-export interface ProductDetail {
-  result: {
-    itemId: number;
-    title: string;
-    description: string;
-    imgUrls: string[];
-    price: number;
-    size: {
-      width: number;
-      height: number;
-      depth: number;
-    };
-    material: string;
-    categoryType: string;
-    artist: {
-      profileImgUrl: string;
-      name: string;
-      description: string;
-    };
-    reaction: {
-      totalCount: number;
-      likes: number;
-      wants: number;
-      revisits: number;
-    };
+export interface ProductDetail extends SuccessResponse {
+  itemId: number;
+  title: string;
+  description: string;
+  imgUrls: string[];
+  price: number;
+  size: {
+    width: number;
+    height: number;
+    depth: number;
   };
-
-  resultCode: number;
-  resultMessage: string;
+  material: string;
+  categoryType: string;
+  totalScrapCount: number;
+  viewer: {
+    isScrapped: boolean;
+    isOwner: boolean;
+  };
+  artist: {
+    id: number;
+    profileImgUrl: string;
+    name: string;
+    description: string;
+  };
+  reaction: {
+    totalCount: number;
+    likes: number;
+    wants: number;
+    revisits: number;
+  };
 }
 
 export interface ProductsListResponse extends SuccessResponse {
@@ -82,6 +83,12 @@ export interface ProductsListResponse extends SuccessResponse {
 }
 
 export interface ProductRegisterResponse extends SuccessResponse {
+  result: {
+    itemId: number;
+  };
+}
+
+export interface DeleteProductResponse extends SuccessResponse {
   result: {
     itemId: number;
   };

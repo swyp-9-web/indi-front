@@ -4,6 +4,7 @@ import { createQueryParams } from '@/utils/queryParams';
 import { fetchWithAuth } from './common.api';
 import { ErrorResponse, SuccessResponse } from './common.type';
 import {
+  DeleteProductResponse,
   ProductDetail,
   ProductRegisterResponse,
   ProductsListQueryParams,
@@ -90,4 +91,21 @@ export const registerProduct = async (formData: FormData) => {
   }
 
   return data as ProductRegisterResponse;
+};
+
+export const deleteProduct = async (
+  productId: number,
+  options: { runtime: 'server' | 'client' } = { runtime: 'client' }
+): Promise<DeleteProductResponse> => {
+  const baseUrl = options.runtime === 'server' ? API_BASE_URL.SERVER : API_BASE_URL.CLIENT;
+
+  const res = await fetchWithAuth(`${baseUrl}/api/v1/items/${productId}`, {
+    method: 'DELETE',
+  });
+
+  const data = await res.json();
+  if (!res.ok) {
+    throw data as ErrorResponse;
+  }
+  return data as DeleteProductResponse;
 };

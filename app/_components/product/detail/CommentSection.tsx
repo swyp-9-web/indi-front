@@ -2,6 +2,8 @@ import Image from 'next/image';
 
 import { formatOverThousand } from '@/utils/formatNumber';
 
+import ProfileImage from '../../shared/ProfileImage';
+
 interface CommentSectionProps {
   comentCount: number;
 }
@@ -16,7 +18,7 @@ export default function CommentSection({ comentCount }: CommentSectionProps) {
       <div className="border-custom-gray-100 mb-[30px] w-full border-[1px]" />
 
       <div className="items-center> flex gap-1.5">
-        {/* <Image src={} alt='userProfile' width={24} height={24} className='rounded-4xl'/> */}
+        <ProfileImage src={null} />
       </div>
     </div>
   );
