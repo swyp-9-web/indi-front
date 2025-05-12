@@ -7,12 +7,13 @@ import UserSupportSection from './_components/UserSupportSection';
 
 const UserProfilePanel = dynamic(() => import('./_components/UserProfilePanel'), {
   ssr: false,
+  loading: () => <div className="border-custom-gray-100 h-100 w-full rounded-lg border" />,
 });
 
 export default function MyPage() {
   return (
     <main className="w-8xl mx-auto flex gap-15 p-25">
-      <div className="w-90">
+      <div className="flex h-177 w-90 flex-col justify-between">
         <UserProfilePanel />
         <UserSupportSection />
       </div>
