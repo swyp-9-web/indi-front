@@ -1,6 +1,13 @@
+'use client';
+
+import dynamic from 'next/dynamic';
+
 import CommentHistoryList from './_components/CommentHistoryList';
-import UserProfilePanel from './_components/UserProfilePanel';
 import UserSupportSection from './_components/UserSupportSection';
+
+const UserProfilePanel = dynamic(() => import('./_components/UserProfilePanel'), {
+  ssr: false,
+});
 
 export default function MyPage() {
   return (
