@@ -3,6 +3,7 @@ export { default as AddIcon } from './svg/add.svg';
 export { default as ArrowDropdownIcon } from './svg/arrow-drop-down.svg';
 export { default as ArrowNextIcon } from './svg/arrow-next.svg';
 export { default as ArrowPrevIcon } from './svg/arrow-prev.svg';
+export { default as ArrowTopRightIcon } from './svg/arrow-top-right.svg';
 export { default as ArrowUpwardIcon } from './svg/arrow-upward.svg';
 export { default as BookmarkIcon } from './svg/bookmark.svg';
 export { default as CancelIcon } from './svg/cancel.svg';
