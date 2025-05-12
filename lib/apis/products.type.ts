@@ -42,7 +42,7 @@ export interface Product {
   };
 }
 
-export interface ProductDetail extends SuccessResponse {
+export interface ProductDetail {
   itemId: number;
   title: string;
   description: string;
@@ -58,6 +58,7 @@ export interface ProductDetail extends SuccessResponse {
   totalScrapCount: number;
   viewer: {
     isScrapped: boolean;
+    isFollowing: boolean;
     isOwner: boolean;
   };
   artist: {
@@ -72,6 +73,10 @@ export interface ProductDetail extends SuccessResponse {
     wants: number;
     revisits: number;
   };
+}
+
+export interface ProductDetailResponse extends SuccessResponse {
+  result: ProductDetail;
 }
 
 export interface ProductsListResponse extends SuccessResponse {

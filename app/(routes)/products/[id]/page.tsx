@@ -6,13 +6,11 @@ import CommentSection from '@/app/_components/product/detail/CommentSection';
 import PatchAndDelete from '@/app/_components/product/detail/PatchAndDelete';
 import ProductDetailAuthorInfo from '@/app/_components/product/detail/ProductDetailAuthorInfo';
 import ProductDetailGallery from '@/app/_components/product/detail/ProductDetailGallery';
-import RecommendButtons from '@/app/_components/product/detail/RecommendButtons';
+// import RecommendButtons from '@/app/_components/product/detail/RecommendButtons';
 import ScrapAndShare from '@/app/_components/product/detail/ScrapAndShare';
-import { Button } from '@/components/ui/button';
 import { ROUTE_PATHS } from '@/constants/route-paths';
-import { fetchFollowingPreview } from '@/lib/apis/following.api';
 import { fetchProductDetail } from '@/lib/apis/products.api';
-import type { ProductDetail } from '@/lib/apis/products.type';
+import type { ProductDetailResponse } from '@/lib/apis/products.type';
 import { fetchUserSummary } from '@/lib/apis/user.api';
 import { ArrowNextIcon } from '@/lib/icons/index';
 import { SmsIcon } from '@/lib/icons/index';
@@ -21,7 +19,11 @@ import { QUERY_KEYS } from '@/lib/queries/queryKeys';
 import { formatNumberWithComma, formatOverThousand } from '@/utils/formatNumber';
 import { getCategoryLabelByValue } from '@/utils/item';
 
-export default async function ProductDetail({ params }: { params: { id: string } }) {
+export default async function ProductDetailResponse({
+  params,
+}: {
+  params: { id: string };
+}): Promise<ProductDetailResponse> {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
@@ -33,14 +35,10 @@ export default async function ProductDetail({ params }: { params: { id: string }
 
   const { id } = await params;
 
-  const response: ProductDetail = await fetchProductDetail(Number(id), {
+  const response = await fetchProductDetail(Number(id), {
     runtime: 'server',
   });
   const product = response.result;
-
-  // const followRes = await fetchFollowingPreview({ runtime: 'server' });
-  // const followingList = followRes.result.followingArtists;
-  // const hasFollow = followingList.some((a) => a.id === product.artist.id);
 
   return (
     <HydrationBoundary state={dehydrateState}>
@@ -49,21 +47,20 @@ export default async function ProductDetail({ params }: { params: { id: string }
           <div className="flex gap-10">
             <div className="flex flex-col gap-5">
               <div className="flex items-center gap-[5px]">
-                <Button
-                  variant="link"
-                  className="text-custom-brand-primary m-0 h-auto p-0 text-[12px]"
+                <Link
+                  className="text-custom-brand-primary m-0 h-auto p-0 text-[12px] hover:underline"
+                  href={ROUTE_PATHS.PRODUCTS}
                 >
-                  <Link href={ROUTE_PATHS.PRODUCTS}>전체</Link>
-                </Button>
+                  전체
+                </Link>
                 <ArrowNextIcon className="!h-3 !w-3 text-[12px]" />
-                <Button
-                  variant="link"
-                  className="text-custom-brand-primary m-0 h-auto p-0 text-[12px]"
+
+                <Link
+                  className="text-custom-brand-primary m-0 h-auto p-0 text-[12px] hover:underline"
+                  href={ROUTE_PATHS.PRODUCTS_CATEGORY(product.categoryType)}
                 >
-                  <Link href={ROUTE_PATHS.PRODUCTS_CATEGORY(product.categoryType)}>
-                    {getCategoryLabelByValue(product.categoryType)}
-                  </Link>
-                </Button>
+                  {getCategoryLabelByValue(product.categoryType)}
+                </Link>
               </div>
               {/* Gallery */}
               <ProductDetailGallery images={product.imgUrls} title={product.title} />
@@ -104,7 +101,8 @@ export default async function ProductDetail({ params }: { params: { id: string }
                 가로{formatNumberWithComma(product.size.width)}
                 <CloseIcon />
                 세로{formatNumberWithComma(product.size.height)}
-                <CloseIcon />폭{formatNumberWithComma(product.size.depth)}
+                <CloseIcon />
+                {product.size.depth != null && <> 폭{formatNumberWithComma(product.size.depth)}</>}
               </div>
 
               <div className="text-custom-gray-300 mb-1 text-[12px]">재질</div>
@@ -113,7 +111,7 @@ export default async function ProductDetail({ params }: { params: { id: string }
               </div>
 
               <ProductDetailAuthorInfo
-                hasFollow={false}
+                hasFollow={product.viewer.isFollowing}
                 artistId={product.artist.id}
                 artistSrc={product.artist.profileImgUrl}
                 artistName={product.artist.name}

@@ -5,7 +5,7 @@ import { fetchWithAuth } from './common.api';
 import { ErrorResponse, SuccessResponse } from './common.type';
 import {
   DeleteProductResponse,
-  ProductDetail,
+  ProductDetailResponse,
   ProductRegisterResponse,
   ProductsListQueryParams,
   ProductsListResponse,
@@ -37,7 +37,7 @@ export const fetchProductsList = async (
 export const fetchProductDetail = async (
   itemId: number,
   options: { runtime: 'server' | 'client' } = { runtime: 'server' }
-): Promise<ProductDetail> => {
+): Promise<ProductDetailResponse> => {
   const baseUrl = options.runtime === 'server' ? API_BASE_URL.SERVER : API_BASE_URL.CLIENT;
 
   const res = await fetchWithAuth(`${baseUrl}/api/v1/items/${itemId}`, {
@@ -47,7 +47,7 @@ export const fetchProductDetail = async (
   });
   const data = await res.json();
   if (!res.ok) throw data as ErrorResponse;
-  return data as ProductDetail;
+  return data as ProductDetailResponse;
 };
 
 export const scrapProducts = async (productId: number) => {

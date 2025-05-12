@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+import { API_BASE_URL } from '@/constants/url';
 import { formatOverThousand } from '@/utils/formatNumber';
 
 interface RecommendButtonsProps {
@@ -29,7 +30,7 @@ export default function RecommendButtons({
     if (type === 'revisits') setRevisits((prev) => prev + 1);
 
     try {
-      await fetch(`/api/v1/items/${itemId}/reactions`, {
+      await fetch(`${API_BASE_URL.CLIENT}/api/v1/items/${itemId}/reactions`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ type }),

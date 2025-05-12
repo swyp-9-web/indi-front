@@ -22,7 +22,7 @@ export default function ProductDetailGallery({ images, title }: ProductDetailGal
               type="button"
               role="listitem"
               onClick={() => setCurrentIndex(idx)}
-              className={`relative h-[4.37rem] w-[4.37rem] overflow-hidden rounded-md ${
+              className={`relative h-17.5 w-17.5 overflow-hidden rounded-md ${
                 currentIndex === idx ? 'ring-primary ring-2' : ''
               }`}
             >
@@ -31,7 +31,7 @@ export default function ProductDetailGallery({ images, title }: ProductDetailGal
           ))}
         </div>
 
-        <div className="relative h-[38.5rem] w-[38.5rem] overflow-hidden rounded-md">
+        <div className="relative h-154 w-154 overflow-hidden rounded-md">
           <Image
             src={images[currentIndex]}
             alt={`${title} 메인 이미지`}

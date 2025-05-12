@@ -9,6 +9,7 @@ import type { ProductDetail } from '@/lib/apis/products.type';
 import { BookmarkFilledIcon } from '@/lib/icons/index';
 import { BookmarkIcon } from '@/lib/icons/index';
 import { ShareIcon } from '@/lib/icons/index';
+import toast from '@/lib/toast';
 import { formatOverThousand } from '@/utils/formatNumber';
 
 interface ScrapAndShareProps {
@@ -27,9 +28,9 @@ export default function ScrapAndShare({ product, hasCount }: ScrapAndShareProps)
   const handleShareClick = () => {
     if (navigator.clipboard) {
       navigator.clipboard.writeText(url);
-      alert('현재 페이지 URL이 복사되었습니다.');
+      toast.default('현재 페이지 URL이 복사되었습니다.');
     } else {
-      alert('클립보드 지원이 필요합니다.');
+      toast.default('클립보드 지원이 필요합니다.');
     }
   };
 
