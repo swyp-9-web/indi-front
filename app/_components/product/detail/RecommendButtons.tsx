@@ -64,7 +64,7 @@ export default function RecommendButtons({
         className={`border-custom-gray-100 active:text-custom-background active:bg-custom-brand-primary text-custom-brand-primary rounded-4xl border-[1px] px-[13px] py-[8px] text-[14px] ${liked ? 'bg-custom-brand-primary/10' : ''}`}
         onClick={() => handleReactionClick('LIKES')}
       >
-        💖 마음에 들어요 {formatOverThousand(likes)}
+        💖 마음에 들어요 {formatOverThousand(likesCount)}
       </button>
       <button
         className={`border-custom-gray-100 text-custom-brand-primary rounded-4xl border-[1px] px-[13px] py-[8px] text-[14px] ${wanted ? 'bg-custom-brand-primary/10' : ''}`}

@@ -18,7 +18,7 @@ import { formatNumberWithComma, formatOverThousand } from '@/utils/formatNumber'
 import { getCategoryLabelByValue } from '@/utils/item';
 
 export default async function ProductDetailResponse({ params }: { params: { id: number } }) {
-  const { id } = params;
+  const { id } = await params;
 
   const queryClient = new QueryClient();
 
@@ -67,7 +67,7 @@ export default async function ProductDetailResponse({ params }: { params: { id: 
                   {product.title}
                 </h1>
 
-                <ScrapAndShare product={product} hasCount={product.viewer.isScrapped} />
+                <ScrapAndShare product={product} userIsScrapped={product.viewer.isScrapped} />
               </div>
               <div className="text-custom-brand-primary mb-[1.87rem] text-2xl font-bold">
                 {formatNumberWithComma(product.price)}원
@@ -109,9 +109,16 @@ export default async function ProductDetailResponse({ params }: { params: { id: 
               </div>
 
               <div className="text-custom-gray-300 mb-1 text-[12px]">재질</div>
-              <div className="text-custom-brand-primary mb-[3.75rem] flex text-[14px] font-semibold">
-                {product.material}
-              </div>
+
+              {product.material ? (
+                <div className="text-custom-brand-primary mb-15 flex text-[14px] font-semibold">
+                  {product.material}
+                </div>
+              ) : (
+                <div className="text-custom-brand-primary mb-15 flex text-[14px] font-semibold">
+                  없음
+                </div>
+              )}
 
               <ProductDetailAuthorInfo
                 hasFollow={product.viewer.isFollowing}

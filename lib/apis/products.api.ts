@@ -93,13 +93,23 @@ export const registerProduct = async (formData: FormData) => {
   return data as ProductRegisterResponse;
 };
 
-export const deleteProduct = async (
-  productId: number,
-  options: { runtime: 'server' | 'client' } = { runtime: 'client' }
-): Promise<DeleteProductResponse> => {
-  const baseUrl = options.runtime === 'server' ? API_BASE_URL.SERVER : API_BASE_URL.CLIENT;
+export const editProduct = async (formData: FormData, productId: number) => {
+  const res = await fetchWithAuth(`${API_BASE_URL.CLIENT}/api/v1/items/${productId}`, {
+    method: 'PATCH',
+    body: formData,
+  });
 
-  const res = await fetchWithAuth(`${baseUrl}/api/v1/items/${productId}`, {
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw data as ErrorResponse;
+  }
+
+  return data as ProductRegisterResponse;
+};
+
+export const deleteProduct = async (productId: number) => {
+  const res = await fetchWithAuth(`${API_BASE_URL.CLIENT}/api/v1/items/${productId}`, {
     method: 'DELETE',
   });
 

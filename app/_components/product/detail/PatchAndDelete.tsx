@@ -1,6 +1,11 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+
+import { useMutation } from '@tanstack/react-query';
+
 import { Button } from '@/components/ui/button';
+import { ROUTE_PATHS } from '@/constants/route-paths';
 import { deleteProduct } from '@/lib/apis/products.api';
 import { useUserSummary } from '@/lib/queries/useUserQueries';
 
@@ -14,6 +19,14 @@ export default function PatchAndDelete({ itemId, owner }: PatchAndDeleteProps) {
 
   const user = data?.result ?? null;
 
+  const router = useRouter();
+  const deleteMutation = useMutation({
+    mutationFn: () => deleteProduct(itemId),
+    onSuccess: () => {
+      router.push(ROUTE_PATHS.PRODUCTS);
+    },
+  });
+
   return (
     <>
       {user && owner && (
@@ -22,10 +35,11 @@ export default function PatchAndDelete({ itemId, owner }: PatchAndDeleteProps) {
             작품 수정하기
           </Button>
           <Button
-            onClick={() => deleteProduct(itemId)}
+            onClick={() => deleteMutation.mutate()}
+            disabled={deleteMutation.isPending}
             className="text-custom-brand-primary h-auto bg-transparent p-0 shadow-none hover:cursor-pointer hover:bg-transparent hover:underline"
           >
-            작품 삭제하기
+            {deleteMutation.isPending ? '삭제 중...' : '작품 삭제하기'}
           </Button>
         </div>
       )}

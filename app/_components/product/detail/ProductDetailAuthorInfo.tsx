@@ -1,7 +1,8 @@
 'use client';
 
-import Image from 'next/image';
+import Link from 'next/link';
 
+import { ROUTE_PATHS } from '@/constants/route-paths';
 import { useFollowToggle } from '@/hooks/useFollowToggle';
 import { ArrowNextIcon } from '@/lib/icons/index';
 import { AddIcon } from '@/lib/icons/index';
@@ -31,13 +32,13 @@ export default function ProductDetailAuthorInfo({
   return (
     <div className="border-custom-gray-100 flex w-full flex-col gap-2.5 rounded-[8px] border-[1px] p-5">
       <div className="flex justify-between">
-        <div className="flex items-center gap-2.5">
+        <Link href={ROUTE_PATHS.ARTIST(String(artistId))} className="flex items-center gap-2.5">
           <ProfileImage src={artistSrc} />
           <div className="text-custom-brand-primary flex items-center gap-[3px] text-[20px] font-semibold">
             {artistName}
             <ArrowNextIcon className="h-4 w-4" />
           </div>
-        </div>
+        </Link>
 
         {user?.id === artistId ? (
           <div />
