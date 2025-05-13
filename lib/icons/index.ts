@@ -1,8 +1,8 @@
 export { default as AddPhotoIcon } from './svg/add-a-photo.svg';
 export { default as AddIcon } from './svg/add.svg';
 export { default as ArrowDropdownIcon } from './svg/arrow-drop-down.svg';
-export { default as ArrowNextIcon } from './svg/arrow-next.svg';
-export { default as ArrowPrevIcon } from './svg/arrow-prev.svg';
+export { default as ArrowNextIcon } from './svg/arrow-next';
+export { default as ArrowPrevIcon } from './svg/arrow-prev';
 export { default as ArrowTopRightIcon } from './svg/arrow-top-right.svg';
 export { default as ArrowUpwardIcon } from './svg/arrow-upward.svg';
 export { default as BookmarkIcon } from './svg/bookmark.svg';
@@ -22,4 +22,4 @@ export { default as ProfileEditIcon } from './svg/profile-edit.svg';
 export { default as RefreshIcon } from './svg/refresh.svg';
 export { default as SearchIcon } from './svg/search.svg';
 export { default as ShareIcon } from './svg/share.svg';
-export { default as SmsIcon } from './svg/sms.svg';
+export { default as SmsIcon } from './svg/sms';
