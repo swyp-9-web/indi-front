@@ -3,8 +3,8 @@ import { describe, expect, it } from 'vitest';
 import { ProductsListQueryParams } from '@/lib/apis/products.type';
 import { createQueryParams } from '@/utils/queryParams';
 
-describe('createQueryParams 테스트', () => {
-  it('기본 파라미터만 포함된 경우', () => {
+describe('createQueryParams', () => {
+  it('should generate query string with basic parameters only', () => {
     const params: ProductsListQueryParams = {
       page: 1,
       limit: 20,
@@ -15,7 +15,7 @@ describe('createQueryParams 테스트', () => {
     expect(result).toBe('page=1&limit=20&sortType=CREATED_RECENT');
   });
 
-  it('배열 파라미터 포함된 경우', () => {
+  it('should include multiple values when array parameters are provided', () => {
     const params: ProductsListQueryParams = {
       sizeTypes: ['S', 'M'],
       categoryTypes: ['CRAFTS', 'TEXTILE_ART'],
@@ -25,7 +25,7 @@ describe('createQueryParams 테스트', () => {
     expect(result).toBe('sizeTypes=S&sizeTypes=M&categoryTypes=CRAFTS&categoryTypes=TEXTILE_ART');
   });
 
-  it('모든 파라미터가 포함된 경우', () => {
+  it('should include all fields when all parameters are provided', () => {
     const params: ProductsListQueryParams = {
       page: 2,
       limit: 10,
@@ -42,7 +42,7 @@ describe('createQueryParams 테스트', () => {
     );
   });
 
-  it('undefined 값이 있는 경우 무시됨', () => {
+  it('should omit parameters with undefined or empty values', () => {
     const params: ProductsListQueryParams = {
       page: 1,
       artistId: undefined,
@@ -54,7 +54,7 @@ describe('createQueryParams 테스트', () => {
     expect(result).toBe('page=1');
   });
 
-  it('정의되지 않은 필드(test 등)는 무시된다', () => {
+  it('should ignore unknown fields that are not part of the type definition', () => {
     const params = {
       page: 1,
       limit: 10,
@@ -62,7 +62,6 @@ describe('createQueryParams 테스트', () => {
     };
 
     const result = createQueryParams(params);
-
     expect(result).toBe('page=1&limit=10');
     expect(result.includes('test')).toBe(false);
   });
