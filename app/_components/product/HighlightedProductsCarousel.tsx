@@ -43,7 +43,7 @@ export default function HighlightedProductsCarousel({
   return (
     <section
       className={cn(
-        'py-12.5',
+        'h-135 py-12.5',
         variant === 'primary' ? 'bg-custom-brand-primary' : 'bg-custom-brand-secondary',
         className
       )}
@@ -58,19 +58,23 @@ export default function HighlightedProductsCarousel({
           {title}
         </h2>
 
-        <button
-          onClick={() => handleNavigationButtonClick('prev')}
-          className="border-custom-gray-100 bg-custom-background absolute top-46 left-20 z-10 flex h-10.5 w-10.5 -translate-x-1/2 translate-y-1/2 cursor-pointer items-center justify-center rounded-full"
-        >
-          <ArrowPrevIcon />
-        </button>
+        {products.length > 4 && (
+          <>
+            <button
+              onClick={() => handleNavigationButtonClick('prev')}
+              className="border-custom-gray-100 bg-custom-background absolute top-46 left-20 z-10 flex h-10.5 w-10.5 -translate-x-1/2 translate-y-1/2 cursor-pointer items-center justify-center rounded-full"
+            >
+              <ArrowPrevIcon />
+            </button>
 
-        <button
-          onClick={() => handleNavigationButtonClick('next')}
-          className="border-custom-gray-100 bg-custom-background absolute top-46 right-20 z-10 flex h-10.5 w-10.5 translate-x-1/2 translate-y-1/2 cursor-pointer items-center justify-center rounded-full"
-        >
-          <ArrowNextIcon />
-        </button>
+            <button
+              onClick={() => handleNavigationButtonClick('next')}
+              className="border-custom-gray-100 bg-custom-background absolute top-46 right-20 z-10 flex h-10.5 w-10.5 translate-x-1/2 translate-y-1/2 cursor-pointer items-center justify-center rounded-full"
+            >
+              <ArrowNextIcon />
+            </button>
+          </>
+        )}
 
         <Swiper
           spaceBetween={20}
