@@ -6,6 +6,8 @@ import { useUserSummary } from '@/lib/queries/useUserQueries';
 import toast from '@/lib/toast';
 import { formatDateToYMD } from '@/utils/date';
 
+import ProfileEditDialog from './ProfileEditDialog';
+
 export default function UserProfilePanel() {
   const { data: userData } = useUserSummary();
 
@@ -38,9 +40,7 @@ export default function UserProfilePanel() {
         {user?.createdAt ? `${formatDateToYMD(user.createdAt)} 부터 활동` : null}
       </p>
 
-      <button className="text-custom-brand-primary border-custom-gray-100 mb-2.5 flex h-12 w-full cursor-pointer items-center justify-center rounded-full border text-sm font-medium">
-        내 정보 관리
-      </button>
+      <ProfileEditDialog user={user} />
 
       {isArtist ? (
         <Link
