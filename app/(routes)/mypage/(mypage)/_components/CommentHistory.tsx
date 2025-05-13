@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 import ProfileImage from '@/app/_components/shared/ProfileImage';
@@ -17,7 +18,17 @@ export default function CommentHistory({ commentHistory }: CommentHistoryProps) 
   return (
     <div className="border-custom-gray-100 flex items-start gap-5.5 border-b pt-9.5 pb-11">
       <div className="w-32.5">
-        <div className="bg-custom-gray-100 h-16 w-16 rounded-lg" />
+        <figure className="bg-custom-gray-100 relative h-16 w-16 overflow-hidden rounded-lg">
+          <Image
+            src={product.thumbnailImgUrl}
+            width={64}
+            height={64}
+            quality={100}
+            className="h-full w-full rounded-lg object-cover"
+            alt="작품 이미지"
+          />
+        </figure>
+
         <p className="mt-5 leading-0">
           <Link
             href={ROUTE_PATHS.ARTIST(String(product.artist.id))}
