@@ -15,11 +15,13 @@ import {
 import { Input } from '@/components/ui/input';
 import { UserSummary } from '@/lib/apis/user.type';
 import { CancelIcon } from '@/lib/icons';
+import { useEditUserProfile } from '@/lib/queries/useUserQueries';
 import {
   FormValues,
   MAX_LENGTH,
   userProfileEditFormSchema,
 } from '@/lib/schemas/userProfileEditForm.schema';
+import toast from '@/lib/toast';
 
 interface ProfileEditFormProps {
   user: UserSummary;
@@ -39,9 +41,44 @@ export default function ProfileEditForm({ user, onClose }: ProfileEditFormProps)
     },
   });
 
-  const handleSubmit = (data: FormValues) => {
-    console.log(data.nickname);
-    onClose();
+  const { mutate, isPending } = useEditUserProfile();
+
+  const handleSubmit = (formValues: FormValues) => {
+    // 프로필 이미지 유효성 검사
+    if (userProfileImg instanceof File) {
+      const FILE_MAX_SIZE = 5 * 1024 * 1024;
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+
+      if (userProfileImg.size > FILE_MAX_SIZE) {
+        toast.error('프로필 이미지는 5MB 이하만 업로드할 수 있습니다');
+        return;
+      }
+
+      if (!allowedTypes.includes(userProfileImg.type)) {
+        toast.error('PNG, JPG, JPEG 형식의 파일만 업로드할 수 있습니다');
+        return;
+      }
+    }
+
+    // FormData 생성
+    const formData = new FormData();
+
+    formData.append('request', JSON.stringify({ nickname: formValues.nickname }));
+
+    // 기존 이미지에서 바뀌지 않는 경우 (string), formData에 포함하지 않음
+    if (userProfileImg instanceof File) {
+      formData.append('profileImage', userProfileImg);
+    }
+
+    mutate(formData, {
+      onSuccess: () => {
+        toast.default('프로필이 성공적으로 수정되었습니다');
+        onClose();
+      },
+      onError: () => {
+        toast.error('잠시 후 다시 시도해주세요');
+      },
+    });
   };
 
   return (
@@ -164,6 +201,7 @@ export default function ProfileEditForm({ user, onClose }: ProfileEditFormProps)
 
         <button
           type="submit"
+          disabled={isPending}
           className="bg-custom-brand-secondary text-custom-gray-900 mt-11.5 h-12 w-full cursor-pointer rounded-full text-sm font-medium"
         >
           완료
