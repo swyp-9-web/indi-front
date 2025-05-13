@@ -79,7 +79,7 @@ export const fetchArtistDetail = async (
 };
 
 export const editArtistProfile = async (formData: FormData) => {
-  const res = await fetchWithAuth(`${API_BASE_URL.CLIENT}/api/v1/users/artist/profile`, {
+  const res = await fetchWithAuth(`${API_BASE_URL.CLIENT}/api/v1/users/profile/artist`, {
     method: 'PATCH',
     body: formData,
   });
@@ -91,4 +91,19 @@ export const editArtistProfile = async (formData: FormData) => {
   }
 
   return data as ArtistDetailResponse;
+};
+
+export const editUserProfile = async (formData: FormData) => {
+  const res = await fetchWithAuth(`${API_BASE_URL.CLIENT}/api/v1/users/profile/user`, {
+    method: 'PATCH',
+    body: formData,
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw data as ErrorResponse;
+  }
+
+  return data as UserSummaryResponse;
 };

@@ -4,7 +4,13 @@ import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstac
 
 import { revalidateArtistTag } from '@/app/actions/revalidate';
 
-import { editArtistProfile, fetchUserSummary, logoutUser, setUserCookie } from '../apis/user.api';
+import {
+  editArtistProfile,
+  editUserProfile,
+  fetchUserSummary,
+  logoutUser,
+  setUserCookie,
+} from '../apis/user.api';
 import { UserSummaryResponse } from '../apis/user.type';
 
 import { QUERY_KEYS } from './queryKeys';
@@ -84,6 +90,23 @@ export const useEditArtistProfile = (artistId: number) => {
     mutationFn: editArtistProfile,
     onSuccess: () => {
       revalidateArtistTag(String(artistId));
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.user.summary });
+    },
+  });
+};
+
+/**
+ * 유저 프로필 수정을 위한 mutation 훅입니다.
+ *
+ * 서버에 formData를 body로 보내 프로필을 수정합니다.
+ * 수정에 성공한 경우 유저 정보를 invalidate 합니다.
+ */
+export const useEditUserProfile = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: editUserProfile,
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.user.summary });
     },
   });
