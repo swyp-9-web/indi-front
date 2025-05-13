@@ -9,25 +9,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import toast from '@/lib/toast';
-
-export default function UserSupportSection() {
-  return (
-    <div className="mt-47.5 w-full">
-      <button
-        onClick={() => toast.error('아직 준비 중인 기능입니다')}
-        className="text-custom-brand-primary border-custom-gray-100 mb-2.5 h-12 w-full cursor-pointer items-center justify-center rounded-lg border text-sm font-medium"
-      >
-        고객센터
-      </button>
-
-      <DeleteAccountDialog />
-    </div>
-  );
-}
 
 // TODO: 탈퇴 API 연동
-function DeleteAccountDialog() {
+export default function DeleteAccountDialog() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
