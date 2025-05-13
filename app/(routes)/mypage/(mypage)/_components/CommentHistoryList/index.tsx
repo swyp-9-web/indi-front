@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useInfiniteCommentHistory } from '@/lib/queries/useCommentsQueries';
 
 import CommentHistory from './CommentHistory';
+import NoCommentHistory from './NoCommentHistory';
 
 export default function CommentHistoryList() {
   const [startInfinite, setStartInfinite] = useState(false);
@@ -34,6 +35,8 @@ export default function CommentHistoryList() {
 
   return (
     <div className="border-custom-gray-100 border-t">
+      {!data?.pages[0].result.meta.totalItems && <NoCommentHistory />}
+
       {data?.pages.map((page) =>
         page.result.comments.map((item) => (
           <CommentHistory key={item.myComment.id} commentHistory={item} />

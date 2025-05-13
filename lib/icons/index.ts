@@ -22,3 +22,4 @@ export { default as ProfileEditIcon } from './svg/profile-edit.svg';
 export { default as RefreshIcon } from './svg/refresh.svg';
 export { default as SearchIcon } from './svg/search.svg';
 export { default as ShareIcon } from './svg/share.svg';
+export { default as SmsIcon } from './svg/sms.svg';
