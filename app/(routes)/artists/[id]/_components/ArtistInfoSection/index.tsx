@@ -18,7 +18,7 @@ interface ArtistInfoSectionProps {
 export default async function ArtistInfoSection({ artistId }: ArtistInfoSectionProps) {
   const [artistRes, userRes] = await Promise.all([
     fetchArtistDetail(artistId, {
-      onError: (_error) => {
+      onError: () => {
         return redirect(ROUTE_PATHS.HOME);
       },
     }),

@@ -124,7 +124,10 @@ export default function ProductRegisterForm() {
 
   // 최종 form 제출 핸들러
   const handleSubmit = async (formValues: FormValues) => {
-    if (submitType === 'TEMP') return;
+    if (submitType === 'TEMP') {
+      toast.error('아직 준비 중인 기능입니다');
+      return;
+    }
 
     const requestPayload = createRequestPayload(formValues);
 
