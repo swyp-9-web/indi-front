@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 
-import { API_BASE_URL } from '@/constants/url';
+import { addItemReaction } from '@/lib/apis/reaction.api';
+import { removeItemReaction } from '@/lib/apis/reaction.api';
 import { formatOverThousand } from '@/utils/formatNumber';
 
 interface RecommendButtonsProps {
@@ -10,7 +11,6 @@ interface RecommendButtonsProps {
   wantsCount: number;
   revisitsCount: number;
   itemId: number;
-  initialReactions: { likes: number; wants: number; revisits: number };
 }
 
 export default function RecommendButtons({
@@ -18,23 +18,41 @@ export default function RecommendButtons({
   wantsCount,
   revisitsCount,
   itemId,
-  initialReactions,
 }: RecommendButtonsProps) {
   const [likes, setLikes] = useState(likesCount);
   const [wants, setWants] = useState(wantsCount);
   const [revisits, setRevisits] = useState(revisitsCount);
 
-  const handleReactionClick = async (type: 'likes' | 'wants' | 'revisits') => {
-    if (type === 'likes') setLikes((prev) => prev + 1);
-    if (type === 'wants') setWants((prev) => prev + 1);
-    if (type === 'revisits') setRevisits((prev) => prev + 1);
+  const [liked, setLiked] = useState(false);
+  const [wanted, setWanted] = useState(false);
+  const [revisited, setRevisited] = useState(false);
 
+  const handleReactionClick = async (type: 'LIKES' | 'WANTS' | 'REVISITS') => {
+    let method = 'POST';
+    if (type === 'LIKES') {
+      const next = !liked;
+      setLiked(next);
+      setLikes((prev) => prev + (next ? 1 : -1));
+      method = next ? 'POST' : 'DELETE';
+    }
+    if (type === 'WANTS') {
+      const next = !wanted;
+      setWanted(next);
+      setWants((prev) => prev + (next ? 1 : -1));
+      method = next ? 'POST' : 'DELETE';
+    }
+    if (type === 'REVISITS') {
+      const next = !revisited;
+      setRevisited(next);
+      setRevisits((prev) => prev + (next ? 1 : -1));
+      method = next ? 'POST' : 'DELETE';
+    }
     try {
-      await fetch(`${API_BASE_URL.CLIENT}/api/v1/items/${itemId}/reactions`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type }),
-      });
+      if (method === 'POST') {
+        addItemReaction(itemId, type);
+      } else {
+        removeItemReaction(itemId);
+      }
     } catch (error) {
       console.error('Reaction failed', error);
     }
@@ -43,20 +61,20 @@ export default function RecommendButtons({
   return (
     <div className="flex gap-1.5">
       <button
-        className="border-custom-gray-100 text-custom-brand-primary rounded-4xl border-[1px] px-[13px] py-[8px] text-[14px]"
-        onClick={() => handleReactionClick('likes')}
+        className={`border-custom-gray-100 active:text-custom-background active:bg-custom-brand-primary text-custom-brand-primary rounded-4xl border-[1px] px-[13px] py-[8px] text-[14px] ${liked ? 'bg-custom-brand-primary/10' : ''}`}
+        onClick={() => handleReactionClick('LIKES')}
       >
         💖 마음에 들어요 {formatOverThousand(likes)}
       </button>
       <button
-        className="border-custom-gray-100 text-custom-brand-primary rounded-4xl border-[1px] px-[13px] py-[8px] text-[14px]"
-        onClick={() => handleReactionClick('wants')}
+        className={`border-custom-gray-100 text-custom-brand-primary rounded-4xl border-[1px] px-[13px] py-[8px] text-[14px] ${wanted ? 'bg-custom-brand-primary/10' : ''}`}
+        onClick={() => handleReactionClick('WANTS')}
       >
         🖼️ 소장하고 싶어요 {formatOverThousand(wants)}
       </button>
       <button
-        className="border-custom-gray-100 text-custom-brand-primary rounded-4xl border-[1px] px-[13px] py-[8px] text-[14px]"
-        onClick={() => handleReactionClick('revisits')}
+        className={`border-custom-gray-100 text-custom-brand-primary rounded-4xl border-[1px] px-[13px] py-[8px] text-[14px] ${revisited ? 'bg-custom-brand-primary/10' : ''}`}
+        onClick={() => handleReactionClick('REVISITS')}
       >
         👀 또 보고 싶어요 {formatOverThousand(revisits)}
       </button>

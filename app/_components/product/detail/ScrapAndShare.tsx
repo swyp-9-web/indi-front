@@ -36,16 +36,15 @@ export default function ScrapAndShare({ product, hasCount }: ScrapAndShareProps)
 
   return (
     <div className="flex items-center gap-[17px]">
-      <button>
-        <button onClick={toggleIsScraped} className="cursor-pointer">
-          {isScraped ? <BookmarkFilledIcon /> : <BookmarkIcon />}
-          {hasCount && (
-            <p className="text-custom-background text-custom-brand-primary text-xs">
-              {formatOverThousand(product.totalScrapCount)}+
-            </p>
-          )}
-        </button>
+      <button onClick={toggleIsScraped} className="cursor-pointer">
+        {isScraped ? <BookmarkFilledIcon /> : <BookmarkIcon />}
+        {hasCount && (
+          <p className="text-custom-brand-primary text-xs">
+            {formatOverThousand(product.totalScrapCount)}+
+          </p>
+        )}
       </button>
+
       <button onClick={handleShareClick} className="cursor-pointer">
         <ShareIcon className="!h-6 !w-6" />
       </button>

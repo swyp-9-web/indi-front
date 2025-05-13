@@ -2,15 +2,13 @@ import Link from 'next/link';
 
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
-import CommentSection from '@/app/_components/product/detail/CommentSection';
 import PatchAndDelete from '@/app/_components/product/detail/PatchAndDelete';
 import ProductDetailAuthorInfo from '@/app/_components/product/detail/ProductDetailAuthorInfo';
 import ProductDetailGallery from '@/app/_components/product/detail/ProductDetailGallery';
-// import RecommendButtons from '@/app/_components/product/detail/RecommendButtons';
+import RecommendButtons from '@/app/_components/product/detail/RecommendButtons';
 import ScrapAndShare from '@/app/_components/product/detail/ScrapAndShare';
 import { ROUTE_PATHS } from '@/constants/route-paths';
 import { fetchProductDetail } from '@/lib/apis/products.api';
-import type { ProductDetailResponse } from '@/lib/apis/products.type';
 import { fetchUserSummary } from '@/lib/apis/user.api';
 import { ArrowNextIcon } from '@/lib/icons/index';
 import { SmsIcon } from '@/lib/icons/index';
@@ -19,11 +17,9 @@ import { QUERY_KEYS } from '@/lib/queries/queryKeys';
 import { formatNumberWithComma, formatOverThousand } from '@/utils/formatNumber';
 import { getCategoryLabelByValue } from '@/utils/item';
 
-export default async function ProductDetailResponse({
-  params,
-}: {
-  params: { id: string };
-}): Promise<ProductDetailResponse> {
+export default async function ProductDetailResponse({ params }: { params: { id: number } }) {
+  const { id } = params;
+
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
@@ -32,8 +28,6 @@ export default async function ProductDetailResponse({
   });
 
   const dehydrateState = dehydrate(queryClient);
-
-  const { id } = await params;
 
   const response = await fetchProductDetail(Number(id), {
     runtime: 'server',
@@ -98,11 +92,20 @@ export default async function ProductDetailResponse({
 
               <div className="text-custom-gray-300 mb-1 text-[12px]">사이즈(cm)</div>
               <div className="text-custom-brand-primary mb-3 flex text-[14px] font-semibold">
-                가로{formatNumberWithComma(product.size.width)}
-                <CloseIcon />
-                세로{formatNumberWithComma(product.size.height)}
-                <CloseIcon />
-                {product.size.depth != null && <> 폭{formatNumberWithComma(product.size.depth)}</>}
+                {product.size.width > 0 || product.size.height > 0 || product.size.depth > 0 ? (
+                  <>
+                    {product.size.width > 0 && <>가로{formatNumberWithComma(product.size.width)}</>}
+                    {product.size.width > 0 && product.size.height > 0 && <CloseIcon />}
+                    {product.size.height > 0 && (
+                      <>세로{formatNumberWithComma(product.size.height)}</>
+                    )}
+                    {(product.size.width > 0 || product.size.height > 0) &&
+                      product.size.depth > 0 && <CloseIcon />}
+                    {product.size.depth > 0 && <>폭{formatNumberWithComma(product.size.depth)}</>}
+                  </>
+                ) : (
+                  <>없음</>
+                )}
               </div>
 
               <div className="text-custom-gray-300 mb-1 text-[12px]">재질</div>
@@ -128,13 +131,12 @@ export default async function ProductDetailResponse({
               <div className="border-custom-gray-100 mb-[1.87rem] h-[1px] w-full border-[1px]" />
 
               <div className="text-custom-gray-300 mb-2.5 text-[12px]">이 작품을 추천해요!</div>
-              {/* <RecommendButtons
-              likesCount={product.reaction.likes}
-              wantsCount={product.reaction.wants}
-              revisitsCount={product.reaction.revisits}
-              itemId={Number(id)}
-              initialReactions={reactions}
-            /> */}
+              <RecommendButtons
+                likesCount={product.reaction.likes}
+                wantsCount={product.reaction.wants}
+                revisitsCount={product.reaction.revisits}
+                itemId={Number(id)}
+              />
             </div>
           </div>
 
