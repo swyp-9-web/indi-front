@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { ProductsListQueryParams } from '@/lib/apis/products.type';
-
-import { createQueryParams } from './queryParams';
+import { createQueryParams } from '@/utils/queryParams';
 
 describe('createQueryParams 테스트', () => {
   it('기본 파라미터만 포함된 경우', () => {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { formatNumberWithComma, formatOverThousand } from './formatNumber';
+import { formatNumberWithComma, formatOverThousand } from '@/utils/formatNumber';
 
 describe('formatNumber utilities', () => {
   describe('formatNumberWithComma', () => {

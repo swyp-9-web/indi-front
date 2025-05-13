@@ -6,7 +6,7 @@ import {
   getSizeLabelByValue,
   getSizeValueByLabel,
   getSortValueByLabel,
-} from './item';
+} from '@/utils/item';
 
 describe('Item 관련 유틸 함수 테스트', () => {
   describe('Category 변환 함수', () => {

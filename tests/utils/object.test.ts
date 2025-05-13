@@ -1,8 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { stableStringify } from './object';
-
-// 함수명 변경 필요
+import { stableStringify } from '@/utils/object';
 
 describe('deepStableStringify 테스트', () => {
   it('키 순서가 달라도 같은 문자열을 반환해야 함', () => {

@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 
-import { formatDateToYMD, formatRelativeTimeFromNow } from './date';
+import { formatDateToYMD, formatRelativeTimeFromNow } from '@/utils/date';
 
 describe('Date 관련 유틸 함수 테스트', () => {
   describe('formatDateToYMD', () => {

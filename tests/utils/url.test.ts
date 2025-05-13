@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { detectPlatformFromUrl } from './url';
+import { detectPlatformFromUrl } from '@/utils/url';
 
 describe('detectPlatformFromUrl 함수 테스트', () => {
   it('Pinterest 도메인을 정확히 감지', () => {
