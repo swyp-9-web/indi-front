@@ -3,6 +3,7 @@ import { useFieldArray, useForm } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import ProfileImageInput from '@/app/_components/shared/ProfileImageInput';
 import {
   Form,
   FormControl,
@@ -22,8 +23,6 @@ import {
   MAX_LENGTH,
 } from '@/lib/schemas/artistProfileEditForm.schema';
 import toast from '@/lib/toast';
-
-import ProfileImageInput from './ProfileImageInput';
 
 interface EditProfileFormProps {
   artist: ArtistDetail;
@@ -110,7 +109,10 @@ export default function EditProfileForm({ artist, onClose }: EditProfileFormProp
       <Form {...form}>
         <div className="mb-7.5 flex items-start gap-7.5">
           {/* 프로필 이미지 입력 (react-hook-form 과 연결 X) */}
-          <ProfileImageInput profileImgUrl={artist.profileImgUrl} onChange={setArtistProfileImg} />
+          <ProfileImageInput
+            initialProfileImgUrl={artist.profileImgUrl}
+            onChange={setArtistProfileImg}
+          />
 
           <div className="flex-1">
             {/* 작가 이름 입력 필드 */}
