@@ -13,10 +13,6 @@ function normalizeToUTCISOString(dateString: string): string {
  *
  * @param dateString - 변환할 ISO 8601 날짜 문자열 (예: "2024-04-23T15:30:00.000Z")
  * @returns "yyyy.MM.dd" 형식의 문자열 (KST 기준) 또는 빈 문자열
- *
- * @example
- * formatDateToYMD("2024-04-23T15:30:00.000Z");
- * // 반환값: "2024.04.24"
  */
 export function formatDateToYMD(dateString: string | null | undefined): string {
   if (!dateString) return '';
@@ -28,6 +24,27 @@ export function formatDateToYMD(dateString: string | null | undefined): string {
     const zonedDate = toZonedTime(parsedDate, timeZone);
 
     return format(zonedDate, 'yyyy.MM.dd', { timeZone });
+  } catch {
+    return '';
+  }
+}
+
+/**
+ * ISO 날짜 문자열을 받아 KST 기준으로 "HH.mm" 형식의 시각 문자열을 반환합니다.
+ *
+ * @param dateString - UTC ISO 8601 형식 문자열
+ * @returns "HH.mm" 형식의 문자열 (예: "12.50")
+ */
+export function formatTimeToHourMinute(dateString: string | null | undefined): string {
+  if (!dateString) return '';
+
+  const timeZone = 'Asia/Seoul';
+
+  try {
+    const parsedDate = parseISO(normalizeToUTCISOString(dateString));
+    const zonedDate = toZonedTime(parsedDate, timeZone);
+
+    return format(zonedDate, 'HH.mm', { timeZone });
   } catch {
     return '';
   }

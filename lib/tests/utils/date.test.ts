@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 
-import { formatDateToYMD, formatRelativeTimeFromNow } from '@/utils/date';
+import { formatDateToYMD, formatRelativeTimeFromNow, formatTimeToHourMinute } from '@/utils/date';
 
 describe('Date utility functions', () => {
   describe('formatDateToYMD (based on KST)', () => {
@@ -26,6 +26,33 @@ describe('Date utility functions', () => {
 
     it('should returns an empty string for an invalid date string', () => {
       const result = formatDateToYMD('invalid-date');
+      expect(result).toBe('');
+    });
+  });
+
+  describe('formatTimeToHourMinute (based on KST)', () => {
+    it('should convert UTC datetime string to KST time in HH.mm format', () => {
+      const result = formatTimeToHourMinute('2024-04-23T15:30:00.000Z');
+      expect(result).toBe('00.30'); // KST + 9
+    });
+
+    it('should handle midnight correctly', () => {
+      const result = formatTimeToHourMinute('2024-04-23T15:00:00.000Z');
+      expect(result).toBe('00.00');
+    });
+
+    it('should return an empty string for empty input', () => {
+      const result = formatTimeToHourMinute('');
+      expect(result).toBe('');
+    });
+
+    it('should return an empty string for null input', () => {
+      const result = formatTimeToHourMinute(null);
+      expect(result).toBe('');
+    });
+
+    it('should return an empty string for invalid date input', () => {
+      const result = formatTimeToHourMinute('not-a-date');
       expect(result).toBe('');
     });
   });
