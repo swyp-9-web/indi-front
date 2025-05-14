@@ -20,6 +20,8 @@ export { default as LinkIcon } from './svg/link.svg';
 export { default as MenuVerbIcon } from './svg/menu-verb.svg';
 export { default as NotificationUnreadIcon } from './svg/notifications-unread.svg';
 export { default as NotificationIcon } from './svg/notifications.svg';
+export { default as PageArrowLeftIcon } from './svg/pagenation-next-left';
+export { default as PageArrowRightIcon } from './svg/pagenation-next-right';
 export { default as ProductImageCancelIcon } from './svg/product-image-cancel.svg';
 export { default as ProfileEditIcon } from './svg/profile-edit.svg';
 export { default as RefreshIcon } from './svg/refresh.svg';
