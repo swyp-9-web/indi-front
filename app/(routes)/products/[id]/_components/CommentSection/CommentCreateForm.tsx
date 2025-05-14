@@ -5,9 +5,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import ProfileImage from '@/app/_components/shared/ProfileImage';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { UserSummary } from '@/lib/apis/user.type';
 import { RadioCheckedIcon, RadioUnCheckedIcon } from '@/lib/icons';
+import { useCreateProductComment } from '@/lib/queries/useCommentsQueries';
 import { commentFormSchema, FormValues, MAX_LENGTH } from '@/lib/schemas/commentForm.schema';
+import toast from '@/lib/toast';
 
 interface CommentCreateFormProps {
   user: UserSummary | null;
@@ -23,9 +26,28 @@ export default function CommentCreateForm({ user, productId }: CommentCreateForm
     },
   });
 
+  const { mutate } = useCreateProductComment(productId);
+  const { checkAuth } = useRequireAuth();
+
+  const handleSubmit = (formValues: FormValues) => {
+    checkAuth(() => {
+      mutate(
+        {
+          productId,
+          content: formValues.content,
+          secret: formValues.secret,
+          rootCommentId: null,
+        },
+        { onError: () => toast.error('잠시 후 다시 시도해주세요') }
+      );
+
+      form.reset();
+    });
+  };
+
   return (
     <Form {...form}>
-      <form className="mt-7.5">
+      <form className="mt-7.5" onSubmit={form.handleSubmit(handleSubmit)}>
         <FormField
           control={form.control}
           name="content"
