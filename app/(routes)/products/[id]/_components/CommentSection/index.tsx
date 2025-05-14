@@ -2,33 +2,74 @@
 
 import { useState } from 'react';
 
+import { useProductComments } from '@/lib/queries/useCommentsQueries';
+import { useUserSummary } from '@/lib/queries/useUserQueries';
 import { formatOverThousand } from '@/utils/formatNumber';
 
 import CommentItem from './CommentItem';
 import PageNavigator from './PageNavigator';
-import PrivateCommentItem from './PrivateCommentItem';
 
-export default function CommentSection() {
+const LIMIT = 3;
+
+interface CommentSectionProps {
+  productId: number;
+  isOwner: boolean;
+}
+
+export default function CommentSection({ productId, isOwner }: CommentSectionProps) {
   const [currentPage, setCurrentPage] = useState(1);
-  const totalCount = 13;
+
+  const { data: commentsData, isLoading } = useProductComments(productId, {
+    page: currentPage,
+    limit: LIMIT,
+  });
+
+  const { data: userData } = useUserSummary();
+
+  if (!commentsData || isLoading) return null;
+
+  const user = userData?.result ?? null;
+
+  const totalCount = commentsData.result.meta.totalItems;
+  const comments = commentsData.result.comments;
 
   return (
     <div className="mt-15">
       <h3 className="text-custom-brand-primary border-custom-gray-100 border-b pb-2.5 text-sm font-semibold">
-        작품 댓글 및 문의<span className="ml-1.5">{`(${formatOverThousand(totalCount)})`}</span>
+        작품 댓글 및 문의
+        <span className="ml-1.5">{`(${formatOverThousand(commentsData.result.totalComments)})`}</span>
       </h3>
 
-      <CommentItem refId={23} type="root" />
-      <CommentItem refId={23} type="reply" />
-      <CommentItem refId={23} type="reply" isReplyButtonVisible />
+      {comments.map((comment) => {
+        const { replies, ...rootComment } = comment;
 
-      <PrivateCommentItem refId={24} type="root" />
-      <PrivateCommentItem refId={24} type="reply" />
+        const canViewSecret = Boolean(user) && (rootComment.user.id === user?.id || isOwner);
 
-      {totalCount !== 0 && (
+        return (
+          <div key={rootComment.id}>
+            <CommentItem
+              type="root"
+              comment={rootComment}
+              canViewSecret={canViewSecret}
+              isMyComment={Boolean(user) && rootComment.user.id === user?.id}
+            />
+            {replies?.map((reply) => (
+              <CommentItem
+                key={reply.id}
+                type="reply"
+                comment={reply}
+                canViewSecret={canViewSecret}
+                isMyComment={Boolean(user) && reply.user.id === user?.id}
+              />
+            ))}
+          </div>
+        );
+      })}
+
+      {totalCount > 0 && (
         <PageNavigator
           currentPage={currentPage}
-          totalPage={Math.ceil(totalCount / 5)}
+          totalPage={Math.ceil(totalCount / LIMIT)}
           onPageChange={setCurrentPage}
         />
       )}

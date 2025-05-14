@@ -1,11 +1,13 @@
+import { Comment } from '@/lib/apis/comments.type';
 import { ArrowTopRightIcon } from '@/lib/icons';
+import { formatDateToYMD, formatTimeToHourMinute } from '@/utils/date';
 
 interface PrivateCommentItemProps {
-  refId: number;
   type: 'root' | 'reply';
+  comment: Comment;
 }
 
-export default function PrivateCommentItem({ refId, type }: PrivateCommentItemProps) {
+export default function PrivateCommentItem({ type, comment }: PrivateCommentItemProps) {
   return (
     <div className="border-custom-gray-100 flex border-b py-4">
       {type === 'reply' && <ArrowTopRightIcon className="mr-1" />}
@@ -14,7 +16,8 @@ export default function PrivateCommentItem({ refId, type }: PrivateCommentItemPr
         <p className="text-custom-brand-primary text-sm">비밀 댓글입니다.</p>
 
         <div className="text-custom-gray-300 mb-0.5 text-xs">
-          2025.04.27.<span className="ml-1.5">12.50</span>
+          {formatDateToYMD(comment.createdAt)}
+          <span className="ml-1.5">{formatTimeToHourMinute(comment.createdAt)}</span>
         </div>
       </div>
     </div>

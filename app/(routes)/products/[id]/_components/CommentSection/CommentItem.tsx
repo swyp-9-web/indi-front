@@ -1,25 +1,30 @@
 import { useState } from 'react';
 
 import ProfileImage from '@/app/_components/shared/ProfileImage';
+import { Comment } from '@/lib/apis/comments.type';
 import { ArrowForwardIcon, ArrowTopRightIcon, MenuVerbIcon } from '@/lib/icons';
 import { cn } from '@/lib/utils';
+import { formatDateToYMD, formatTimeToHourMinute } from '@/utils/date';
+
+import PrivateCommentItem from './PrivateCommentItem';
 
 interface CommentItemProps {
-  refId: number;
   type: 'root' | 'reply';
+  comment: Comment;
+  canViewSecret: boolean;
+  isMyComment: boolean;
   isReplyButtonVisible?: boolean;
 }
 
 export default function CommentItem({
-  refId,
   type,
+  comment,
+  canViewSecret,
+  isMyComment,
   isReplyButtonVisible = false,
 }: CommentItemProps) {
   const [showExpandButton, setShowExpandButton] = useState(false);
   const [isContentExpanded, setIsContentExpanded] = useState(false);
-
-  const isMyComment = true;
-  const isOwner = true;
 
   const contentRefCallback = (node: HTMLDivElement | null) => {
     if (node) {
@@ -28,6 +33,9 @@ export default function CommentItem({
       setShowExpandButton(isClamped);
     }
   };
+
+  if (comment.isSecret && !canViewSecret)
+    return <PrivateCommentItem type={type} comment={comment} />;
 
   return (
     <div
@@ -41,10 +49,10 @@ export default function CommentItem({
       <div className="flex-1">
         <div className="mb-2 flex items-center justify-between">
           <div className="flex items-center gap-1.5">
-            <ProfileImage src={null} className="h-6 w-6" />
-            <div className="text-sm font-semibold">유저명</div>
+            <ProfileImage src={comment.user.profileImgUrl ?? null} className="h-6 w-6" />
+            <div className="text-sm font-semibold">{comment.user.nickname}</div>
 
-            {isOwner && (
+            {comment.user.isOwner && (
               <div className="border-custom-gray-100 font-custom-brand-primary flex h-5.5 w-9.5 items-center justify-center rounded-full border text-xs">
                 작가
               </div>
@@ -61,16 +69,7 @@ export default function CommentItem({
           )}
           ref={contentRefCallback}
         >
-          댓글 내용은 다음과 같습니다. 댓글 내용은 다음과 같습니다. 댓글 내용은 다음과 같댓글 내용은
-          다음과 같습니다. 습니다. 댓글 내용은 다음과 같습니다. 댓글 내용은 다음과 같습니다. 댓글
-          내용은 다음과 같습니다. 댓글 내용은 다음과 같습니다. 댓글 내용은 다음과 같습니다. 댓글
-          내용은 다음과 같습니댓글 내용은 다음과 같습니다. 댓글 내용은 다음과 같습니다. 다. 댓글
-          내용은 다음과 같습니다.댓댓글 내용은 다음과 같습니다. 댓글 내용은 다음과 같습니다. 댓글
-          내용은 다음과 같습니다. 댓글 내용은 다음과 같습니다. 댓글 내용은 다음과 같습니다. 댓글
-          내용은 다음과 같습니다. 댓글 내용은 다음과 같습니다. 댓글 내용은 다음과 같습니다. 글
-          내용은 다음과 같습니다댓글 내용은 다음과 같습니다. 댓글 내용은 다음과 같습니다. 댓글
-          내용은 다음과 같습니다. 댓글 내용은 다음과 같습니다. 댓글 내용은 다음과 같습니다. 댓글
-          내용은 다음과 같습니다. 댓글 내용은 다음과 같습니다. 댓글 내용은 다음과 같습니다.
+          {comment.content}
         </p>
 
         {showExpandButton && !isContentExpanded && (
@@ -86,7 +85,8 @@ export default function CommentItem({
         <div
           className={cn('text-custom-gray-300 text-xs', isContentExpanded ? 'mt-1.5' : 'mt-2.25')}
         >
-          2025.04.27.<span className="ml-1.5">12.50</span>
+          {formatDateToYMD(comment.createdAt)}
+          <span className="ml-1.5">{formatTimeToHourMinute(comment.createdAt)}</span>
         </div>
 
         {isReplyButtonVisible && (
