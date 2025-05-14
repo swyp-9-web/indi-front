@@ -23,7 +23,7 @@ export default function PatchAndDelete({ itemId, isOwner }: PatchAndDeleteProps)
   const deleteMutation = useMutation({
     mutationFn: () => deleteProduct(itemId),
     onSuccess: () => {
-      router.push(ROUTE_PATHS.PRODUCTS);
+      router.push(ROUTE_PATHS.HOME);
     },
   });
 
