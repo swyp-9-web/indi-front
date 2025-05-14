@@ -2,30 +2,27 @@
 
 import Link from 'next/link';
 
+import ProfileImage from '@/app/_components/shared/ProfileImage';
 import { ROUTE_PATHS } from '@/constants/route-paths';
 import { useFollowToggle } from '@/hooks/useFollowToggle';
-import { ArrowNextIcon } from '@/lib/icons/index';
-import { AddIcon } from '@/lib/icons/index';
-import { CheckIcon } from '@/lib/icons/index';
+import { AddIcon, ArrowNextIcon, CheckIcon } from '@/lib/icons';
 import { useUserSummary } from '@/lib/queries/useUserQueries';
 
-import ProfileImage from '../../shared/ProfileImage';
-
-interface ProductDetailAuthorInfoProps {
+interface ProductDetailArtistInfoProps {
   artistSrc: string;
   artistName: string;
   artistDescription: string;
-  hasFollow: boolean;
+  isFollowing: boolean;
   artistId: number;
 }
 
-export default function ProductDetailAuthorInfo({
+export default function ProductDetailArtistInfo({
   artistSrc,
   artistName,
   artistDescription,
-  hasFollow,
+  isFollowing: hasFollow,
   artistId,
-}: ProductDetailAuthorInfoProps) {
+}: ProductDetailArtistInfoProps) {
   const { data } = useUserSummary();
   const user = data?.result ?? null;
   const { isFollowing, toggleIsFollowing } = useFollowToggle(artistId, hasFollow);

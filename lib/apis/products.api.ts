@@ -45,8 +45,13 @@ export const fetchProductDetail = async (
     headers: { 'Content-Type': 'application/json' },
     cache: 'no-store',
   });
+
   const data = await res.json();
-  if (!res.ok) throw data as ErrorResponse;
+
+  if (!res.ok) {
+    throw data as ErrorResponse;
+  }
+
   return data as ProductDetailResponse;
 };
 
@@ -114,8 +119,10 @@ export const deleteProduct = async (productId: number) => {
   });
 
   const data = await res.json();
+
   if (!res.ok) {
     throw data as ErrorResponse;
   }
+
   return data as DeleteProductResponse;
 };

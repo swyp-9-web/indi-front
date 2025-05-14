@@ -11,10 +11,10 @@ import { useUserSummary } from '@/lib/queries/useUserQueries';
 
 interface PatchAndDeleteProps {
   itemId: number;
-  owner: boolean;
+  isOwner: boolean;
 }
 
-export default function PatchAndDelete({ itemId, owner }: PatchAndDeleteProps) {
+export default function PatchAndDelete({ itemId, isOwner }: PatchAndDeleteProps) {
   const { data } = useUserSummary();
 
   const user = data?.result ?? null;
@@ -29,7 +29,7 @@ export default function PatchAndDelete({ itemId, owner }: PatchAndDeleteProps) {
 
   return (
     <>
-      {user && owner && (
+      {user && isOwner && (
         <div className="mb-2.5 flex gap-5">
           <Button className="text-custom-brand-primary h-auto bg-transparent p-0 shadow-none hover:cursor-pointer hover:bg-transparent hover:underline">
             작품 수정하기

@@ -2,8 +2,7 @@
 
 import { useState } from 'react';
 
-import { addItemReaction } from '@/lib/apis/reaction.api';
-import { removeItemReaction } from '@/lib/apis/reaction.api';
+import { addItemReaction, removeItemReaction } from '@/lib/apis/reaction.api';
 import { formatOverThousand } from '@/utils/formatNumber';
 
 interface RecommendButtonsProps {
@@ -47,6 +46,7 @@ export default function RecommendButtons({
       setRevisits((prev) => prev + (next ? 1 : -1));
       method = next ? 'POST' : 'DELETE';
     }
+
     try {
       if (method === 'POST') {
         addItemReaction(itemId, type);
@@ -64,7 +64,7 @@ export default function RecommendButtons({
         className={`border-custom-gray-100 active:text-custom-background active:bg-custom-brand-primary text-custom-brand-primary rounded-4xl border-[1px] px-[13px] py-[8px] text-[14px] ${liked ? 'bg-custom-brand-primary/10' : ''}`}
         onClick={() => handleReactionClick('LIKES')}
       >
-        💖 마음에 들어요 {formatOverThousand(likesCount)}
+        💖 마음에 들어요 {formatOverThousand(likes)}
       </button>
       <button
         className={`border-custom-gray-100 text-custom-brand-primary rounded-4xl border-[1px] px-[13px] py-[8px] text-[14px] ${wanted ? 'bg-custom-brand-primary/10' : ''}`}

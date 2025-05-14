@@ -1,8 +1,5 @@
-import Image from 'next/image';
-
+import ProfileImage from '@/app/_components/shared/ProfileImage';
 import { formatOverThousand } from '@/utils/formatNumber';
-
-import ProfileImage from '../../shared/ProfileImage';
 
 interface CommentSectionProps {
   commentCount: number;

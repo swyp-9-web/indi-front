@@ -2,22 +2,17 @@
 
 import { useEffect, useState } from 'react';
 
-import Link from 'next/link';
-
 import { useScrapToggle } from '@/hooks/useScrapToggle';
 import type { ProductDetail } from '@/lib/apis/products.type';
-import { BookmarkFilledIcon } from '@/lib/icons/index';
-import { BookmarkIcon } from '@/lib/icons/index';
-import { ShareIcon } from '@/lib/icons/index';
+import { BookmarkFilledIcon, BookmarkIcon, ShareIcon } from '@/lib/icons';
 import toast from '@/lib/toast';
 import { formatOverThousand } from '@/utils/formatNumber';
 
 interface ScrapAndShareProps {
   product: ProductDetail;
-  userIsScrapped: boolean;
 }
 
-export default function ScrapAndShare({ product, userIsScrapped }: ScrapAndShareProps) {
+export default function ScrapAndShare({ product }: ScrapAndShareProps) {
   const { isScraped, toggleIsScraped } = useScrapToggle(product.itemId, product.viewer.isScrapped);
   const [count, setCount] = useState(product.totalScrapCount);
   const [url, setUrl] = useState('');
@@ -37,10 +32,10 @@ export default function ScrapAndShare({ product, userIsScrapped }: ScrapAndShare
 
   const handleScrap = async () => {
     try {
-      await toggleIsScraped();
+      toggleIsScraped();
 
       setCount((prev) => prev + (isScraped ? -1 : 1));
-    } catch (error) {
+    } catch {
       toast.error('스크랩 처리에 실패했습니다.');
     }
   };
