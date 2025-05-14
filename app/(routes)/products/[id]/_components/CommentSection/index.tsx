@@ -6,6 +6,7 @@ import { useProductComments } from '@/lib/queries/useCommentsQueries';
 import { useUserSummary } from '@/lib/queries/useUserQueries';
 import { formatOverThousand } from '@/utils/formatNumber';
 
+import CommentCreateForm from './CommentCreateForm';
 import CommentItem from './CommentItem';
 import PageNavigator from './PageNavigator';
 
@@ -73,6 +74,8 @@ export default function CommentSection({ productId, isOwner }: CommentSectionPro
           onPageChange={setCurrentPage}
         />
       )}
+
+      <CommentCreateForm user={user} productId={productId} />
     </div>
   );
 }

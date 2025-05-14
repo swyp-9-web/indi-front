@@ -32,7 +32,7 @@ export default function PageNavigator({
   };
 
   return (
-    <div className="mt-7.5 flex items-center justify-center gap-2.5">
+    <div className="mt-7.5 mb-19 flex items-center justify-center gap-2.5">
       <button onClick={handlePrevGroup} disabled={startPage === 1} className="cursor-pointer">
         <PageArrowLeftIcon
           className={cn(startPage === 1 ? 'text-custom-gray-200' : 'text-custom-brand-primary')}
