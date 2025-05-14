@@ -25,7 +25,7 @@ export default function PatchAndDelete({ itemId, isOwner }: PatchAndDeleteProps)
   const deleteMutation = useMutation({
     mutationFn: () => deleteProduct(itemId),
     onSuccess: () => {
-      router.push(ROUTE_PATHS.HOME);
+      router.replace(ROUTE_PATHS.HOME);
       queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] === 'products' });
     },
   });
