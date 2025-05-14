@@ -2,7 +2,9 @@
 
 import { useState } from 'react';
 
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { addItemReaction, removeItemReaction } from '@/lib/apis/reaction.api';
+import { useUserSummary } from '@/lib/queries/useUserQueries';
 import { formatOverThousand } from '@/utils/formatNumber';
 
 interface RecommendButtonsProps {
@@ -10,6 +12,12 @@ interface RecommendButtonsProps {
   wantsCount: number;
   revisitsCount: number;
   itemId: number;
+  hasLike: boolean;
+  hasWant: boolean;
+  hasRevisit: boolean;
+  likeId: number | null;
+  wantId: number | null;
+  revisitId: number | null;
 }
 
 export default function RecommendButtons({
@@ -17,64 +25,81 @@ export default function RecommendButtons({
   wantsCount,
   revisitsCount,
   itemId,
+  hasLike,
+  hasWant,
+  hasRevisit,
+  likeId,
+  wantId,
+  revisitId,
 }: RecommendButtonsProps) {
+  const { checkAuth } = useRequireAuth();
+
   const [likes, setLikes] = useState(likesCount);
   const [wants, setWants] = useState(wantsCount);
   const [revisits, setRevisits] = useState(revisitsCount);
 
-  const [liked, setLiked] = useState(false);
-  const [wanted, setWanted] = useState(false);
-  const [revisited, setRevisited] = useState(false);
+  const [liked, setLiked] = useState(hasLike);
+  const [wanted, setWanted] = useState(hasWant);
+  const [revisited, setRevisited] = useState(hasRevisit);
 
-  const handleReactionClick = async (type: 'LIKES' | 'WANTS' | 'REVISITS') => {
-    let method = 'POST';
-    if (type === 'LIKES') {
-      const next = !liked;
-      setLiked(next);
-      setLikes((prev) => prev + (next ? 1 : -1));
-      method = next ? 'POST' : 'DELETE';
-    }
-    if (type === 'WANTS') {
-      const next = !wanted;
-      setWanted(next);
-      setWants((prev) => prev + (next ? 1 : -1));
-      method = next ? 'POST' : 'DELETE';
-    }
-    if (type === 'REVISITS') {
-      const next = !revisited;
-      setRevisited(next);
-      setRevisits((prev) => prev + (next ? 1 : -1));
-      method = next ? 'POST' : 'DELETE';
-    }
+  const [emojiIds, setEmojiIds] = useState({
+    LIKES: likeId,
+    WANTS: wantId,
+    REVISITS: revisitId,
+  });
 
-    try {
-      if (method === 'POST') {
-        addItemReaction(itemId, type);
-      } else {
-        removeItemReaction(itemId);
+  const optimisticToggle = async (
+    type: 'LIKES' | 'WANTS' | 'REVISITS',
+    current: boolean,
+    setState: (v: boolean) => void,
+    count: number,
+    setCount: (v: number) => void
+  ) => {
+    checkAuth(async () => {
+      const next = !current;
+      const originalCount = count;
+      const originalState = current;
+      const prevEmojiId = emojiIds[type];
+
+      setState(next);
+      setCount(next ? originalCount + 1 : originalCount - 1);
+
+      try {
+        if (next) {
+          const response = await addItemReaction(itemId, type);
+          const newId = response?.result;
+          setEmojiIds((prev) => ({ ...prev, [type]: newId }));
+        } else {
+          if (prevEmojiId != null) {
+            await removeItemReaction(prevEmojiId);
+            setEmojiIds((prev) => ({ ...prev, [type]: null }));
+          }
+        }
+      } catch (err) {
+        console.error(`Reaction ${type} failed`, err);
+        setState(originalState);
+        setCount(originalCount);
       }
-    } catch (error) {
-      console.error('Reaction failed', error);
-    }
+    });
   };
 
   return (
     <div className="flex gap-1.5">
       <button
-        className={`border-custom-gray-100 active:text-custom-background active:bg-custom-brand-primary text-custom-brand-primary rounded-4xl border-[1px] px-[13px] py-[8px] text-[14px] ${liked ? 'bg-custom-brand-primary/10' : ''}`}
-        onClick={() => handleReactionClick('LIKES')}
+        className={`border-custom-gray-100 cursor-pointer rounded-4xl border-[1px] px-[13px] py-[8px] text-[14px] ${liked ? 'text-custom-background bg-custom-brand-primary' : 'text-custom-brand-primary'}`}
+        onClick={() => optimisticToggle('LIKES', liked, setLiked, likes, setLikes)}
       >
         💖 마음에 들어요 {formatOverThousand(likes)}
       </button>
       <button
-        className={`border-custom-gray-100 text-custom-brand-primary rounded-4xl border-[1px] px-[13px] py-[8px] text-[14px] ${wanted ? 'bg-custom-brand-primary/10' : ''}`}
-        onClick={() => handleReactionClick('WANTS')}
+        className={`border-custom-gray-100 cursor-pointer rounded-4xl border-[1px] px-[13px] py-[8px] text-[14px] ${wanted ? 'text-custom-background bg-custom-brand-primary' : 'text-custom-brand-primary'}`}
+        onClick={() => optimisticToggle('WANTS', wanted, setWanted, wants, setWants)}
       >
         🖼️ 소장하고 싶어요 {formatOverThousand(wants)}
       </button>
       <button
-        className={`border-custom-gray-100 text-custom-brand-primary rounded-4xl border-[1px] px-[13px] py-[8px] text-[14px] ${revisited ? 'bg-custom-brand-primary/10' : ''}`}
-        onClick={() => handleReactionClick('REVISITS')}
+        className={`border-custom-gray-100 cursor-pointer rounded-4xl border-[1px] px-[13px] py-[8px] text-[14px] ${revisited ? 'text-custom-background bg-custom-brand-primary' : 'text-custom-brand-primary bg-custom-background'}`}
+        onClick={() => optimisticToggle('REVISITS', revisited, setRevisited, revisits, setRevisits)}
       >
         👀 또 보고 싶어요 {formatOverThousand(revisits)}
       </button>

@@ -19,8 +19,12 @@ export const addItemReaction = async (
   return data as ReactionResponse;
 };
 
-export const removeItemReaction = async (itemId: number): Promise<ReactionResponse> => {
-  const res = await fetchWithAuth(`${API_BASE_URL.CLIENT}/api/v1/item-emojis/${itemId}`, {
+export const removeItemReaction = async (itemEmojiId: number): Promise<ReactionResponse> => {
+  if (!itemEmojiId || itemEmojiId === 0) {
+    throw new Error('Invalid emoji ID for deletion.');
+  }
+
+  const res = await fetchWithAuth(`${API_BASE_URL.CLIENT}/api/v1/item-emojis/${itemEmojiId}`, {
     method: 'DELETE',
   });
 

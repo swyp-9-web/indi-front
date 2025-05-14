@@ -1,4 +1,6 @@
+import { headers } from 'next/headers';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
@@ -21,6 +23,10 @@ interface ProductDetailPageProps {
 }
 
 export default async function ProductDetail({ params }: ProductDetailPageProps) {
+  const referer = (await headers()).get('referer');
+  if (!params) {
+    redirect(referer || ROUTE_PATHS.HOME);
+  }
   const { id } = await params;
 
   const queryClient = new QueryClient();
@@ -63,7 +69,7 @@ export default async function ProductDetail({ params }: ProductDetailPageProps) 
               <ProductDetailGallery images={product.imgUrls} title={product.title} />
             </div>
 
-            <div className="flex max-w-[33.37rem] flex-col">
+            <div className="flex max-w-133.5 flex-col">
               <PatchAndDelete itemId={product.itemId} isOwner={product.viewer.isOwner} />
               <div className="mb-5 flex gap-[2.3rem]">
                 <h1 className="text-custom-brand-primary w-[26.62rem] text-2xl font-bold">
@@ -85,11 +91,13 @@ export default async function ProductDetail({ params }: ProductDetailPageProps) 
                       👀
                     </div>
                   </div>
-                  {formatOverThousand(product.reaction.totalCount)}+
+                  {/* {formatOverThousand(product.reaction.totalCount)}+ */}
+                  {formatOverThousand(9)}+
                 </div>
                 <div className="border-custom-gray-100 flex items-center justify-center gap-1 rounded-4xl border-[1px] px-2.5 py-1.5">
                   <SmsIcon />
-                  {formatOverThousand(product.reaction.totalCount)}+
+                  {/* {formatOverThousand(product.reaction.totalCount)}+ */}
+                  {formatOverThousand(9)}+
                 </div>
               </div>
 
@@ -136,7 +144,7 @@ export default async function ProductDetail({ params }: ProductDetailPageProps) 
 
               <div className="border-custom-gray-100 mb-[1.87rem] h-[1px] w-full border-[1px]" />
 
-              <div className="text-custom-brand-primary mb-10 w-full text-[1rem]">
+              <div className="text-custom-brand-primary mb-10 w-full text-[1rem] whitespace-pre-wrap">
                 {product.description}
               </div>
 
@@ -144,15 +152,26 @@ export default async function ProductDetail({ params }: ProductDetailPageProps) 
 
               <div className="text-custom-gray-300 mb-2.5 text-[12px]">이 작품을 추천해요!</div>
               <RecommendButtons
-                likesCount={product.reaction.likes}
-                wantsCount={product.reaction.wants}
-                revisitsCount={product.reaction.revisits}
+                // likesCount={product.reaction.likes}
+                // wantsCount={product.reaction.wants}
+                // revisitsCount={product.reaction.revisits}
+                likesCount={9}
+                wantsCount={9}
+                revisitsCount={9}
                 itemId={Number(id)}
+                hasLike={product.reaction.isLiked}
+                hasWant={product.reaction.isWanted}
+                hasRevisit={product.reaction.isRevisited}
+                likeId={product.reaction.likedEmojiId === 0 ? null : product.reaction.likedEmojiId}
+                wantId={
+                  product.reaction.wantedEmojiId === 0 ? null : product.reaction.wantedEmojiId
+                }
+                revisitId={
+                  product.reaction.revisitedEmojiId === 0 ? null : product.reaction.revisitedEmojiId
+                }
               />
             </div>
           </div>
-
-          {/* <CommentSection /> */}
         </div>
       </div>
     </HydrationBoundary>
