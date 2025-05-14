@@ -2,6 +2,7 @@ import { API_BASE_URL } from '@/constants';
 import { createQueryParams } from '@/utils/queryParams';
 
 import {
+  CommentCreateResponse,
   CommentsHistoryQueryParams,
   CommentsHistoryResponse,
   ProductCommentsQueryParams,
@@ -53,4 +54,32 @@ export const fetchProductComments = async (
   }
 
   return data as ProductCommentsResponse;
+};
+
+export const createProductComment = async (commentData: {
+  productId: number;
+  content: string;
+  secret: boolean;
+  rootCommentId: number | null;
+}) => {
+  const { productId: itemId, content: comment, secret, rootCommentId } = commentData;
+
+  const res = await fetchWithAuth(`${API_BASE_URL.CLIENT}/api/v1/comments`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      itemId,
+      comment,
+      secret,
+      rootCommentId,
+    }),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw data as ErrorResponse;
+  }
+
+  return data as CommentCreateResponse;
 };

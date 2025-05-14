@@ -63,6 +63,24 @@ export interface ProductCommentsResponse extends SuccessResponse {
   };
 }
 
+export interface CommentCreateResponse extends SuccessResponse {
+  result: {
+    commentId: number;
+  };
+}
+
+export interface CommentEditResponse extends SuccessResponse {
+  result: {
+    commentId: number;
+  };
+}
+
+export interface CommentDeleteResponse extends SuccessResponse {
+  result: {
+    commentId: number;
+  };
+}
+
 // 댓글 히스토리 API 요청 시에 사용되는 쿼리 파라미터 값들에 대한 타입
 export interface CommentsHistoryQueryParams {
   page?: number;

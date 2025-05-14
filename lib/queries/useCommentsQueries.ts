@@ -1,6 +1,16 @@
-import { useInfiniteQuery, useQuery, UseQueryOptions } from '@tanstack/react-query';
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+  UseQueryOptions,
+} from '@tanstack/react-query';
 
-import { fetchCommentsHistory, fetchProductComments } from '../apis/comments.api';
+import {
+  createProductComment,
+  fetchCommentsHistory,
+  fetchProductComments,
+} from '../apis/comments.api';
 import {
   CommentsHistoryQueryParams,
   ProductCommentsQueryParams,
@@ -34,5 +44,28 @@ export const useProductComments = (
     queryKey: QUERY_KEYS.comments.product(productId, queryParams),
     queryFn: () => fetchProductComments(productId, queryParams, { runtime: 'client' }),
     ...options,
+  });
+};
+
+export const useCreateProductComment = (productId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: createProductComment,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.comments.history });
+      queryClient.invalidateQueries({
+        predicate: (query) => {
+          const targetKey = QUERY_KEYS.comments.product(productId, {});
+          const queryKey = query.queryKey;
+
+          return (
+            queryKey[0] === targetKey[0] &&
+            queryKey[1] === targetKey[1] &&
+            queryKey[2] === targetKey[2]
+          );
+        },
+      });
+    },
   });
 };

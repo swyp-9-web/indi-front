@@ -20,6 +20,7 @@ export const QUERY_KEYS = {
     summary: ['user', 'summary'],
   },
   comments: {
+    all: ['comments'],
     history: ['comments', 'history'],
     product: (productId: number, queryParams: ProductCommentsQueryParams) => [
       'comments',
