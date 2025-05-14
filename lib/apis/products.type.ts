@@ -42,6 +42,49 @@ export interface Product {
   };
 }
 
+export interface ProductDetail {
+  itemId: number;
+  title: string;
+  description: string;
+  imgUrls: string[];
+  price: number;
+  size: {
+    width: number;
+    height: number;
+    depth: number;
+  };
+  material: string;
+  categoryType: string;
+  totalScrapCount: number;
+  viewer: {
+    isScrapped: boolean;
+    isFollowing: boolean;
+    isOwner: boolean;
+  };
+  artist: {
+    id: number;
+    profileImgUrl: string;
+    nickname: string;
+    description: string;
+  };
+  reaction: {
+    totalCount: number;
+    likes: number;
+    wants: number;
+    revisits: number;
+    isLiked: boolean;
+    isWanted: boolean;
+    isRevisited: boolean;
+    likedEmojiId: number;
+    wantedEmojiId: number;
+    revisitedEmojiId: number;
+  };
+}
+
+export interface ProductDetailResponse extends SuccessResponse {
+  result: ProductDetail;
+}
+
 export interface ProductsListResponse extends SuccessResponse {
   result: {
     items: Product[];
@@ -51,6 +94,12 @@ export interface ProductsListResponse extends SuccessResponse {
 }
 
 export interface ProductRegisterResponse extends SuccessResponse {
+  result: {
+    itemId: number;
+  };
+}
+
+export interface DeleteProductResponse extends SuccessResponse {
   result: {
     itemId: number;
   };
