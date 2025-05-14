@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Button } from '@/components/ui/button';
 import { ROUTE_PATHS } from '@/constants/route-paths';
@@ -19,11 +19,14 @@ export default function PatchAndDelete({ itemId, isOwner }: PatchAndDeleteProps)
 
   const user = data?.result ?? null;
 
+  const queryClient = useQueryClient();
+
   const router = useRouter();
   const deleteMutation = useMutation({
     mutationFn: () => deleteProduct(itemId),
     onSuccess: () => {
       router.push(ROUTE_PATHS.HOME);
+      queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] === 'products' });
     },
   });
 
