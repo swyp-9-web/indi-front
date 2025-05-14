@@ -19,7 +19,7 @@ import { useProductRegisterForm } from '@/stores/useProductRegisterForm';
  */
 export function useProductRegisterPage() {
   const router = useRouter();
-  const { setMode, setInitialFormValues, setProductId } = useProductRegisterForm();
+  const { setMode, setInitialFormValues, setProductId, resetFormState } = useProductRegisterForm();
 
   const enterRegisterPage = {
     create: () => {
@@ -61,6 +61,7 @@ export function useProductRegisterPage() {
 
         router.push(ROUTE_PATHS.REGISTER_PRODUCT);
       } catch {
+        resetFormState();
         toast.error('잠시 후 다시 시도해주세요');
       }
     },
