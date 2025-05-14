@@ -1,7 +1,7 @@
 import { ProductsListQueryParams } from '@/lib/apis/products.type';
 import { stableStringify } from '@/utils/object';
 
-import { CommentsHistoryQueryParams } from '../apis/comments.type';
+import { ProductCommentsQueryParams } from '../apis/comments.type';
 import { FollowingArtistsQueryParams } from '../apis/following.type';
 
 export const QUERY_KEYS = {
@@ -20,9 +20,11 @@ export const QUERY_KEYS = {
     summary: ['user', 'summary'],
   },
   comments: {
-    history: (queryParams: CommentsHistoryQueryParams) => [
+    history: ['comments', 'history'],
+    product: (productId: number, queryParams: ProductCommentsQueryParams) => [
       'comments',
-      'history',
+      'product',
+      productId,
       stableStringify(queryParams),
     ],
   },

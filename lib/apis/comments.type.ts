@@ -28,6 +28,26 @@ export interface CommentHistoryGroup {
   replyComment: CommentHistory | null;
 }
 
+export interface Comment {
+  rootCommentId: number;
+  id: number;
+  content: string;
+  isSecret: boolean;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+  user: {
+    id: number;
+    nickname: string;
+    profileImgUrl: string;
+    isOwner: boolean;
+  };
+}
+
+export interface RootComment extends Comment {
+  replies: Comment[];
+}
+
 export interface CommentsHistoryResponse extends SuccessResponse {
   result: {
     comments: CommentHistoryGroup[];
@@ -35,8 +55,21 @@ export interface CommentsHistoryResponse extends SuccessResponse {
   };
 }
 
+export interface ProductCommentsResponse extends SuccessResponse {
+  result: {
+    totalComments: number;
+    comments: RootComment[];
+    meta: Meta;
+  };
+}
+
 // 댓글 히스토리 API 요청 시에 사용되는 쿼리 파라미터 값들에 대한 타입
 export interface CommentsHistoryQueryParams {
+  page?: number;
+  limit?: number;
+}
+
+export interface ProductCommentsQueryParams {
   page?: number;
   limit?: number;
 }
