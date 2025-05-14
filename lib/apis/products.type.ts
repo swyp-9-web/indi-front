@@ -64,7 +64,7 @@ export interface ProductDetail {
   artist: {
     id: number;
     profileImgUrl: string;
-    name: string;
+    nickname: string;
     description: string;
   };
   reaction: {
@@ -72,6 +72,12 @@ export interface ProductDetail {
     likes: number;
     wants: number;
     revisits: number;
+    isLiked: boolean;
+    isWanted: boolean;
+    isRevisited: boolean;
+    likedEmojiId: number;
+    wantedEmojiId: number;
+    revisitedEmojiId: number;
   };
 }
 

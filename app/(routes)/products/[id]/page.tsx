@@ -128,7 +128,7 @@ export default async function ProductDetail({ params }: ProductDetailPageProps) 
                 isFollowing={product.viewer.isFollowing}
                 artistId={product.artist.id}
                 artistSrc={product.artist.profileImgUrl}
-                artistName={product.artist.name}
+                artistName={product.artist.nickname}
                 artistDescription={product.artist.description}
               />
 
