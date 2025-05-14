@@ -24,8 +24,13 @@ export default function ProductDetailArtistInfo({
   artistId,
 }: ProductDetailArtistInfoProps) {
   const { data } = useUserSummary();
+
   const user = data?.result ?? null;
-  const { isFollowing, toggleIsFollowing } = useFollowToggle(artistId, hasFollow);
+
+  const { isFollowing, toggleIsFollowing } = useFollowToggle(artistId, hasFollow, {
+    invalidateFollowingQueries: true,
+  });
+
   return (
     <div className="border-custom-gray-100 flex w-full flex-col gap-2.5 rounded-[8px] border-[1px] p-5">
       <div className="flex justify-between">
