@@ -1,6 +1,8 @@
 import { useRouter } from 'next/navigation';
 
 import { ROUTE_PATHS } from '@/constants';
+import { fetchProductDetail } from '@/lib/apis/products.api';
+import toast from '@/lib/toast';
 import { useProductRegisterForm } from '@/stores/useProductRegisterForm';
 
 /**
@@ -26,14 +28,41 @@ export function useProductRegisterPage() {
       router.push(ROUTE_PATHS.REGISTER_PRODUCT);
     },
 
-    edit: ({ productId }: { productId: number }) => {
-      setMode('EDIT');
-      setProductId(productId);
+    edit: async (productId: number) => {
+      try {
+        const data = await fetchProductDetail(productId, { runtime: 'client' });
+        const { viewer, title, description, price, material, size, categoryType, imgUrls } =
+          data.result;
 
-      // TODO: productId를 통해 세부 정보를 불러와서 initialValue를 설정
-      console.log(productId);
+        if (!viewer.isOwner) {
+          toast.error('권한이 없습니다');
+          return;
+        }
 
-      router.push(ROUTE_PATHS.REGISTER_PRODUCT);
+        setMode('EDIT');
+        setProductId(productId);
+
+        setInitialFormValues({
+          initialValues: {
+            title,
+            description,
+            priceType: price === 0 ? 'inquiry' : 'fixed',
+            price: price === 0 ? '' : String(price),
+            material,
+            size: {
+              width: size.width > 0 ? String(size.width) : '',
+              height: size.height > 0 ? String(size.height) : '',
+              depth: size.depth > 0 ? String(size.depth) : '',
+            },
+            categoryType,
+          },
+          initialImgUrls: imgUrls,
+        });
+
+        router.push(ROUTE_PATHS.REGISTER_PRODUCT);
+      } catch {
+        toast.error('잠시 후 다시 시도해주세요');
+      }
     },
 
     tempEdit: () => {
