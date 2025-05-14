@@ -2,12 +2,14 @@ import Link from 'next/link';
 
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
-import PatchAndDelete from '@/app/_components/product/detail/PatchAndDelete';
-import ProductDetailAuthorInfo from '@/app/_components/product/detail/ProductDetailAuthorInfo';
-import ProductDetailGallery from '@/app/_components/product/detail/ProductDetailGallery';
-import RecommendButtons from '@/app/_components/product/detail/RecommendButtons';
-import ScrapAndShare from '@/app/_components/product/detail/ScrapAndShare';
+import PatchAndDelete from '@/app/_components/product/detail/_components/PatchAndDelete';
+import ProductDetailAuthorInfo from '@/app/_components/product/detail/_components/ProductDetailAuthorInfo';
+import ProductDetailGallery from '@/app/_components/product/detail/_components/ProductDetailGallery';
+import RecommendButtons from '@/app/_components/product/detail/_components/RecommendButtons';
+import ScrapAndShare from '@/app/_components/product/detail/_components/ScrapAndShare';
 import { ROUTE_PATHS } from '@/constants/route-paths';
+import { fetchEmojisByItemId } from '@/lib/apis/emoji.api';
+import type { Emoji } from '@/lib/apis/emoji.type';
 import { fetchProductDetail } from '@/lib/apis/products.api';
 import { fetchUserSummary } from '@/lib/apis/user.api';
 import { ArrowNextIcon } from '@/lib/icons/index';
@@ -28,6 +30,10 @@ export default async function ProductDetailResponse({ params }: { params: { id: 
   });
 
   const dehydrateState = dehydrate(queryClient);
+
+  const emojis = (await fetchEmojisByItemId(Number(id), { runtime: 'server' })).filter(
+    (emoji: Emoji) => emoji.itemId === Number(id)
+  );
 
   const response = await fetchProductDetail(Number(id), {
     runtime: 'server',
@@ -124,7 +130,7 @@ export default async function ProductDetailResponse({ params }: { params: { id: 
                 hasFollow={product.viewer.isFollowing}
                 artistId={product.artist.id}
                 artistSrc={product.artist.profileImgUrl}
-                artistName={product.artist.name}
+                artistName={product.artist.nickname}
                 artistDescription={product.artist.description}
               />
               <div className="text-custom-gray-300 mt-[3.75rem] mb-2.5 text-[12px]">작품설명</div>
@@ -143,6 +149,7 @@ export default async function ProductDetailResponse({ params }: { params: { id: 
                 wantsCount={product.reaction.wants}
                 revisitsCount={product.reaction.revisits}
                 itemId={Number(id)}
+                itemsReactions={emojis}
               />
             </div>
           </div>

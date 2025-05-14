@@ -9,7 +9,7 @@ import { AddIcon } from '@/lib/icons/index';
 import { CheckIcon } from '@/lib/icons/index';
 import { useUserSummary } from '@/lib/queries/useUserQueries';
 
-import ProfileImage from '../../shared/ProfileImage';
+import ProfileImage from '../../../shared/ProfileImage';
 
 interface ProductDetailAuthorInfoProps {
   artistSrc: string;

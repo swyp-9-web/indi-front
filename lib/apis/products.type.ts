@@ -64,7 +64,7 @@ export interface ProductDetail {
   artist: {
     id: number;
     profileImgUrl: string;
-    name: string;
+    nickname: string;
     description: string;
   };
   reaction: {
