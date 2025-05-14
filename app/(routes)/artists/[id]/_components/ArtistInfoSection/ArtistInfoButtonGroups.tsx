@@ -28,11 +28,17 @@ export function ArtistButtonGroups() {
   const enterRegisterPage = useProductRegisterPage();
   return (
     <div className="mt-10 flex w-full flex-col gap-2.5">
-      <button className="border-custom-gray-100 flex h-12 w-full cursor-pointer items-center justify-center rounded-full border text-sm font-medium">
+      <button
+        onClick={() => toast.error('아직 준비 중인 기능입니다')}
+        className="border-custom-gray-100 flex h-12 w-full cursor-pointer items-center justify-center rounded-full border text-sm font-medium"
+      >
         주문제작 의뢰 보기
       </button>
 
-      <button className="border-custom-gray-100 flex h-12 w-full cursor-pointer items-center justify-center rounded-full border text-sm font-medium">
+      <button
+        onClick={() => toast.error('아직 준비 중인 기능입니다')}
+        className="border-custom-gray-100 flex h-12 w-full cursor-pointer items-center justify-center rounded-full border text-sm font-medium"
+      >
         임시저장된 글
       </button>
 
@@ -68,7 +74,10 @@ export function UserButtonGroups({ artist }: UserButtonGroupsProps) {
         <span>{isFollowing ? '팔로잉' : '팔로우'}</span>
       </button>
 
-      <button className="bg-custom-brand-secondary text-custom-gray-900 flex h-12 w-full cursor-pointer items-center justify-center rounded-full text-sm font-medium">
+      <button
+        onClick={() => toast.error('아직 준비 중인 기능입니다')}
+        className="bg-custom-brand-secondary text-custom-gray-900 flex h-12 w-full cursor-pointer items-center justify-center rounded-full text-sm font-medium"
+      >
         주문제작 의뢰하기
       </button>
     </div>

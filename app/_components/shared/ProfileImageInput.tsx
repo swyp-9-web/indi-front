@@ -6,12 +6,15 @@ import { Label } from '@/components/ui/label';
 import { ProfileEditIcon } from '@/lib/icons';
 
 interface ProfileImageInputProps {
-  profileImgUrl: string;
+  initialProfileImgUrl: string;
   onChange: (file: File) => void;
 }
 
-export default function ProfileImageInput({ profileImgUrl, onChange }: ProfileImageInputProps) {
-  const [previewUrl, setPreviewUrl] = useState(profileImgUrl);
+export default function ProfileImageInput({
+  initialProfileImgUrl,
+  onChange,
+}: ProfileImageInputProps) {
+  const [previewUrl, setPreviewUrl] = useState(initialProfileImgUrl);
   const previousObjectUrl = useRef<string | null>(null);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {

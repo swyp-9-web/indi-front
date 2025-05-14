@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { useDebounce, useDebouncedCallback } from './useDebounce';
+import { useDebounce, useDebouncedCallback } from '@/hooks/useDebounce';
 
 describe('useDebounce', () => {
   it('should update the value after the delay', () => {

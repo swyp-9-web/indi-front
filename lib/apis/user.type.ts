@@ -2,9 +2,14 @@ import { SuccessResponse } from './common.type';
 
 export interface UserSummary {
   id: number;
-  profileImgUrl: string;
+  name: string;
   nickname: string;
+  profileImgUrl: string;
+  email: string;
   role: 'USER' | 'ARTIST';
+  telNumber: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface ArtistDetail {
