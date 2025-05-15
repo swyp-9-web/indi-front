@@ -7,7 +7,7 @@ import { useUserSummary } from '@/lib/queries/useUserQueries';
 import { formatOverThousand } from '@/utils/formatNumber';
 
 import CommentCreateForm from './CommentCreateForm';
-import CommentItem from './CommentItem';
+import CommentGroup from './CommentGroup';
 import PageNavigator from './PageNavigator';
 
 const LIMIT = 3;
@@ -41,33 +41,15 @@ export default function CommentSection({ productId, isOwner }: CommentSectionPro
         <span className="ml-1.5">{`(${formatOverThousand(commentsData.result.totalComments)})`}</span>
       </h3>
 
-      {comments.map((comment) => {
-        const { replies, ...rootComment } = comment;
-
-        const canViewSecret = Boolean(user) && (rootComment.user.id === user?.id || isOwner);
-
-        return (
-          <div key={rootComment.id}>
-            <CommentItem
-              type="root"
-              comment={rootComment}
-              productId={productId}
-              canViewSecret={canViewSecret}
-              isMyComment={Boolean(user) && rootComment.user.id === user?.id}
-            />
-            {replies?.map((reply) => (
-              <CommentItem
-                key={reply.id}
-                type="reply"
-                comment={reply}
-                productId={productId}
-                canViewSecret={canViewSecret}
-                isMyComment={Boolean(user) && reply.user.id === user?.id}
-              />
-            ))}
-          </div>
-        );
-      })}
+      {comments.map((comment) => (
+        <CommentGroup
+          key={comment.id}
+          comment={comment}
+          user={user}
+          isOwner={isOwner}
+          productId={productId}
+        />
+      ))}
 
       {totalCount > 0 && (
         <PageNavigator

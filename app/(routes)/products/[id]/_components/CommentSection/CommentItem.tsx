@@ -16,6 +16,7 @@ interface CommentItemProps {
   canViewSecret: boolean;
   isMyComment: boolean;
   isReplyButtonVisible?: boolean;
+  onReplyButtonClick?: () => void;
 }
 
 export default function CommentItem({
@@ -25,6 +26,7 @@ export default function CommentItem({
   canViewSecret,
   isMyComment,
   isReplyButtonVisible = false,
+  onReplyButtonClick,
 }: CommentItemProps) {
   const [showExpandButton, setShowExpandButton] = useState(false);
   const [isContentExpanded, setIsContentExpanded] = useState(false);
@@ -100,7 +102,10 @@ export default function CommentItem({
         </div>
 
         {isReplyButtonVisible && (
-          <button className="border-custom-gray-100 font-custom-brand-primary mt-2.5 cursor-pointer rounded-lg border px-2 py-1 text-sm font-semibold">
+          <button
+            onClick={onReplyButtonClick}
+            className="border-custom-gray-100 font-custom-brand-primary mt-2.5 cursor-pointer rounded-lg border px-2 py-1 text-sm font-semibold"
+          >
             답글
           </button>
         )}
