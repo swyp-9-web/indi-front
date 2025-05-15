@@ -92,11 +92,11 @@ export default async function ProductDetail({ params }: ProductDetailPageProps) 
                       👀
                     </div>
                   </div>
-                  {/* {formatOverThousand(product.reaction.totalCount)}+ */}
+                  {formatOverThousand(product.reaction.totalCount)}+
                 </div>
                 <div className="border-custom-gray-100 flex items-center justify-center gap-1 rounded-4xl border-[1px] px-2.5 py-1.5">
                   <SmsIcon />
-                  {/* {formatOverThousand(product.reaction.totalCount)}+ */}
+                  {formatOverThousand(product.reaction.totalCount)}+
                 </div>
               </div>
 
