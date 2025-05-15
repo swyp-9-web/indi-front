@@ -26,7 +26,7 @@ export default function FollowingPopover() {
   const { toggleIsOpen: toggleAuthDialogOpen } = useAuthDialog();
 
   const { data: user } = useUserSummary();
-  const { data: followingData } = useFollowingPreview();
+  const { data: followingData } = useFollowingPreview({ enabled: Boolean(user?.result) });
 
   const artists = followingData?.result.followingArtists ?? [];
   const followingCount = followingData?.result.totalFollowings ?? 0;
@@ -69,7 +69,11 @@ export default function FollowingPopover() {
         ) : (
           <>
             {artists.map((artist) => (
-              <FollowingArtistRow key={artist.id} artist={artist} />
+              <FollowingArtistRow
+                key={artist.id}
+                artist={artist}
+                onClose={() => setIsOpen(false)}
+              />
             ))}
 
             <div className="flex h-21.5 w-full items-center justify-center border-t-1">
@@ -97,15 +101,17 @@ function NoFollowingArtists() {
 
 interface FollowingArtistRowProps {
   artist: FollowingPreview;
+  onClose: () => void;
 }
 
-function FollowingArtistRow({ artist }: FollowingArtistRowProps) {
+function FollowingArtistRow({ artist, onClose }: FollowingArtistRowProps) {
   const { isFollowing, toggleIsFollowing } = useFollowToggle(artist.id, artist.isFollowing);
 
   return (
     <div className="text-custom-brand-primary hover:text-custom-brand-primary focus:text-custom-brand-primary flex h-17 w-full items-center justify-between px-5 text-sm font-medium hover:bg-transparent focus:bg-transparent">
       <Link
         href={ROUTE_PATHS.ARTIST(String(artist.id))}
+        onClick={onClose}
         className="flex items-center justify-between gap-5 underline-offset-2 hover:underline"
       >
         <ProfileImage src={artist.profileImgUrl} className="h-12 w-12" />

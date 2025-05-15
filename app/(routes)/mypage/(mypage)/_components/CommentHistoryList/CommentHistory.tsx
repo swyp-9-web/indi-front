@@ -32,7 +32,7 @@ export default function CommentHistory({ commentHistory }: CommentHistoryProps) 
         <p className="mt-5 leading-0">
           <Link
             href={ROUTE_PATHS.ARTIST(String(product.artist.id))}
-            className="text-custom-gray-200 truncate overflow-hidden text-xs font-semibold whitespace-nowrap underline-offset-2 hover:underline"
+            className="text-custom-gray-200 block truncate overflow-hidden text-xs font-semibold underline-offset-2 hover:underline"
           >
             {product.artist.nickname}
           </Link>
@@ -40,7 +40,7 @@ export default function CommentHistory({ commentHistory }: CommentHistoryProps) 
         <h4 className="mt-0.5 leading-0">
           <Link
             href={ROUTE_PATHS.PRODUCT_DETAIL(String(product.id))}
-            className="text-custom-brand-primary truncate overflow-hidden text-sm font-semibold whitespace-nowrap underline-offset-2 hover:underline"
+            className="text-custom-brand-primary block truncate overflow-hidden text-sm font-semibold underline-offset-2 hover:underline"
           >
             {product.title}
           </Link>
