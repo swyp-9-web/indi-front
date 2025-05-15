@@ -23,7 +23,7 @@ export default function ProductCard({
   size = 'normal',
 }: ProductCardProps) {
   return (
-    <article className="relative">
+    <article className={cn('relative w-76.25', size === 'small' && 'w-65')}>
       <figure
         className={cn(
           'bg-custom-gray-100 relative flex h-76.25 w-76.25 items-center justify-center rounded-xl',
@@ -53,7 +53,7 @@ export default function ProductCard({
           <Link
             href={ROUTE_PATHS.ARTIST(String(product.artist.id))}
             className={cn(
-              'text-xs font-semibold underline-offset-2 hover:underline',
+              'block truncate text-xs font-semibold underline-offset-2 hover:underline',
               textColor === 'dark' ? 'text-custom-gray-300' : 'text-custom-gray-100'
             )}
           >
@@ -64,11 +64,11 @@ export default function ProductCard({
           <Link
             href={ROUTE_PATHS.PRODUCT_DETAIL(String(product.id))}
             className={cn(
-              'text-sm font-semibold underline-offset-2 hover:underline',
+              'block truncate text-sm font-semibold underline-offset-2 hover:underline',
               textColor === 'dark' ? 'text-custom-brand-primary' : 'text-custom-background'
             )}
           >
-            {product.name || 'untitled'}
+            {product.name}
           </Link>
         </h2>
         <p
