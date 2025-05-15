@@ -51,6 +51,7 @@ export default function CommentSection({ productId, isOwner }: CommentSectionPro
             <CommentItem
               type="root"
               comment={rootComment}
+              productId={productId}
               canViewSecret={canViewSecret}
               isMyComment={Boolean(user) && rootComment.user.id === user?.id}
             />
@@ -59,6 +60,7 @@ export default function CommentSection({ productId, isOwner }: CommentSectionPro
                 key={reply.id}
                 type="reply"
                 comment={reply}
+                productId={productId}
                 canViewSecret={canViewSecret}
                 isMyComment={Boolean(user) && reply.user.id === user?.id}
               />

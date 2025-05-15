@@ -2,15 +2,17 @@ import { useState } from 'react';
 
 import ProfileImage from '@/app/_components/shared/ProfileImage';
 import { Comment } from '@/lib/apis/comments.type';
-import { ArrowForwardIcon, ArrowTopRightIcon, MenuVerbIcon } from '@/lib/icons';
+import { ArrowForwardIcon, ArrowTopRightIcon } from '@/lib/icons';
 import { cn } from '@/lib/utils';
 import { formatDateToYMD, formatTimeToHourMinute } from '@/utils/date';
 
+import CommentActionsMenu from './CommentActionsMenu';
 import PrivateCommentItem from './PrivateCommentItem';
 
 interface CommentItemProps {
   type: 'root' | 'reply';
   comment: Comment;
+  productId: number;
   canViewSecret: boolean;
   isMyComment: boolean;
   isReplyButtonVisible?: boolean;
@@ -19,12 +21,14 @@ interface CommentItemProps {
 export default function CommentItem({
   type,
   comment,
+  productId,
   canViewSecret,
   isMyComment,
   isReplyButtonVisible = false,
 }: CommentItemProps) {
   const [showExpandButton, setShowExpandButton] = useState(false);
   const [isContentExpanded, setIsContentExpanded] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   const contentRefCallback = (node: HTMLDivElement | null) => {
     if (node) {
@@ -59,7 +63,13 @@ export default function CommentItem({
             )}
           </div>
 
-          {isMyComment && <MenuVerbIcon />}
+          {isMyComment && (
+            <CommentActionsMenu
+              productId={productId}
+              comment={comment}
+              onSelectEditMode={() => setIsEditMode(true)}
+            />
+          )}
         </div>
 
         <p
