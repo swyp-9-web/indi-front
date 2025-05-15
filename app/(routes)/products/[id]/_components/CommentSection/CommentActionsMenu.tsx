@@ -40,7 +40,7 @@ export default function CommentActionsMenu({
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
-        className="min-w-none border-custom-gray-100 w-14 rounded-lg border p-0"
+        className="min-w-none border-custom-gray-100 bg-custom-background w-14 rounded-lg border p-0"
       >
         <DropdownMenuItem
           onSelect={handleSelectEdit}
