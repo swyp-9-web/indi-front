@@ -54,7 +54,9 @@ export default function ProductDetailArtistInfo({
           </button>
         )}
       </div>
-      <div className="text-custom-brand-primary w-full text-[12px]">{artistDescription}</div>
+      <div className="text-custom-brand-primary w-full text-[12px] break-all whitespace-pre-wrap">
+        {artistDescription}
+      </div>
     </div>
   );
 }

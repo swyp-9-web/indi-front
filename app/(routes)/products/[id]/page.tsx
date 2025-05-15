@@ -2,8 +2,9 @@ import Link from 'next/link';
 
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
+import HighlightedProductsCarousel from '@/app/_components/product/HighlightedProductsCarousel';
 import { ROUTE_PATHS } from '@/constants/route-paths';
-import { fetchProductDetail } from '@/lib/apis/products.api';
+import { fetchProductDetail, fetchProductsList } from '@/lib/apis/products.api';
 import { fetchUserSummary } from '@/lib/apis/user.api';
 import { ArrowNextIcon, CloseIcon, SmsIcon } from '@/lib/icons/index';
 import { QUERY_KEYS } from '@/lib/queries/queryKeys';
@@ -37,9 +38,15 @@ export default async function ProductDetail({ params }: ProductDetailPageProps) 
   });
   const product = response.result;
 
+  const artistPageResponse = await fetchProductsList({
+    artistId: product.artist.id,
+    sortType: 'SCRAPED_TOP',
+  });
+  const artistPage = artistPageResponse.result;
+
   return (
     <HydrationBoundary state={dehydrateState}>
-      <div className="mx-20 my-[6.25rem] flex flex-col">
+      <div className="mx-20 my-25 flex flex-col">
         <div className="mx-auto max-w-7xl">
           <div className="flex gap-10">
             <div className="flex flex-col gap-5">
@@ -63,19 +70,19 @@ export default async function ProductDetail({ params }: ProductDetailPageProps) 
               <ProductDetailGallery images={product.imgUrls} title={product.title} />
             </div>
 
-            <div className="flex max-w-[33.37rem] flex-col">
+            <div className="flex max-w-133.5 flex-col">
               <PatchAndDelete itemId={product.itemId} isOwner={product.viewer.isOwner} />
-              <div className="mb-5 flex gap-[2.3rem]">
-                <h1 className="text-custom-brand-primary w-[26.62rem] text-2xl font-bold">
+              <div className="mb-5 flex gap-10">
+                <h1 className="text-custom-brand-primary w-106.5 text-2xl font-bold break-all whitespace-pre-wrap">
                   {product.title}
                 </h1>
 
                 <ScrapAndShare product={product} />
               </div>
-              <div className="text-custom-brand-primary mb-[1.87rem] text-2xl font-bold">
+              <div className="text-custom-brand-primary mb-7.5 text-2xl font-bold">
                 {product.price ? `${formatNumberWithComma(product.price)}원` : `구매시 문의`}
               </div>
-              <div className="mb-[3.75rem] flex gap-1.5">
+              <div className="mb-15 flex gap-1.5">
                 <div className="border-custom-gray-100 flex items-center justify-center gap-1 rounded-4xl border-[1px] px-2.5 py-1.5">
                   <div className="flex -space-x-2">
                     <div className="bg-custom-brand-secondary border-custom-background z-10 flex h-6 w-6 items-center justify-center rounded-full border-[1px] text-[14px]">
@@ -132,15 +139,15 @@ export default async function ProductDetail({ params }: ProductDetailPageProps) 
                 artistDescription={product.artist.description}
               />
 
-              <div className="text-custom-gray-300 mt-[3.75rem] mb-2.5 text-[12px]">작품설명</div>
+              <div className="text-custom-gray-300 mt-15 mb-2.5 text-[12px]">작품설명</div>
 
-              <div className="border-custom-gray-100 mb-[1.87rem] h-[1px] w-full border-[1px]" />
+              <div className="border-custom-gray-100 mb-7.5 h-[1px] w-full border-[1px]" />
 
-              <div className="text-custom-brand-primary mb-10 w-full text-[1rem]">
+              <div className="text-custom-brand-primary mb-10 w-full break-all whitespace-pre-wrap">
                 {product.description}
               </div>
 
-              <div className="border-custom-gray-100 mb-[1.87rem] h-[1px] w-full border-[1px]" />
+              <div className="border-custom-gray-100 mb-7.5 h-[1px] w-full border-[1px]" />
 
               <div className="text-custom-gray-300 mb-2.5 text-[12px]">이 작품을 추천해요!</div>
               <RecommendButtons
@@ -148,13 +155,26 @@ export default async function ProductDetail({ params }: ProductDetailPageProps) 
                 wantsCount={product.reaction.wants}
                 revisitsCount={product.reaction.revisits}
                 itemId={Number(id)}
+                hasLike={product.reaction.isLiked}
+                hasWant={product.reaction.isWanted}
+                hasRevisit={product.reaction.isRevisited}
+                likeId={product.reaction.likedEmojiId === 0 ? null : product.reaction.likedEmojiId}
+                wantId={
+                  product.reaction.wantedEmojiId === 0 ? null : product.reaction.wantedEmojiId
+                }
+                revisitId={
+                  product.reaction.revisitedEmojiId === 0 ? null : product.reaction.revisitedEmojiId
+                }
               />
             </div>
           </div>
-
-          {/* <CommentSection /> */}
         </div>
       </div>
+      <HighlightedProductsCarousel
+        title={'작가의 다른 작품들'}
+        variant={'primary'}
+        products={artistPage.items}
+      />
     </HydrationBoundary>
   );
 }
