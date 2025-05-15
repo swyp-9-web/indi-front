@@ -46,7 +46,7 @@ export default function PatchAndDelete({ itemId, isOwner }: PatchAndDeleteProps)
           </Button>
         </div>
       )}
-      {!user && <div className="mb-[38px]" />}
+      {!user && <div className="mb-9.5" />}
     </>
   );
 }

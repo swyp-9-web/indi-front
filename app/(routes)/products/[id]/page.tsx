@@ -93,12 +93,10 @@ export default async function ProductDetail({ params }: ProductDetailPageProps) 
                     </div>
                   </div>
                   {/* {formatOverThousand(product.reaction.totalCount)}+ */}
-                  {formatOverThousand(9)}+
                 </div>
                 <div className="border-custom-gray-100 flex items-center justify-center gap-1 rounded-4xl border-[1px] px-2.5 py-1.5">
                   <SmsIcon />
                   {/* {formatOverThousand(product.reaction.totalCount)}+ */}
-                  {formatOverThousand(9)}+
                 </div>
               </div>
 
@@ -145,7 +143,7 @@ export default async function ProductDetail({ params }: ProductDetailPageProps) 
 
               <div className="border-custom-gray-100 mb-7.5 h-[1px] w-full border-[1px]" />
 
-              <div className="text-custom-brand-primary text-4 mb-10 w-full break-all whitespace-pre-wrap">
+              <div className="text-custom-brand-primary mb-10 w-full break-all whitespace-pre-wrap">
                 {product.description}
               </div>
 
@@ -153,12 +151,9 @@ export default async function ProductDetail({ params }: ProductDetailPageProps) 
 
               <div className="text-custom-gray-300 mb-2.5 text-[12px]">이 작품을 추천해요!</div>
               <RecommendButtons
-                // likesCount={product.reaction.likes}
-                // wantsCount={product.reaction.wants}
-                // revisitsCount={product.reaction.revisits}
-                likesCount={9}
-                wantsCount={9}
-                revisitsCount={9}
+                likesCount={product.reaction.likes}
+                wantsCount={product.reaction.wants}
+                revisitsCount={product.reaction.revisits}
                 itemId={Number(id)}
                 hasLike={product.reaction.isLiked}
                 hasWant={product.reaction.isWanted}
