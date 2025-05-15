@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
+import HighlightedProductsCarousel from '@/app/_components/product/HighlightedProductsCarousel';
 import { ROUTE_PATHS } from '@/constants/route-paths';
 import { fetchProductDetail, fetchProductsList } from '@/lib/apis/products.api';
 import { fetchUserSummary } from '@/lib/apis/user.api';
@@ -181,8 +182,11 @@ export default async function ProductDetail({ params }: ProductDetailPageProps) 
           </div>
         </div>
       </div>
-
-      <ArtistOtherCards artistId={product.artist.id} />
+      <HighlightedProductsCarousel
+        title={'작가의 다른 작품들'}
+        variant={'primary'}
+        products={artistPage.items}
+      />
     </HydrationBoundary>
   );
 }
