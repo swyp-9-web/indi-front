@@ -8,6 +8,8 @@ import {
 
 import {
   createProductComment,
+  deleteProductComment,
+  editProductComment,
   fetchCommentsHistory,
   fetchProductComments,
 } from '../apis/comments.api';
@@ -52,6 +54,52 @@ export const useCreateProductComment = (productId: number) => {
 
   return useMutation({
     mutationFn: createProductComment,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.comments.history });
+      queryClient.invalidateQueries({
+        predicate: (query) => {
+          const targetKey = QUERY_KEYS.comments.product(productId, {});
+          const queryKey = query.queryKey;
+
+          return (
+            queryKey[0] === targetKey[0] &&
+            queryKey[1] === targetKey[1] &&
+            queryKey[2] === targetKey[2]
+          );
+        },
+      });
+    },
+  });
+};
+
+export const useEditProductComment = (productId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: editProductComment,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.comments.history });
+      queryClient.invalidateQueries({
+        predicate: (query) => {
+          const targetKey = QUERY_KEYS.comments.product(productId, {});
+          const queryKey = query.queryKey;
+
+          return (
+            queryKey[0] === targetKey[0] &&
+            queryKey[1] === targetKey[1] &&
+            queryKey[2] === targetKey[2]
+          );
+        },
+      });
+    },
+  });
+};
+
+export const useDeleteProductComment = (productId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteProductComment,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.comments.history });
       queryClient.invalidateQueries({

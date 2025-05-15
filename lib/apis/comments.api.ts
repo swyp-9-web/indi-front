@@ -3,6 +3,8 @@ import { createQueryParams } from '@/utils/queryParams';
 
 import {
   CommentCreateResponse,
+  CommentDeleteResponse,
+  CommentEditResponse,
   CommentsHistoryQueryParams,
   CommentsHistoryResponse,
   ProductCommentsQueryParams,
@@ -82,4 +84,43 @@ export const createProductComment = async (commentData: {
   }
 
   return data as CommentCreateResponse;
+};
+
+export const editProductComment = async (commentData: {
+  commentId: number;
+  content: string;
+  secret: boolean;
+}) => {
+  const { commentId, content: comment, secret } = commentData;
+
+  const res = await fetchWithAuth(`${API_BASE_URL.CLIENT}/api/v1/comments/${commentId}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      comment,
+      secret,
+    }),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw data as ErrorResponse;
+  }
+
+  return data as CommentEditResponse;
+};
+
+export const deleteProductComment = async (commentId: number) => {
+  const res = await fetchWithAuth(`${API_BASE_URL.CLIENT}/api/v1/comments/${commentId}`, {
+    method: 'DELETE',
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw data as ErrorResponse;
+  }
+
+  return data as CommentDeleteResponse;
 };
