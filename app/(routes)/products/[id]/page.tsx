@@ -11,6 +11,7 @@ import { QUERY_KEYS } from '@/lib/queries/queryKeys';
 import { formatNumberWithComma, formatOverThousand } from '@/utils/formatNumber';
 import { getCategoryLabelByValue } from '@/utils/item';
 
+import CommentSection from './_components/CommentSection';
 import PatchAndDelete from './_components/PatchAndDelete';
 import ProductDetailArtistInfo from './_components/ProductDetailAuthorInfo';
 import ProductDetailGallery from './_components/ProductDetailGallery';
@@ -168,8 +169,11 @@ export default async function ProductDetail({ params }: ProductDetailPageProps) 
               />
             </div>
           </div>
+
+          <CommentSection productId={product.itemId} isOwner={product.viewer.isOwner} />
         </div>
       </div>
+
       <HighlightedProductsCarousel
         title={'작가의 다른 작품들'}
         variant={'primary'}
