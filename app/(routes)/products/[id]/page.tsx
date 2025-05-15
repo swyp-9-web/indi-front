@@ -13,7 +13,6 @@ import { QUERY_KEYS } from '@/lib/queries/queryKeys';
 import { formatNumberWithComma, formatOverThousand } from '@/utils/formatNumber';
 import { getCategoryLabelByValue } from '@/utils/item';
 
-import ArtistOtherCards from './_components/ArtistOtherCards';
 import PatchAndDelete from './_components/PatchAndDelete';
 import ProductDetailArtistInfo from './_components/ProductDetailAuthorInfo';
 import ProductDetailGallery from './_components/ProductDetailGallery';
