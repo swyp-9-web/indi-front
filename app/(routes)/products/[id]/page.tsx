@@ -1,6 +1,4 @@
-import { headers } from 'next/headers';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
 
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
@@ -24,10 +22,6 @@ interface ProductDetailPageProps {
 }
 
 export default async function ProductDetail({ params }: ProductDetailPageProps) {
-  const referer = (await headers()).get('referer');
-  if (!params) {
-    redirect(referer || ROUTE_PATHS.HOME);
-  }
   const { id } = await params;
 
   const queryClient = new QueryClient();
@@ -79,7 +73,7 @@ export default async function ProductDetail({ params }: ProductDetailPageProps) 
             <div className="flex max-w-133.5 flex-col">
               <PatchAndDelete itemId={product.itemId} isOwner={product.viewer.isOwner} />
               <div className="mb-5 flex gap-10">
-                <h1 className="text-custom-brand-primary w-106.5 text-2xl font-bold">
+                <h1 className="text-custom-brand-primary w-106.5 text-2xl font-bold break-all whitespace-pre-wrap">
                   {product.title}
                 </h1>
 
@@ -151,7 +145,7 @@ export default async function ProductDetail({ params }: ProductDetailPageProps) 
 
               <div className="border-custom-gray-100 mb-7.5 h-[1px] w-full border-[1px]" />
 
-              <div className="text-custom-brand-primary text-4 mb-10 w-full whitespace-pre-wrap">
+              <div className="text-custom-brand-primary text-4 mb-10 w-full break-all whitespace-pre-wrap">
                 {product.description}
               </div>
 
