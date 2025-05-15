@@ -11,13 +11,21 @@ import { RadioCheckedIcon, RadioUnCheckedIcon } from '@/lib/icons';
 import { useCreateProductComment } from '@/lib/queries/useCommentsQueries';
 import { commentFormSchema, FormValues, MAX_LENGTH } from '@/lib/schemas/commentForm.schema';
 import toast from '@/lib/toast';
+import { cn } from '@/lib/utils';
 
 interface CommentCreateFormProps {
   user: UserSummary | null;
   productId: number;
+  mode?: 'root' | 'reply';
+  rootCommentId?: number | null;
 }
 
-export default function CommentCreateForm({ user, productId }: CommentCreateFormProps) {
+export default function CommentCreateForm({
+  user,
+  productId,
+  mode = 'root',
+  rootCommentId = null,
+}: CommentCreateFormProps) {
   const form = useForm<FormValues>({
     resolver: zodResolver(commentFormSchema),
     defaultValues: {
@@ -30,13 +38,19 @@ export default function CommentCreateForm({ user, productId }: CommentCreateForm
   const { checkAuth } = useRequireAuth();
 
   const handleSubmit = (formValues: FormValues) => {
+    if (mode === 'reply' && !rootCommentId) {
+      console.error(
+        'CommentCreateForm: reply mode인 경우 반드시 rootCommentId를 prop으로 전달해주세요'
+      );
+    }
+
     checkAuth(() => {
       mutate(
         {
           productId,
           content: formValues.content,
           secret: formValues.secret,
-          rootCommentId: null,
+          rootCommentId,
         },
         { onError: () => toast.error('잠시 후 다시 시도해주세요') }
       );
@@ -47,7 +61,10 @@ export default function CommentCreateForm({ user, productId }: CommentCreateForm
 
   return (
     <Form {...form}>
-      <form className="mt-7.5" onSubmit={form.handleSubmit(handleSubmit)}>
+      <form
+        className={cn('mt-7.5', mode === 'reply' && 'mt-4')}
+        onSubmit={form.handleSubmit(handleSubmit)}
+      >
         <FormField
           control={form.control}
           name="content"
@@ -62,7 +79,10 @@ export default function CommentCreateForm({ user, productId }: CommentCreateForm
 
               <FormControl>
                 <Textarea
-                  className="aria-invalid:border-input aria-invalid:focus-visible:ring-ring/50 placeholder:text-custom-gray-200 text-custom-gray-900 focus:!border-custom-gray-100 h-53 resize-none rounded-t-lg rounded-b-none px-4 pt-12 pb-13.5 font-medium shadow-none placeholder:text-sm placeholder:font-medium focus-visible:ring-0"
+                  className={cn(
+                    'aria-invalid:border-input aria-invalid:focus-visible:ring-ring/50 placeholder:text-custom-gray-200 text-custom-gray-900 focus:!border-custom-gray-100 h-53 resize-none rounded-t-lg rounded-b-none px-4 pt-12 pb-13.5 font-medium shadow-none placeholder:text-sm placeholder:font-medium focus-visible:ring-0',
+                    mode === 'reply' && 'h-45 rounded-lg'
+                  )}
                   placeholder="작품에 대한 감상평이나 문의를 남겨주세요."
                   {...field}
                 />
@@ -78,7 +98,12 @@ export default function CommentCreateForm({ user, productId }: CommentCreateForm
           )}
         />
 
-        <div className="border-custom-gray-100 flex h-13 w-full items-center justify-end gap-4 rounded-b-lg border-x border-b px-4">
+        <div
+          className={cn(
+            'border-custom-gray-100 flex h-13 w-full items-center justify-end gap-4 rounded-b-lg border-x border-b px-4',
+            mode === 'reply' && 'rounded-none border-r-0 border-l-0'
+          )}
+        >
           <FormField
             control={form.control}
             name="secret"
@@ -102,7 +127,7 @@ export default function CommentCreateForm({ user, productId }: CommentCreateForm
             type="submit"
             className="bg-custom-brand-primary text-custom-background h-10 w-35 cursor-pointer rounded-full text-sm font-medium"
           >
-            등록
+            {mode === 'root' ? '등록' : '답글하기'}
           </button>
         </div>
       </form>

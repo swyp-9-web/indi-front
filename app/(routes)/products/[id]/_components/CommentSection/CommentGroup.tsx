@@ -4,6 +4,7 @@ import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { Comment, RootComment } from '@/lib/apis/comments.type';
 import { UserSummary } from '@/lib/apis/user.type';
 
+import CommentCreateForm from './CommentCreateForm';
 import CommentItem from './CommentItem';
 
 interface CommentGroupProps {
@@ -22,7 +23,7 @@ export default function CommentGroup({ comment, user, isOwner, productId }: Comm
   const canViewSecret = Boolean(user) && (rootComment.user.id === user?.id || isOwner);
 
   const handleReplyButtonClick = () => {
-    checkAuth(() => setIsReplyFormOpen(true));
+    checkAuth(() => setIsReplyFormOpen((prev) => !prev));
   };
 
   // 로그아웃 시 답글 Form 사라짐
@@ -55,7 +56,14 @@ export default function CommentGroup({ comment, user, isOwner, productId }: Comm
         />
       ))}
 
-      {isReplyFormOpen && <div>열림</div>}
+      {isReplyFormOpen && (
+        <CommentCreateForm
+          user={user}
+          productId={productId}
+          mode="reply"
+          rootCommentId={rootComment.id}
+        />
+      )}
     </div>
   );
 }
