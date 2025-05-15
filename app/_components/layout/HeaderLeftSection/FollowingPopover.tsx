@@ -26,7 +26,7 @@ export default function FollowingPopover() {
   const { toggleIsOpen: toggleAuthDialogOpen } = useAuthDialog();
 
   const { data: user } = useUserSummary();
-  const { data: followingData } = useFollowingPreview();
+  const { data: followingData } = useFollowingPreview({ enabled: Boolean(user?.result) });
 
   const artists = followingData?.result.followingArtists ?? [];
   const followingCount = followingData?.result.totalFollowings ?? 0;
