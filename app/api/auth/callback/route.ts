@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     response.cookies.set('JSESSIONID', sessionId, {
       path: '/',
       httpOnly: true,
-      maxAge: 60 * 60 * 24 * 7,
+      maxAge: 60 * 60 * 2,
       sameSite: 'lax',
       secure: process.env.NODE_ENV === 'production',
     });
