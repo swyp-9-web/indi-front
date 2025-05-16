@@ -69,7 +69,9 @@ export const useRegisterProduct = () => {
   return useMutation({
     mutationFn: registerProduct,
     onSuccess: () => {
-      queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] === 'products' });
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey[0] === QUERY_KEYS.products.all[0],
+      });
     },
   });
 };
@@ -87,7 +89,9 @@ export const useEditProduct = () => {
     mutationFn: ({ formData, productId }: { formData: FormData; productId: number }) =>
       editProduct(formData, productId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] === 'products' });
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey[0] === QUERY_KEYS.products.all[0],
+      });
     },
   });
 };

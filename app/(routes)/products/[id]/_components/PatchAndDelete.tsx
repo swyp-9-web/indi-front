@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { ROUTE_PATHS } from '@/constants/route-paths';
 import { useProductRegisterPage } from '@/hooks/useProductRegisterPage';
 import { deleteProduct } from '@/lib/apis/products.api';
+import { QUERY_KEYS } from '@/lib/queries/queryKeys';
 import { useUserSummary } from '@/lib/queries/useUserQueries';
 
 interface PatchAndDeleteProps {
@@ -28,7 +29,9 @@ export default function PatchAndDelete({ itemId, isOwner }: PatchAndDeleteProps)
     mutationFn: () => deleteProduct(itemId),
     onSuccess: () => {
       router.replace(ROUTE_PATHS.HOME);
-      queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] === 'products' });
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey[0] === QUERY_KEYS.products.all[0],
+      });
     },
   });
 

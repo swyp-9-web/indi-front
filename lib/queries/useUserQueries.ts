@@ -30,7 +30,9 @@ export const useLoginCallback = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.user.summary });
-      queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] === 'products' });
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey[0] === QUERY_KEYS.products.all[0],
+      });
     },
   });
 };

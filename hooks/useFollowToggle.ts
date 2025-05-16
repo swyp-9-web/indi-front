@@ -102,7 +102,7 @@ export function useFollowToggle(
           // e.g. 작가 피드 페이지 팔로우 기능 변경 시 layout과 팔로우 목록 페이지 invalidate
           if (options?.invalidateFollowingQueries) {
             queryClient.invalidateQueries({
-              predicate: (query) => query.queryKey[0] === 'following',
+              predicate: (query) => query.queryKey[0] === QUERY_KEYS.following.all[0],
             });
           }
 
@@ -122,7 +122,7 @@ export function useFollowToggle(
           // 요청 실패 시 서버 상태와 동기화 진행
           await revalidateArtistTag(String(artistId));
           queryClient.invalidateQueries({
-            predicate: (query) => query.queryKey[0] === 'following',
+            predicate: (query) => query.queryKey[0] === QUERY_KEYS.following.all[0],
           });
 
           toast.error('잠시 후 다시 시도해주세요');
