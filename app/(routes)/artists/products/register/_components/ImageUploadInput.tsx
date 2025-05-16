@@ -9,10 +9,25 @@ import { AddPhotoIcon, ProductImageCancelIcon } from '@/lib/icons';
 interface ImageUploadInputProps {
   images: (string | File)[];
   onChangeImages: (images: (string | File)[]) => void;
+  errorMessage: string;
 }
 
-export default function ImageUploadInput({ images, onChangeImages }: ImageUploadInputProps) {
+export default function ImageUploadInput({
+  images,
+  onChangeImages,
+  errorMessage,
+}: ImageUploadInputProps) {
   const [previewUrls, setPreviewUrls] = useState<Map<File, string>>(new Map()); // File(key): url(value)
+
+  const renameFiles = (files: File[]) => {
+    const renamedFiles = files.map((file, index) => {
+      const ext = file.name.split('.').pop();
+      const base = file.name.replace(/\.[^/.]+$/, '');
+      return new File([file], `${base}_${Date.now()}_${index}.${ext}`, { type: file.type });
+    });
+
+    return renamedFiles;
+  };
 
   // 새로 업로드한 파일을 images 배열에 추가하고, 최대 8개까지만 유지합니다.
   // 추가된 File에 대해 preview URL을 생성해서 previewUrls Map에 저장합니다.
@@ -21,13 +36,16 @@ export default function ImageUploadInput({ images, onChangeImages }: ImageUpload
     if (!e.target.files) return;
 
     const files = [...e.target.files];
+    const renamedFiles = renameFiles(files);
 
-    const newImages = [...images, ...files].slice(0, 8);
+    if (renamedFiles.length === 0) return;
+
+    const newImages = [...images, ...renamedFiles].slice(0, 8);
     onChangeImages(newImages);
 
     // 새로 선택된 files에 대한 previewUrl 생성
     const newPreviewUrls = new Map(previewUrls);
-    files.forEach((file) => {
+    renamedFiles.forEach((file) => {
       const url = URL.createObjectURL(file);
       newPreviewUrls.set(file, url);
     });
@@ -73,11 +91,15 @@ export default function ImageUploadInput({ images, onChangeImages }: ImageUpload
       <h3 className="text-custom-brand-primary mb-1 text-lg font-bold">
         작품 이미지<span className="text-custom-status-notice">*</span>
       </h3>
-      <p className="text-custom-brand-primary mb-9 text-sm">
+      <p className="text-custom-brand-primary mb-1 text-sm">
         작품 이미지는 1:1 비율로 보여져요. 개당 최대 50MB 이하의 이미지만 업로드가 가능하며,{' '}
         <span className="text-custom-status-notice font-semibold">최대 8장</span>까지 추가할 수
         있어요.
       </p>
+
+      <div className="text-custom-status-negative mb-4 h-3 text-xs font-semibold">
+        {errorMessage}
+      </div>
 
       <div className="grid grid-cols-2 gap-2.5">
         {images.map((image, idx) => (

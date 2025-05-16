@@ -22,6 +22,7 @@ export default function ProductRegisterForm() {
 
   const [productImages, setProductImages] = useState<(string | File)[]>(initialImgUrls);
   const [imageOrder, setImageOrder] = useState<string[]>(initialImgUrls);
+  const [imageErrorMessage, setImageErrorMessage] = useState('');
 
   const [submitType, setSubmitType] = useState<'TEMP' | 'OPEN'>('OPEN');
 
@@ -47,6 +48,28 @@ export default function ProductRegisterForm() {
 
     const newImageOrder = images.map((item) => (typeof item === 'string' ? item : item.name));
     setImageOrder(newImageOrder);
+
+    setImageErrorMessage('');
+  };
+
+  const validateImages = () => {
+    if (imageOrder.length === 0) {
+      setImageErrorMessage('작품 이미지를 등록해 주세요.');
+      return false;
+    }
+
+    const isOversizedFile = (image: string | File): image is File =>
+      image instanceof File && image.size > 5 * 1024 * 1024;
+    const oversized = productImages.filter(isOversizedFile);
+
+    if (oversized.length > 0) {
+      const names = oversized.map((file) => file.name).join(', ');
+      setImageErrorMessage(`${names} 파일은 5MB를 초과합니다.`);
+      return false;
+    }
+
+    setImageErrorMessage('');
+    return true;
   };
 
   const { mutate: registerProduct, isPending: isRegisterPending } = useRegisterProduct();
@@ -129,6 +152,8 @@ export default function ProductRegisterForm() {
       return;
     }
 
+    if (!validateImages()) return;
+
     const requestPayload = createRequestPayload(formValues);
 
     // mutate에 사용할 formData 생성
@@ -154,7 +179,11 @@ export default function ProductRegisterForm() {
     <Form {...form}>
       <form className="w-full" onSubmit={form.handleSubmit(handleSubmit)}>
         <div className="flex items-start gap-5">
-          <ImageUploadInput images={productImages} onChangeImages={handleChangeImagesInput} />
+          <ImageUploadInput
+            images={productImages}
+            onChangeImages={handleChangeImagesInput}
+            errorMessage={imageErrorMessage}
+          />
           <ProductInfoInputs form={form} />
         </div>
 
