@@ -49,8 +49,8 @@ export default function ProductRegisterForm() {
     setImageOrder(newImageOrder);
   };
 
-  const { mutate: registerProduct } = useRegisterProduct();
-  const { mutate: editProduct } = useEditProduct();
+  const { mutate: registerProduct, isPending: isRegisterPending } = useRegisterProduct();
+  const { mutate: editProduct, isPending: isEditPending } = useEditProduct();
 
   // formValues를 기반으로 FormData의 'request' key에 들어갈 JSON payload를 생성하는 함수
   const createRequestPayload = (formValues: FormValues) => {
@@ -172,6 +172,7 @@ export default function ProductRegisterForm() {
           <button
             type="submit"
             onClick={() => setSubmitType('OPEN')}
+            disabled={isEditPending || isRegisterPending}
             className="bg-custom-brand-secondary text-custom-gray-900 flex h-11.5 w-42 cursor-pointer items-center justify-center rounded-full text-sm font-medium"
           >
             등록하기
