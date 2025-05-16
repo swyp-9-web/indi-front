@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 
 import { useDebouncedCallback } from '@/hooks/useDebounce';
+import { QUERY_KEYS } from '@/lib/queries/queryKeys';
 import { useToggleProductScrap } from '@/lib/queries/useProductsQueries';
 
 import { useRequireAuth } from './useRequireAuth';
@@ -32,7 +33,9 @@ export function useScrapToggle(productId: number, initialIsScraped: boolean) {
           setServerScrapState(nextIsScrapped);
 
           // 스크랩 관련 query invalidate
-          queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] === 'products' });
+          queryClient.invalidateQueries({
+            predicate: (query) => query.queryKey[0] === QUERY_KEYS.products.all[0],
+          });
         },
         onError: () => {
           // 요청 실패 시 서버 상태와 동일한 상태로 롤백

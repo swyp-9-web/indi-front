@@ -6,9 +6,11 @@ import { FollowingArtistsQueryParams } from '../apis/following.type';
 
 export const QUERY_KEYS = {
   products: {
+    all: ['products'],
     list: (queryParams: ProductsListQueryParams) => ['products', stableStringify(queryParams)],
   },
   following: {
+    all: ['following'],
     preview: ['following', 'preview'],
     artists: (queryParams: FollowingArtistsQueryParams) => [
       'following',
@@ -17,6 +19,7 @@ export const QUERY_KEYS = {
     ],
   },
   user: {
+    all: ['user'],
     summary: ['user', 'summary'],
   },
   comments: {
