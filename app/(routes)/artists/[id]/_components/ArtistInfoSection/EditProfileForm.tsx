@@ -147,8 +147,8 @@ export default function EditProfileForm({ artist, onClose }: EditProfileFormProp
                   <div className="mt-1 flex items-center justify-between">
                     <FormMessage className="text-custom-status-negative text-xs font-semibold" />
                     <p className="flex-1 text-right text-xs">
-                      <span className="text-custom-status-notice">{field.value.trim().length}</span>
-                      /{MAX_LENGTH.nickname}
+                      <span className="text-custom-status-notice">{field.value.length}</span>/
+                      {MAX_LENGTH.nickname}
                     </p>
                   </div>
                 </FormItem>
@@ -176,8 +176,8 @@ export default function EditProfileForm({ artist, onClose }: EditProfileFormProp
                   <div className="mt-1 flex items-center justify-between">
                     <FormMessage className="text-custom-status-negative text-xs font-semibold" />
                     <p className="flex-1 text-right text-xs">
-                      <span className="text-custom-status-notice">{field.value.trim().length}</span>
-                      /{MAX_LENGTH.aboutMe}
+                      <span className="text-custom-status-notice">{field.value.length}</span>/
+                      {MAX_LENGTH.aboutMe}
                     </p>
                   </div>
                 </FormItem>

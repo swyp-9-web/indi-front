@@ -122,7 +122,7 @@ export default function ProfileEditForm({ user, onClose }: ProfileEditFormProps)
               <div className="mt-1 flex items-center justify-between">
                 <FormMessage className="text-custom-status-negative text-xs font-semibold" />
                 <p className="flex-1 text-right text-xs">
-                  <span className="text-custom-status-notice">{field.value.trim().length}</span>/
+                  <span className="text-custom-status-notice">{field.value.length}</span>/
                   {MAX_LENGTH.nickname}
                 </p>
               </div>
