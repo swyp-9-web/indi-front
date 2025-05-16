@@ -4,6 +4,8 @@ import { useState } from 'react';
 
 import Image from 'next/image';
 
+import { cn } from '@/lib/utils';
+
 interface ProductDetailGalleryProps {
   images: string[];
   title: string;
@@ -18,13 +20,15 @@ export default function ProductDetailGallery({ images, title }: ProductDetailGal
         <div role="list" className="flex flex-col gap-2">
           {images.map((src, idx) => (
             <button
-              key={src}
+              key={`${src}-${idx}`}
               type="button"
               role="listitem"
               onClick={() => setCurrentIndex(idx)}
-              className={`relative h-17.5 w-17.5 overflow-hidden rounded-md ${
-                currentIndex === idx ? 'ring-primary ring-2' : ''
-              }`}
+              className={cn(
+                `relative h-17.5 w-17.5 overflow-hidden rounded-md ${
+                  currentIndex === idx ? 'ring-primary ring-2' : ''
+                }`
+              )}
             >
               <Image src={src} alt={`${title} 썸네일`} fill className="object-cover" />
             </button>
