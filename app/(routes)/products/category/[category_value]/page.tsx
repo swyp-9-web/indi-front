@@ -1,6 +1,9 @@
 import { Suspense } from 'react';
 
+import { notFound } from 'next/navigation';
+
 import ScrollToTopButton from '@/app/_components/shared/ScrollToTopButton';
+import { CATEGORY_VALUES } from '@/constants';
 import { getCategoryLabelByValue } from '@/utils/item';
 
 import ProductsControls from './_components/ProductsControls';
@@ -15,6 +18,11 @@ interface CategoryPageProps {
 
 export default async function ProductsCategory({ params, searchParams }: CategoryPageProps) {
   const [{ category_value: categoryValue }, query] = await Promise.all([params, searchParams]);
+
+  // category value값이 올바르지 않은 경우 notFound
+  if (!CATEGORY_VALUES.includes(categoryValue)) {
+    notFound();
+  }
 
   const queryParams = { categoryTypes: categoryValue, ...query };
 
