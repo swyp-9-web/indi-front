@@ -159,13 +159,23 @@ export default function ProductRegisterForm() {
         </div>
 
         <div className="mb-20 flex items-center justify-center gap-2.5">
-          {mode !== 'EDIT' && (
+          {mode === 'CREATE' && (
             <button
               type="submit"
               onClick={() => setSubmitType('TEMP')}
               className="border-custom-gray-100 flex h-11.5 w-42 cursor-pointer items-center justify-center rounded-full border text-sm font-medium"
             >
               임시저장
+            </button>
+          )}
+
+          {mode === 'EDIT' && (
+            <button
+              type="submit"
+              onClick={() => router.back()}
+              className="border-custom-gray-100 flex h-11.5 w-42 cursor-pointer items-center justify-center rounded-full border text-sm font-medium"
+            >
+              취소
             </button>
           )}
 
