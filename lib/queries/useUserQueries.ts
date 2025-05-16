@@ -1,5 +1,3 @@
-import { useRouter } from 'next/navigation';
-
 import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query';
 
 import { revalidateArtistTag } from '@/app/actions/revalidate';
@@ -60,19 +58,13 @@ export const useUserSummary = (
  * 로그아웃 처리를 위한 mutation 훅입니다.
  *
  * 서버에 로그아웃 요청을 보내고, (Next API Route)
- * 클라이언트 상태를 초기화 합니다.
+ * window.location.reload() 를 통해 새로고침합니다. // 가장 안전한 방식
  */
 export const useLogout = () => {
-  const queryClient = useQueryClient();
-  const router = useRouter();
-
   return useMutation({
     mutationFn: logoutUser,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.user.summary });
-      queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] === 'following' });
-      queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] === 'products' });
-      router.refresh();
+      window.location.reload();
     },
   });
 };
