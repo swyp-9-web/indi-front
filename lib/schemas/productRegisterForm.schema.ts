@@ -1,9 +1,16 @@
 import { z } from 'zod';
 
+import { formatNumberWithComma } from '@/utils/formatNumber';
+
 export const MAX_LENGTH = {
   name: 40,
   material: 40,
   description: 400,
+};
+
+const MAX_NUMBER = {
+  size: 10000,
+  price: 100000000,
 };
 
 const sizeSchema = z
@@ -13,14 +20,21 @@ const sizeSchema = z
     depth: z.string().optional(),
   })
   .superRefine(({ width, height, depth }, ctx) => {
-    if ((width && !height) || (height && !width)) {
-      ctx.addIssue({ code: z.ZodIssueCode.custom, message: '가로와 세로를 모두 입력해 주세요.' });
-    }
     [width, height, depth].forEach((value) => {
       if (value && !/^\d+$/.test(value)) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: '숫자를 입력해 주세요.' });
       }
+      if (Number(value) > MAX_NUMBER.size) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: `${formatNumberWithComma(MAX_NUMBER.size)} 이하의 숫자를 입력해 주세요.`,
+        });
+      }
     });
+
+    if ((width && !height) || (height && !width)) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: '가로와 세로를 모두 입력해 주세요.' });
+    }
   });
 
 export const productRegisterFormSchema = z
@@ -68,6 +82,13 @@ export const productRegisterFormSchema = z
           code: z.ZodIssueCode.custom,
           path: ['price'],
           message: '올바른 값을 입력해 주세요.',
+        });
+      }
+      if (Number(price) > MAX_NUMBER.price) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['price'],
+          message: `${formatNumberWithComma(MAX_NUMBER.price)} 이하의 숫자를 입력해주세요.`,
         });
       }
     }
