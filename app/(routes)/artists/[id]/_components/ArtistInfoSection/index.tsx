@@ -70,13 +70,13 @@ export default async function ArtistInfoSection({ artistId }: ArtistInfoSectionP
         <div className="mt-7.5 mb-30 w-full">
           <h5 className="text-custom-gray-300 text-xs">웹사이트</h5>
           <ul className="mt-2 flex flex-col gap-1.5">
-            {[artist.homeLink, ...artist.snsLinks].map((url) => {
+            {[artist.homeLink, ...artist.snsLinks].map((url, idx) => {
               if (!url) return null;
 
               const platform = detectPlatformFromUrl(url);
 
               return (
-                <li key={url}>
+                <li key={`${url}-${idx}`}>
                   <a
                     href={url}
                     target="_blank"
