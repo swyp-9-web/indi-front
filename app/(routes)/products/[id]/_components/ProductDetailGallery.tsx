@@ -25,7 +25,8 @@ export default function ProductDetailGallery({ images, title }: ProductDetailGal
               role="listitem"
               onClick={() => setCurrentIndex(idx)}
               className={cn(
-                `, currentIndex === idx ? 'ring-primary ring-2' : '' relative h-17.5 w-17.5 overflow-hidden rounded-md`
+                'relative h-17.5 w-17.5 overflow-hidden rounded-md',
+                currentIndex === idx && 'ring-primary ring-2'
               )}
             >
               <Image src={src} alt={`${title} 썸네일`} fill className="object-cover" />
