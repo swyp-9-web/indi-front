@@ -26,25 +26,26 @@ interface ProductDetailPageProps {
 export default async function ProductDetail({ params }: ProductDetailPageProps) {
   const { id } = await params;
 
-  const queryClient = new QueryClient();
+  async function prepareDehydratedState() {
+    const queryClient = new QueryClient();
+    await queryClient.prefetchQuery({
+      queryKey: QUERY_KEYS.user.summary,
+      queryFn: () => fetchUserSummary({ runtime: 'server' }),
+    });
+    return dehydrate(queryClient);
+  }
 
-  await queryClient.prefetchQuery({
-    queryKey: QUERY_KEYS.user.summary,
-    queryFn: () => fetchUserSummary(),
-  });
+  async function getProductAndArtistPage(productId: number) {
+    const { result: product } = await fetchProductDetail(productId, { runtime: 'server' });
+    const { result: artistPage } = await fetchProductsList({
+      artistId: product.artist.id,
+      sortType: 'SCRAPED_TOP',
+    });
+    return { product, artistPage };
+  }
 
-  const dehydrateState = dehydrate(queryClient);
-
-  const response = await fetchProductDetail(Number(id), {
-    runtime: 'server',
-  });
-  const product = response.result;
-
-  const artistPageResponse = await fetchProductsList({
-    artistId: product.artist.id,
-    sortType: 'SCRAPED_TOP',
-  });
-  const artistPage = artistPageResponse.result;
+  const dehydrateState = await prepareDehydratedState();
+  const { product, artistPage } = await getProductAndArtistPage(Number(id));
 
   return (
     <HydrationBoundary state={dehydrateState}>
