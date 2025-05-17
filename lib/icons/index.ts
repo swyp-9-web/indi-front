@@ -15,7 +15,7 @@ export { default as CheckIcon } from './svg/check.svg';
 export { default as ChevronBackwardIcon } from './svg/chevron-backward.svg';
 export { default as CloseIcon } from './svg/close.svg';
 export { default as DialogCloseIcon } from './svg/dialog-close.svg';
-export { default as FindInPageIcon } from './svg/find-in-page.svg';
+export { default as FindInPageIcon } from './svg/find-in-page';
 export { default as LinkIcon } from './svg/link.svg';
 export { default as MenuVerbIcon } from './svg/menu-verb.svg';
 export { default as NotificationUnreadIcon } from './svg/notifications-unread.svg';
