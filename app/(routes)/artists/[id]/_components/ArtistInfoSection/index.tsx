@@ -28,8 +28,6 @@ export default async function ArtistInfoSection({ artistId }: ArtistInfoSectionP
   const isMyPage = artistId === userRes.result?.id;
   const artist = artistRes.result;
 
-  console.log([artist.homeLink, ...artist.snsLinks]);
-
   return (
     <section className="relative mt-10 w-66.25">
       <ShareLinkButton />
