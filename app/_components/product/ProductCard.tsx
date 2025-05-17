@@ -31,7 +31,7 @@ export default function ProductCard({
         )}
       >
         {product.thumbnailImgUrl ? (
-          <Link href={ROUTE_PATHS.ARTIST(String(product.id))}>
+          <Link href={ROUTE_PATHS.PRODUCT_DETAIL(String(product.id))}>
             <Image
               fill
               src={product.thumbnailImgUrl}
