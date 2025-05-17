@@ -19,7 +19,7 @@ export default async function GlobalNavBar() {
 
   return (
     <HydrationBoundary state={dehydrateState}>
-      <header className="border-custom-gray-100 bg-custom-background absolute inset-x-0 top-0 z-50 h-14 border-b">
+      <header className="border-custom-gray-100 bg-custom-background sticky inset-x-0 top-0 z-50 h-14 border-b">
         <div className="w-8xl mx-auto flex h-full items-center justify-between px-6">
           <HeaderLeftSection />
           <HeaderCenterSection />
