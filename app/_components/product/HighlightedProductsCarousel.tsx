@@ -8,7 +8,7 @@ import 'swiper/css/navigation';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { Product } from '@/lib/apis/products.type';
-import { ArrowNextIcon, ArrowPrevIcon } from '@/lib/icons';
+import { ArrowNextIcon, ArrowPrevIcon, FindInPageIcon } from '@/lib/icons';
 import { cn } from '@/lib/utils';
 
 import ProductCard from './ProductCard';
@@ -85,6 +85,18 @@ export default function HighlightedProductsCarousel({
           }}
           className="w-full"
         >
+          {products.length === 0 && (
+            <div
+              className={cn(
+                'mx-auto mt-35 opacity-40',
+                variant === 'primary' ? 'text-custom-background' : 'text-custom-brand-primary'
+              )}
+            >
+              <FindInPageIcon className="mx-auto mb-4" />
+              <div className="text-center text-2xl font-semibold">작품이 없습니다.</div>
+            </div>
+          )}
+
           {products.map((product) => (
             <SwiperSlide key={product.id}>
               <ProductCard
