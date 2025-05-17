@@ -34,7 +34,7 @@ export default async function ArtistInfoSection({ artistId }: ArtistInfoSectionP
 
       <ProfileImage src={artist.profileImgUrl} className="mx-auto h-25 w-25" />
 
-      <p className="text-custom-brand-primary mx-auto mt-7.5 mb-3 w-60 text-center text-2xl font-bold">
+      <p className="text-custom-brand-primary mx-auto mt-7.5 mb-3 w-60 text-center text-2xl font-bold break-words">
         {artist.nickname}
       </p>
       {isMyPage && <EditProfileDialogButton artist={artist} />}
@@ -61,7 +61,7 @@ export default async function ArtistInfoSection({ artistId }: ArtistInfoSectionP
 
       <div className="mt-7.5">
         <h5 className="text-custom-gray-300 text-xs">작가 소개</h5>
-        <p className="text-custom-brand-primary mt-1 text-sm whitespace-pre-line">
+        <p className="text-custom-brand-primary mt-1 text-sm break-words whitespace-pre-line">
           {artist.aboutMe}
         </p>
       </div>
@@ -70,13 +70,13 @@ export default async function ArtistInfoSection({ artistId }: ArtistInfoSectionP
         <div className="mt-7.5 mb-30 w-full">
           <h5 className="text-custom-gray-300 text-xs">웹사이트</h5>
           <ul className="mt-2 flex flex-col gap-1.5">
-            {[artist.homeLink, ...artist.snsLinks].map((url) => {
+            {[artist.homeLink, ...artist.snsLinks].map((url, idx) => {
               if (!url) return null;
 
               const platform = detectPlatformFromUrl(url);
 
               return (
-                <li key={url}>
+                <li key={`${url}-${idx}`}>
                   <a
                     href={url}
                     target="_blank"

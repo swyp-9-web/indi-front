@@ -37,7 +37,12 @@ function FollowingArtistInfo({ artist }: FollowingArtistInfoProps) {
       <div className="flex flex-col items-center justify-center">
         <ProfileImage src={artist.profileImgUrl ?? null} className="mb-7.5 h-25 w-25" />
 
-        <p className="mb-2 w-61 text-center text-2xl font-bold">{artist.nickname}</p>
+        <Link
+          href={ROUTE_PATHS.ARTIST(String(artist.id))}
+          className="mb-2 block w-61 text-center text-2xl font-bold break-words underline-offset-2 hover:underline"
+        >
+          {artist.nickname}
+        </Link>
 
         <div className="flex items-center justify-between">
           <div className="text-custom-brand-primary flex items-center justify-center gap-1.5 px-3 text-lg font-bold">

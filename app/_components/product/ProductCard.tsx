@@ -26,17 +26,19 @@ export default function ProductCard({
     <article className={cn('relative w-76.25', size === 'small' && 'w-65')}>
       <figure
         className={cn(
-          'bg-custom-gray-100 relative flex h-76.25 w-76.25 items-center justify-center rounded-xl',
+          'bg-custom-gray-100 relative flex h-76.25 w-76.25 items-center justify-center rounded-lg',
           size === 'small' && 'h-65 w-65'
         )}
       >
         {product.thumbnailImgUrl ? (
-          <Image
-            fill
-            src={product.thumbnailImgUrl}
-            className="rounded-xl object-cover"
-            alt="작품 이미지"
-          />
+          <Link href={ROUTE_PATHS.PRODUCT_DETAIL(String(product.id))}>
+            <Image
+              fill
+              src={product.thumbnailImgUrl}
+              className="rounded-xl object-cover"
+              alt="작품 이미지"
+            />
+          </Link>
         ) : (
           <figcaption className="text-custom-gray-400 text-base">No Image</figcaption>
         )}

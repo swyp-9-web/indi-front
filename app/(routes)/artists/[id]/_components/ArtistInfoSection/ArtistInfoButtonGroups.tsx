@@ -44,7 +44,7 @@ export function ArtistButtonGroups() {
 
       <button
         onClick={enterRegisterPage.create}
-        className="bg-custom-brand-secondary text-custom-gray-900 flex h-12 w-full items-center justify-center rounded-full text-sm font-medium"
+        className="bg-custom-brand-secondary text-custom-gray-900 flex h-12 w-full cursor-pointer items-center justify-center rounded-full text-sm font-medium"
       >
         작품 등록
       </button>

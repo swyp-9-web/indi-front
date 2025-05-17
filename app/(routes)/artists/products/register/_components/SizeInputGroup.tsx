@@ -14,7 +14,7 @@ export default function SizeInputGroup({ form }: SizeInputGroupProps) {
     <FormField
       control={form.control}
       name="size"
-      render={({ field }) => (
+      render={() => (
         <FormItem className="relative block">
           <FormLabel className="data-[error=true]:text-custom-brand-primary mb-1.5 gap-0 text-sm font-semibold">
             작품 실측(cm)
@@ -32,11 +32,13 @@ export default function SizeInputGroup({ form }: SizeInputGroupProps) {
                         placeholder={
                           dimension === 'width' ? '가로' : dimension === 'height' ? '세로' : '폭'
                         }
-                        type="number"
+                        type="text"
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);
-                          form.trigger('size');
+                          if (form.formState.isSubmitted) {
+                            form.trigger('size');
+                          }
                         }}
                       />
                     </FormControl>

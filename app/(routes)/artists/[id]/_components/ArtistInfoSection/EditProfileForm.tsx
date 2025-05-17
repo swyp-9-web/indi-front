@@ -147,8 +147,8 @@ export default function EditProfileForm({ artist, onClose }: EditProfileFormProp
                   <div className="mt-1 flex items-center justify-between">
                     <FormMessage className="text-custom-status-negative text-xs font-semibold" />
                     <p className="flex-1 text-right text-xs">
-                      <span className="text-custom-status-notice">{field.value.trim().length}</span>
-                      /{MAX_LENGTH.nickname}
+                      <span className="text-custom-status-notice">{field.value.length}</span>/
+                      {MAX_LENGTH.nickname}
                     </p>
                   </div>
                 </FormItem>
@@ -167,7 +167,7 @@ export default function EditProfileForm({ artist, onClose }: EditProfileFormProp
 
                   <FormControl>
                     <Textarea
-                      className="border-custom-gray-100 aria-invalid:border-input aria-invalid:focus-visible:ring-ring/50 placeholder:text-custom-gray-200 text-custom-gray-900 h-23.5 resize-none px-4.5 py-3.5 font-medium shadow-none placeholder:text-sm placeholder:font-medium"
+                      className="border-custom-gray-100 aria-invalid:border-input aria-invalid:focus-visible:ring-ring/50 placeholder:text-custom-gray-200 text-custom-gray-900 h-23.5 w-80 resize-none px-4.5 py-3.5 font-medium break-words shadow-none placeholder:text-sm placeholder:font-medium"
                       placeholder="예) 호기심이 많고 고양이를 좋아하는 작가입니다."
                       {...field}
                     />
@@ -176,8 +176,8 @@ export default function EditProfileForm({ artist, onClose }: EditProfileFormProp
                   <div className="mt-1 flex items-center justify-between">
                     <FormMessage className="text-custom-status-negative text-xs font-semibold" />
                     <p className="flex-1 text-right text-xs">
-                      <span className="text-custom-status-notice">{field.value.trim().length}</span>
-                      /{MAX_LENGTH.aboutMe}
+                      <span className="text-custom-status-notice">{field.value.length}</span>/
+                      {MAX_LENGTH.aboutMe}
                     </p>
                   </div>
                 </FormItem>
