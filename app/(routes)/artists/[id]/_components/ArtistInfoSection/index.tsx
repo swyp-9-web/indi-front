@@ -28,6 +28,8 @@ export default async function ArtistInfoSection({ artistId }: ArtistInfoSectionP
   const isMyPage = artistId === userRes.result?.id;
   const artist = artistRes.result;
 
+  console.log([artist.homeLink, ...artist.snsLinks]);
+
   return (
     <section className="relative mt-10 w-66.25">
       <ShareLinkButton />
@@ -66,7 +68,7 @@ export default async function ArtistInfoSection({ artistId }: ArtistInfoSectionP
         </p>
       </div>
 
-      {artist.homeLink && artist.snsLinks.length === 0 && (
+      {(artist.homeLink || artist.snsLinks.length > 0) && (
         <div className="mt-7.5 mb-30 w-full">
           <h5 className="text-custom-gray-300 text-xs">웹사이트</h5>
           <ul className="mt-2 flex flex-col gap-1.5">
