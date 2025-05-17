@@ -6,11 +6,12 @@ import HighlightedProductsCarousel from '@/app/_components/product/HighlightedPr
 import { ROUTE_PATHS } from '@/constants/route-paths';
 import { fetchProductDetail, fetchProductsList } from '@/lib/apis/products.api';
 import { fetchUserSummary } from '@/lib/apis/user.api';
-import { ArrowNextIcon, CloseIcon, SmsIcon } from '@/lib/icons/index';
+import { ArrowNextIcon, CloseIcon } from '@/lib/icons/index';
 import { QUERY_KEYS } from '@/lib/queries/queryKeys';
 import { formatNumberWithComma, formatOverThousand } from '@/utils/formatNumber';
 import { getCategoryLabelByValue } from '@/utils/item';
 
+import CommentCount from './_components/CommentCount';
 import CommentSection from './_components/CommentSection';
 import PatchAndDelete from './_components/PatchAndDelete';
 import ProductDetailArtistInfo from './_components/ProductDetailAuthorInfo';
@@ -95,10 +96,7 @@ export default async function ProductDetail({ params }: ProductDetailPageProps) 
                   </div>
                   {formatOverThousand(product.reaction.totalCount)}+
                 </div>
-                <div className="border-custom-gray-100 flex items-center justify-center gap-1 rounded-4xl border-[1px] px-2.5 py-1.5">
-                  <SmsIcon />
-                  {formatOverThousand(product.reaction.totalCount)}+
-                </div>
+                <CommentCount productId={product.itemId} />
               </div>
 
               <div className="text-custom-gray-300 mb-1 text-[12px]">사이즈(cm)</div>

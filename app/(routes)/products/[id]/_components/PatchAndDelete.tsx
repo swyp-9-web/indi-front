@@ -55,7 +55,6 @@ export default function PatchAndDelete({ itemId, isOwner }: PatchAndDeleteProps)
           >
             작품 수정하기
           </Button>
-
           <Dialog>
             <DialogTrigger asChild>
               <Button className="text-custom-brand-primary h-auto bg-transparent p-0 shadow-none hover:cursor-pointer hover:bg-transparent hover:underline">
