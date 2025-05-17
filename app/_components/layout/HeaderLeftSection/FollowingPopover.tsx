@@ -59,7 +59,12 @@ export default function FollowingPopover() {
       >
         팔로잉 작가
       </PopoverTrigger>
-      <PopoverContent className="bg-custom-background border-custom-gray-100 z-10 w-108.5 translate-x-43 translate-y-[13px] rounded-none border p-0 shadow-none">
+      <PopoverContent
+        align="start"
+        sideOffset={13}
+        alignOffset={-10}
+        className="bg-custom-background border-custom-gray-100 z-10 w-108.5 rounded-none border p-0 shadow-none"
+      >
         <div className="text-custom-brand-primary h-11.5 border-b-1 px-5 py-3 text-sm font-medium">
           팔로잉 작가 ({formatNumberWithComma(followingCount)})
         </div>

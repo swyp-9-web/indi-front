@@ -13,7 +13,12 @@ export default function NotificationPopover() {
           <NotificationIcon className="h-6 w-6" />
         )}
       </PopoverTrigger>
-      <PopoverContent className="bg-custom-background border-custom-gray-100 z-10 w-80 -translate-x-20 translate-y-1 rounded-none border p-0 shadow-none">
+      <PopoverContent
+        align="end"
+        sideOffset={4}
+        alignOffset={-10}
+        className="bg-custom-background border-custom-gray-100 z-10 w-80 rounded-none border p-0 shadow-none"
+      >
         <div className="flex h-11.5 w-full items-center justify-between border-b px-5">
           <h3 className="text-custom-brand-primary text-sm font-medium">읽지 않은 알림 (0)</h3>
           <button className="text-custom-brand-primary cursor-pointer text-xs font-semibold underline underline-offset-2">
