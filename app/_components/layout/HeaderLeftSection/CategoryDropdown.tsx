@@ -32,7 +32,12 @@ export default function CategoryDropdown() {
       >
         카테고리
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="bg-custom-background border-custom-gray-100 z-10 translate-x-28 translate-y-[13px] rounded-none border p-0 shadow-none">
+      <DropdownMenuContent
+        align="start"
+        sideOffset={13}
+        alignOffset={-10}
+        className="bg-custom-background border-custom-gray-100 z-10 rounded-none border p-0 shadow-none"
+      >
         {CATEGORY_ITEMS.map((item) => (
           <DropdownMenuItem
             key={item.value}
