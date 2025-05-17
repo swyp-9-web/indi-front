@@ -35,7 +35,7 @@ export default function ProductCard({
             <Image
               fill
               src={product.thumbnailImgUrl}
-              className="rounded-xl object-cover"
+              className="rounded-lg object-cover"
               alt="작품 이미지"
             />
           </Link>
