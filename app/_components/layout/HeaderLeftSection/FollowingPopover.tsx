@@ -112,10 +112,10 @@ function FollowingArtistRow({ artist, onClose }: FollowingArtistRowProps) {
       <Link
         href={ROUTE_PATHS.ARTIST(String(artist.id))}
         onClick={onClose}
-        className="flex items-center justify-between gap-5 underline-offset-2 hover:underline"
+        className="flex items-center gap-5 underline-offset-2 hover:underline"
       >
         <ProfileImage src={artist.profileImgUrl} className="h-12 w-12" />
-        <p>{artist.nickname}</p>
+        <p className="max-w-50 truncate">{artist.nickname}</p>
       </Link>
 
       <FollowingButton isFollowing={isFollowing} onClick={toggleIsFollowing} />

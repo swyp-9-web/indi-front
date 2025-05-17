@@ -167,7 +167,7 @@ export default function EditProfileForm({ artist, onClose }: EditProfileFormProp
 
                   <FormControl>
                     <Textarea
-                      className="border-custom-gray-100 aria-invalid:border-input aria-invalid:focus-visible:ring-ring/50 placeholder:text-custom-gray-200 text-custom-gray-900 h-23.5 resize-none px-4.5 py-3.5 font-medium shadow-none placeholder:text-sm placeholder:font-medium"
+                      className="border-custom-gray-100 aria-invalid:border-input aria-invalid:focus-visible:ring-ring/50 placeholder:text-custom-gray-200 text-custom-gray-900 h-23.5 w-80 resize-none px-4.5 py-3.5 font-medium break-words shadow-none placeholder:text-sm placeholder:font-medium"
                       placeholder="예) 호기심이 많고 고양이를 좋아하는 작가입니다."
                       {...field}
                     />

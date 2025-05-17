@@ -25,7 +25,7 @@ export default function UserProfilePanel() {
         )}
       </div>
 
-      <p className="text-custom-brand-primary mt-7.5 mb-3 text-center text-2xl font-bold">
+      <p className="text-custom-brand-primary mt-7.5 mb-3 w-full text-center text-2xl font-bold break-words">
         {user?.nickname}
       </p>
 
