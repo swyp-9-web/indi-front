@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
@@ -36,12 +37,16 @@ export default async function ProductDetail({ params }: ProductDetailPageProps) 
   }
 
   async function getProductAndArtistPage(productId: number) {
-    const { result: product } = await fetchProductDetail(productId, { runtime: 'server' });
-    const { result: artistPage } = await fetchProductsList({
-      artistId: product.artist.id,
-      sortType: 'SCRAPED_TOP',
-    });
-    return { product, artistPage };
+    try {
+      const { result: product } = await fetchProductDetail(productId, { runtime: 'server' });
+      const { result: artistPage } = await fetchProductsList({
+        artistId: product.artist.id,
+        sortType: 'SCRAPED_TOP',
+      });
+      return { product, artistPage };
+    } catch (error) {
+      notFound();
+    }
   }
 
   const dehydrateState = await prepareDehydratedState();
@@ -95,7 +100,7 @@ export default async function ProductDetail({ params }: ProductDetailPageProps) 
                       👀
                     </div>
                   </div>
-                  {formatOverThousand(product.reaction.totalCount)}+
+                  {formatOverThousand(product.reaction.totalCount)}
                 </div>
                 <CommentCount productId={product.itemId} />
               </div>
