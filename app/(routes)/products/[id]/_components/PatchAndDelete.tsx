@@ -62,7 +62,7 @@ export default function PatchAndDelete({ itemId, isOwner }: PatchAndDeleteProps)
               </Button>
             </DialogTrigger>
             <DialogOverlay className="bg-custom-brand-primary/50 fixed inset-0 z-40" />
-            <DialogContent className="fixed top-1/2 left-1/2 z-50 flex h-113.5 w-100 max-w-md -translate-x-1/2 -translate-y-1/2 flex-col justify-between rounded-xl border bg-white p-7.5">
+            <DialogContent className="fixed top-1/2 left-1/2 z-50 flex h-113.5 w-100 max-w-md -translate-x-1/2 -translate-y-1/2 flex-col justify-between rounded-xl border bg-[#F9F7F0] p-7.5">
               <DialogHeader>
                 <DialogTitle className="text-custom-brand-primary text-2xl font-bold">
                   작품 삭제
