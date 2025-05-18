@@ -47,7 +47,7 @@ export default function PatchAndDelete({ itemId, isOwner }: PatchAndDeleteProps)
 
   return (
     <>
-      {user && isOwner && (
+      {user && isOwner ? (
         <div className="mb-2.5 flex gap-5">
           <Button
             onClick={() => enterRegisterPage.edit(itemId)}
@@ -91,8 +91,9 @@ export default function PatchAndDelete({ itemId, isOwner }: PatchAndDeleteProps)
             </DialogContent>
           </Dialog>
         </div>
+      ) : (
+        <div className="mb-9.5" />
       )}
-      {!user && <div className="mb-9.5" />}
     </>
   );
 }
