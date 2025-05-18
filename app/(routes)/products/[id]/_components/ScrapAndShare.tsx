@@ -44,7 +44,7 @@ export default function ScrapAndShare({ product }: ScrapAndShareProps) {
     <div className="flex items-center gap-[17px]">
       <button onClick={handleScrap} className="cursor-pointer">
         {isScraped ? <BookmarkFilledIcon /> : <BookmarkIcon />}
-        <p className="text-custom-brand-primary text-xs">{formatOverThousand(count)}+</p>
+        <p className="text-custom-brand-primary text-xs">{formatOverThousand(count)}</p>
       </button>
 
       <button onClick={handleShareClick} className="cursor-pointer">

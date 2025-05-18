@@ -95,7 +95,7 @@ export default async function ProductDetail({ params }: ProductDetailPageProps) 
                       👀
                     </div>
                   </div>
-                  {formatOverThousand(product.reaction.totalCount)}+
+                  {formatOverThousand(product.reaction.totalCount)}
                 </div>
                 <CommentCount productId={product.itemId} />
               </div>
