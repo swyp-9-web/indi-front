@@ -41,6 +41,7 @@ export default function ProductInfoInputs({ form }: ProductInfoInputsProps) {
                   <Input
                     className="placeholder:text-custom-gray-200 text-custom-gray-900 h-12 pr-12 pl-4.5 font-medium shadow-none placeholder:text-sm placeholder:font-medium"
                     placeholder="작품명을 입력해 주세요."
+                    maxLength={MAX_LENGTH.name}
                     {...field}
                   />
                   {field.value && (
@@ -124,7 +125,8 @@ export default function ProductInfoInputs({ form }: ProductInfoInputsProps) {
                 <div className="relative">
                   <Input
                     className="placeholder:text-custom-gray-200 text-custom-gray-900 h-12 pr-12 pl-4.5 font-medium shadow-none placeholder:text-sm placeholder:font-medium"
-                    placeholder="작품명을 입력해 주세요."
+                    placeholder="작품 재질을 입력해 주세요."
+                    maxLength={MAX_LENGTH.material}
                     {...field}
                   />
                   {field.value && (
@@ -161,7 +163,8 @@ export default function ProductInfoInputs({ form }: ProductInfoInputsProps) {
               <FormControl>
                 <Textarea
                   className="aria-invalid:border-input aria-invalid:focus-visible:ring-ring/50 placeholder:text-custom-gray-200 text-custom-gray-900 h-57 resize-none px-4.5 py-3.5 font-medium shadow-none placeholder:text-sm placeholder:font-medium"
-                  placeholder="작품 설명을 입력해 주세요."
+                  placeholder="작품에 대한 설명을 입력해 주세요."
+                  maxLength={MAX_LENGTH.description}
                   {...field}
                 />
               </FormControl>
