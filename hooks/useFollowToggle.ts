@@ -64,6 +64,24 @@ export function useFollowToggle(
           // 팔로우 변경시 작가 피드 페이지 갱신, 바로 반영되지는 않고 페이지 재요청시 갱신됨
           await revalidateArtistTag(String(artistId));
 
+          // TanStack Query를 사용하는 모든 query invalidate
+          // e.g. 작가 피드 페이지 팔로우 기능 변경 시 layout과 팔로우 목록 페이지 invalidate
+          if (options?.invalidateFollowingQueries) {
+            queryClient.invalidateQueries({
+              predicate: (query) => query.queryKey[0] === QUERY_KEYS.following.all[0],
+            });
+          }
+
+          // 팔로우 페이지의 첫 번째 목록에서 변화가 생기는 경우 preview invalidate
+          if (options?.invalidateFollowingPreview) {
+            queryClient.invalidateQueries({ queryKey: QUERY_KEYS.following.preview });
+          }
+
+          toast.default(
+            nextIsFollowing ? '작가 팔로우를 시작했습니다' : '작가 팔로우를 취소했습니다'
+          );
+        },
+        onSettled: () => {
           // 팔로잉 프리뷰 쿼리 데이터 변경
           queryClient.setQueryData(
             QUERY_KEYS.following.preview,
@@ -108,28 +126,8 @@ export function useFollowToggle(
               };
             }
           );
-
-          // TanStack Query를 사용하는 모든 query invalidate
-          // e.g. 작가 피드 페이지 팔로우 기능 변경 시 layout과 팔로우 목록 페이지 invalidate
-          if (options?.invalidateFollowingQueries) {
-            queryClient.invalidateQueries({
-              predicate: (query) => query.queryKey[0] === QUERY_KEYS.following.all[0],
-            });
-          }
-
-          // 팔로우 페이지의 첫 번째 목록에서 변화가 생기는 경우 preview invalidate
-          if (options?.invalidateFollowingPreview) {
-            queryClient.invalidateQueries({ queryKey: QUERY_KEYS.following.preview });
-          }
-
-          toast.default(
-            nextIsFollowing ? '작가 팔로우를 시작했습니다' : '작가 팔로우를 취소했습니다'
-          );
         },
         onError: async () => {
-          // 요청 실패 시 UI 상태 롤백
-          setServerFollowState(serverFollowState);
-
           // 요청 실패 시 서버 상태와 동기화 진행
           await revalidateArtistTag(String(artistId));
           queryClient.invalidateQueries({
