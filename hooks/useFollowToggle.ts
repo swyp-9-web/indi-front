@@ -73,6 +73,9 @@ export function useFollowToggle(
                 ...prevData,
                 result: {
                   ...prevData.result,
+                  totalFollowings: nextIsFollowing
+                    ? prevData.result.totalFollowings + 1
+                    : prevData.result.totalFollowings - 1,
                   followingArtists: prevData.result.followingArtists.map((artist) =>
                     artist.id === artistId ? { ...artist, isFollowing: nextIsFollowing } : artist
                   ),
@@ -91,7 +94,15 @@ export function useFollowToggle(
                 result: {
                   ...prevData.result,
                   artists: prevData.result.artists.map((artist) =>
-                    artist.id === artistId ? { ...artist, isFollowing: nextIsFollowing } : artist
+                    artist.id === artistId
+                      ? {
+                          ...artist,
+                          isFollowing: nextIsFollowing,
+                          totalFollower: nextIsFollowing
+                            ? artist.totalFollower + 1
+                            : artist.totalFollower - 1,
+                        }
+                      : artist
                   ),
                 },
               };
