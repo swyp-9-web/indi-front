@@ -8,6 +8,26 @@ import { useToggleProductScrap } from '@/lib/queries/useProductsQueries';
 
 import { useRequireAuth } from './useRequireAuth';
 
+export function useScrapToggle(
+  productId: number,
+  initialIsScraped: boolean,
+  initialScrapCount: number
+): {
+  isScraped: boolean;
+  scrapCount: number;
+  toggleIsScraped: () => void;
+};
+
+export function useScrapToggle(
+  productId: number,
+  initialIsScraped: boolean,
+  initialScrapCount?: undefined
+): {
+  isScraped: boolean;
+  scrapCount: undefined;
+  toggleIsScraped: () => void;
+};
+
 /**
  * 제품 스크랩 상태를 토글하는 커스텀 훅
  * @param productId - 제품 ID
