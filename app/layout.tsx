@@ -2,6 +2,8 @@ import { Metadata } from 'next';
 import localFont from 'next/font/local';
 import Script from 'next/script';
 
+import { SpeedInsights } from '@vercel/speed-insights/next';
+
 import Providers from '@/app/_provider';
 import { Toaster } from '@/components/ui/sonner';
 
@@ -102,6 +104,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <LoginDialog />
           <Toaster position="bottom-center" />
         </Providers>
+
+        <SpeedInsights />
       </body>
     </html>
   );
