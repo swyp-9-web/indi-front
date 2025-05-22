@@ -88,13 +88,6 @@ export default function ViewDetails({ detail }: ViewDetailsProps) {
                 <div className="flex flex-col">
                   <span className="w-24 font-semibold">작가 소개</span>
                   <span className="whitespace-pre-wrap">{detail.artistAboutMe}</span>
-                  agndsklgdglsmdgklsadmglksadmglksadg;masl;dgmsadlgmas;lkdgmaslkgmaslk;dgmsaldgmk
-                  agndsklgdglsmdgklsadmglksadmglksadg;masl;dgmsadlgmas;lkdgmaslkgmaslk;dgmsaldgmk
-                  agndsklgdglsmdgklsadmglksadmglksadg;masl;dgmsadlgmas;lkdgmaslkgmaslk;dgmsaldgmk
-                  agndsklgdglsmdgklsadmglksadmglksadg;masl;dgmsadlgmas;lkdgmaslkgmaslk;dgmsaldgmk
-                  agndsklgdglsmdgklsadmglksadmglksadg;masl;dgmsadlgmas;lkdgmaslkgmaslk;dgmsaldgmk
-                  agndsklgdglsmdgklsadmglksadmglksadg;masl;dgmsadlgmas;lkdgmaslkgmaslk;dgmsaldgmk
-                  agndsklgdglsmdgklsadmglksadmglksadg;masl;dgmsadlgmas;lkdgmaslkgmaslk;dgmsaldgmk
                 </div>
               </div>
             </DialogDescription>
