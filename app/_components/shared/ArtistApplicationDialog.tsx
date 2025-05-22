@@ -1,6 +1,9 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
+
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import {
   Dialog,
@@ -10,7 +13,22 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { CheckCircleIcon } from '@/lib/icons';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { CancelIcon, CheckCircleIcon } from '@/lib/icons';
+import {
+  artistApplyFormSchema,
+  FormValues,
+  MAX_LENGTH,
+} from '@/lib/schemas/artistApplyForm.schema';
 
 interface ArtistApplicationDialogProps {
   trigger?: React.ReactElement<HTMLButtonElement>;
@@ -35,10 +53,6 @@ export default function ArtistApplicationDialog({ trigger }: ArtistApplicationDi
     }
   }, [isOpen]);
 
-  const handleSubmit = () => {
-    setIsCompleted(true);
-  };
-
   return (
     <>
       <Dialog open={isOpen} onOpenChange={() => setIsOpen((prev) => !prev)}>
@@ -60,15 +74,7 @@ export default function ArtistApplicationDialog({ trigger }: ArtistApplicationDi
               </DialogDescription>
             </DialogHeader>
 
-            <form className="mt-15.5 mb-10"></form>
-
-            <button
-              type="submit"
-              onClick={handleSubmit}
-              className="bg-custom-brand-secondary text-custom-gray-900 mx-auto flex h-12 w-49.5 cursor-pointer items-center justify-center rounded-full text-sm"
-            >
-              신청하기
-            </button>
+            <ArtistApplyForm onSubmit={() => setIsCompleted(true)} />
           </DialogContent>
         ) : (
           <DialogContent ref={dialogContentRef} className="w-100 gap-0">
@@ -97,5 +103,139 @@ export default function ArtistApplicationDialog({ trigger }: ArtistApplicationDi
         )}
       </Dialog>
     </>
+  );
+}
+
+interface ArtistApplyFormProps {
+  onSubmit: () => void;
+}
+
+function ArtistApplyForm({ onSubmit }: ArtistApplyFormProps) {
+  const form = useForm<FormValues>({
+    resolver: zodResolver(artistApplyFormSchema),
+    defaultValues: {
+      artistAboutMe: '',
+      email: '',
+      snsLink: '',
+    },
+  });
+
+  const handleSubmit = () => {
+    onSubmit();
+  };
+
+  return (
+    <form className="mt-15.5" onSubmit={form.handleSubmit(handleSubmit)}>
+      <Form {...form}>
+        <FormField
+          control={form.control}
+          name="artistAboutMe"
+          render={({ field }) => (
+            <FormItem className="relative block">
+              <FormLabel className="data-[error=true]:text-custom-brand-primary mb-1.5 gap-0 text-sm font-semibold">
+                질문1 작가 소개를 작성해주세요
+                <span className="text-custom-status-notice ml-0.5">*</span>
+              </FormLabel>
+
+              <FormControl>
+                <Textarea
+                  className="border-custom-gray-100 aria-invalid:border-input aria-invalid:focus-visible:ring-ring/50 placeholder:text-custom-gray-200 text-custom-gray-900 h-23.5 w-full resize-none px-4.5 py-3.5 font-medium break-words shadow-none placeholder:text-sm placeholder:font-medium"
+                  placeholder="예) 호기심이 많고 고양이를 좋아하는 작가입니다."
+                  maxLength={MAX_LENGTH.artistAboutMe}
+                  {...field}
+                />
+              </FormControl>
+
+              <div className="mt-1 flex h-5 items-center justify-between">
+                <FormMessage className="text-custom-status-negative text-xs font-semibold" />
+                <p className="flex-1 text-right text-xs">
+                  <span className="text-custom-status-notice">{field.value.length}</span>/
+                  {MAX_LENGTH.artistAboutMe}
+                </p>
+              </div>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem className="relative mt-6 block">
+              <FormLabel className="data-[error=true]:text-custom-brand-primary mb-1.5 gap-0 text-sm font-semibold">
+                질문2 인증가능한 이메일을 입력해주세요.
+                <span className="text-custom-status-notice ml-0.5">*</span>
+              </FormLabel>
+
+              <FormControl>
+                <div className="relative">
+                  <Input
+                    className="border-custom-gray-100 placeholder:text-custom-gray-200 text-custom-gray-900 h-12 pr-12 pl-4.5 font-medium shadow-none placeholder:text-sm placeholder:font-medium"
+                    placeholder="이메일 입력"
+                    {...field}
+                  />
+                  {field.value && (
+                    <button
+                      type="button"
+                      onClick={() => field.onChange('')}
+                      className="absolute top-1/2 right-4.5 -translate-y-1/2 cursor-pointer"
+                    >
+                      <CancelIcon />
+                    </button>
+                  )}
+                </div>
+              </FormControl>
+
+              <div className="mt-1 h-4">
+                <FormMessage className="text-custom-status-negative text-xs font-semibold" />
+              </div>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="snsLink"
+          render={({ field }) => (
+            <FormItem className="relative mt-6 block">
+              <FormLabel className="data-[error=true]:text-custom-brand-primary mb-1.5 gap-0 text-sm font-semibold">
+                질문3 작품을 볼 수 있는 링크를 남겨주세요.
+                <span className="text-custom-status-notice ml-0.5">*</span>
+              </FormLabel>
+
+              <FormControl>
+                <div className="relative">
+                  <Input
+                    className="border-custom-gray-100 placeholder:text-custom-gray-200 text-custom-gray-900 h-12 pr-12 pl-4.5 font-medium shadow-none placeholder:text-sm placeholder:font-medium"
+                    placeholder="작품 사이트 입력"
+                    {...field}
+                  />
+                  {field.value && (
+                    <button
+                      type="button"
+                      onClick={() => field.onChange('')}
+                      className="absolute top-1/2 right-4.5 -translate-y-1/2 cursor-pointer"
+                    >
+                      <CancelIcon />
+                    </button>
+                  )}
+                </div>
+              </FormControl>
+
+              <div className="mt-1 h-4">
+                <FormMessage className="text-custom-status-negative text-xs font-semibold" />
+              </div>
+            </FormItem>
+          )}
+        />
+
+        <button
+          type="submit"
+          className="bg-custom-brand-secondary text-custom-gray-900 mx-auto mt-10 flex h-12 w-49.5 cursor-pointer items-center justify-center rounded-full text-sm"
+        >
+          신청하기
+        </button>
+      </Form>
+    </form>
   );
 }
