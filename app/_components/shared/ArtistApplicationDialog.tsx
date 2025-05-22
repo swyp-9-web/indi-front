@@ -24,6 +24,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
+import { ErrorResponse } from '@/lib/apis/common.type';
 import { CancelIcon, CheckCircleIcon } from '@/lib/icons';
 import { useApplyArtist, useUserSummary } from '@/lib/queries/useUserQueries';
 import {
@@ -142,8 +143,21 @@ function ArtistApplyForm({ onSubmit }: ArtistApplyFormProps) {
     },
   });
 
-  const handleSubmit = () => {
-    onSubmit();
+  const { mutate } = useApplyArtist();
+
+  const handleSubmit = (formValues: FormValues) => {
+    mutate(formValues, {
+      onSuccess: () => onSubmit(),
+      onError: (error) => {
+        const err = error as unknown as ErrorResponse; // 추후에 isErrorResponse 유틸을 만들어 사용하기
+
+        if (err?.reason && err.status === 400) {
+          toast.error(err.reason);
+        } else {
+          toast.error('잠시 후 다시 시도해주세요');
+        }
+      },
+    });
   };
 
   return (
