@@ -23,12 +23,15 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { CancelIcon, CheckCircleIcon } from '@/lib/icons';
+import { useApplyArtist, useUserSummary } from '@/lib/queries/useUserQueries';
 import {
   artistApplyFormSchema,
   FormValues,
   MAX_LENGTH,
 } from '@/lib/schemas/artistApplyForm.schema';
+import toast from '@/lib/toast';
 
 interface ArtistApplicationDialogProps {
   trigger?: React.ReactElement<HTMLButtonElement>;
@@ -53,9 +56,28 @@ export default function ArtistApplicationDialog({ trigger }: ArtistApplicationDi
     }
   }, [isOpen]);
 
+  const { checkAuth } = useRequireAuth();
+  const { data } = useUserSummary();
+
+  const user = data?.result ?? null;
+
+  const handleOpenChange = (open: boolean) => {
+    if (open) {
+      checkAuth(() => {
+        if (user && user.role === 'ARTIST') {
+          toast.error('이미 작가 입니다.');
+        } else {
+          setIsOpen(true);
+        }
+      });
+    } else {
+      setIsOpen(false);
+    }
+  };
+
   return (
     <>
-      <Dialog open={isOpen} onOpenChange={() => setIsOpen((prev) => !prev)}>
+      <Dialog open={isOpen} onOpenChange={handleOpenChange}>
         {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
 
         {!isCompleted ? (
