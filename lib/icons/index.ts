@@ -11,6 +11,7 @@ export { default as BookmarkIcon } from './svg/bookmark.svg';
 export { default as CancelIcon } from './svg/cancel.svg';
 export { default as CardBookmarkIcon } from './svg/card-bookmark';
 export { default as CardBookmarkFilledIcon } from './svg/card-bookmark-filled';
+export { default as CheckCircleIcon } from './svg/check-circle.svg';
 export { default as CheckIcon } from './svg/check.svg';
 export { default as ChevronBackwardIcon } from './svg/chevron-backward.svg';
 export { default as CloseIcon } from './svg/close.svg';
