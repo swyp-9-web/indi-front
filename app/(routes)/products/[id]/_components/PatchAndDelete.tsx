@@ -84,7 +84,6 @@ export default function PatchAndDelete({ itemId, isOwner }: PatchAndDeleteProps)
                   onClick={() => deleteMutation.mutate()}
                   disabled={deleteMutation.isPending}
                 >
-                  {/* {deleteMutation.isPending ? '삭제 중...' : '확인'} */}
                   확인
                 </Button>
               </DialogFooter>
