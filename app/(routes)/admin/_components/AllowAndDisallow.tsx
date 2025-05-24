@@ -1,9 +1,8 @@
 'use client';
 
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 
 import { AllowAritist, DisallowAritist } from '@/lib/apis/admin.api';
-import { QUERY_KEYS } from '@/lib/queries/queryKeys';
 import toast from '@/lib/toast';
 
 interface AllowAndDisallowProps {
@@ -12,24 +11,16 @@ interface AllowAndDisallowProps {
 }
 
 export default function AllowAndDisallow({ userId, applyedId }: AllowAndDisallowProps) {
-  const queryClient = useQueryClient();
-
   const allowMutation = useMutation({
     mutationFn: () => AllowAritist(userId, applyedId),
     onSuccess: () => {
       toast.default('승인 되었습니다*새로고침 해주세요!');
-      queryClient.invalidateQueries({
-        predicate: (query) => query.queryKey[0] === QUERY_KEYS.products.all[0],
-      });
     },
   });
   const disallowMutation = useMutation({
     mutationFn: () => DisallowAritist(userId, applyedId),
     onSuccess: () => {
       toast.default('반려 되었습니다*새로고침 해주세요!');
-      queryClient.invalidateQueries({
-        predicate: (query) => query.queryKey[0] === QUERY_KEYS.products.all[0],
-      });
     },
   });
   return (
