@@ -2,11 +2,19 @@
 
 import { useEffect, useState } from 'react';
 
+import { useRouter } from 'next/navigation';
+
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { ROUTE_PATHS } from '@/constants';
 import { useNotificationSSE } from '@/hooks/useNotificationSSE';
+import { Notification } from '@/lib/apis/notifications.type';
 import { UserSummary } from '@/lib/apis/user.type';
 import { NotificationIcon, NotificationUnreadIcon } from '@/lib/icons';
-import { useInfiniteNotifications } from '@/lib/queries/useNotificationsQueries';
+import {
+  useInfiniteNotifications,
+  useReadNotification,
+} from '@/lib/queries/useNotificationsQueries';
+import toast from '@/lib/toast';
 import { formatOverThousand } from '@/utils/formatNumber';
 
 interface NotificationPopoverProps {
@@ -47,6 +55,31 @@ export default function NotificationPopover({ user }: NotificationPopoverProps) 
     };
   };
 
+  const { mutate: readNotification } = useReadNotification();
+  const router = useRouter();
+
+  const handleNotificationClick = (notification: Notification) => {
+    readNotification(notification.id, {
+      onSuccess: () => {
+        if (notification.type === 'COMMENT') {
+          router.push(ROUTE_PATHS.PRODUCT_DETAIL(String(notification.data.itemId)));
+          setIsOpen(false);
+        }
+      },
+      onError: () => {
+        toast.error('잠시 후에 시도해주세요');
+      },
+    });
+  };
+
+  const handleReadAllClick = () => {
+    readNotification(undefined, {
+      onError: () => {
+        toast.error('잠시 후에 시도해주세요');
+      },
+    });
+  };
+
   return (
     <Popover open={isOpen} onOpenChange={() => setIsOpen((prev) => !prev)}>
       <PopoverTrigger className="flex h-9.5 w-9.5 cursor-pointer items-center justify-center">
@@ -64,7 +97,10 @@ export default function NotificationPopover({ user }: NotificationPopoverProps) 
       >
         <div className="flex h-11.5 w-full items-center justify-between border-b px-5">
           <h3 className="text-custom-brand-primary text-sm font-medium">{`읽지 않은 알림 (${formatOverThousand(totalUnread)})`}</h3>
-          <button className="text-custom-brand-primary cursor-pointer text-xs font-semibold underline underline-offset-2">
+          <button
+            onClick={handleReadAllClick}
+            className="text-custom-brand-primary cursor-pointer text-xs font-semibold underline underline-offset-2"
+          >
             모두 읽음
           </button>
         </div>
@@ -74,6 +110,7 @@ export default function NotificationPopover({ user }: NotificationPopoverProps) 
             {notifications.map((notification) => (
               <button
                 key={notification.id}
+                onClick={() => handleNotificationClick(notification)}
                 className="text-custom-gray-400 h-11.5 cursor-pointer truncate px-5 py-3 text-sm underline-offset-2 hover:underline"
               >
                 {notification.type === 'COMMENT' &&
