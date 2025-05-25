@@ -1,6 +1,10 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { fetchNotifications } from '../apis/notifications.api';
+import {
+  fetchNotifications,
+  readAllNotifications,
+  readNotification,
+} from '../apis/notifications.api';
 import { NotificationsQueryParams } from '../apis/notifications.type';
 
 import { QUERY_KEYS } from './queryKeys';
@@ -19,5 +23,15 @@ export const useInfiniteNotifications = (
     },
     initialPageParam: 1,
     enabled,
+  });
+};
+
+export const useReadNotification = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (notificationId?: number) =>
+      notificationId ? readNotification(notificationId) : readAllNotifications(),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.notifications.all }),
   });
 };

@@ -1,6 +1,6 @@
 import { SuccessResponse } from './common.type';
 
-interface Notification {
+interface BaseNotification {
   id: number;
   type: 'COMMENT' | 'ARTIST_APPROVED';
   content: string;
@@ -8,7 +8,7 @@ interface Notification {
   createdAt: string; // ISO string
 }
 
-interface CommentNotification extends Notification {
+interface CommentNotification extends BaseNotification {
   type: 'COMMENT';
   data: {
     itemId: number;
@@ -19,16 +19,18 @@ interface CommentNotification extends Notification {
   };
 }
 
-interface ArtistApprovedNotification extends Notification {
+interface ArtistApprovedNotification extends BaseNotification {
   type: 'ARTIST_APPROVED';
   data: {
     createdAt: string;
   };
 }
 
+export type Notification = CommentNotification | ArtistApprovedNotification;
+
 export interface NotificationsResponse extends SuccessResponse {
   result: {
-    notifications: (CommentNotification | ArtistApprovedNotification)[];
+    notifications: Notification[];
     meta: {
       // 해당 response만 totalItems => totalNotifications로 변경되어 common.type.ts의 Meta 사용하지 않고 재정의
       currentPage: number;
@@ -37,6 +39,10 @@ export interface NotificationsResponse extends SuccessResponse {
       hasNextPage: boolean;
     };
   };
+}
+
+export interface ReadNotificationResponse extends SuccessResponse {
+  result: string;
 }
 
 // 알림 리스트 API 요청 시에 사용되는 쿼리 파라미터 값들에 대한 타입
