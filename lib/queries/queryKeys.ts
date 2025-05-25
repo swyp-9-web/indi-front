@@ -32,4 +32,7 @@ export const QUERY_KEYS = {
       stableStringify(queryParams),
     ],
   },
+  notifications: {
+    all: ['notifications'],
+  },
 };
