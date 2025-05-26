@@ -63,8 +63,12 @@ export default function NotificationPopover({ user }: NotificationPopoverProps) 
       onSuccess: () => {
         if (notification.type === 'COMMENT') {
           router.push(ROUTE_PATHS.PRODUCT_DETAIL(String(notification.data.itemId)));
-          setIsOpen(false);
         }
+        if (notification.type === 'ARTIST_APPROVED') {
+          router.push(ROUTE_PATHS.ARTIST(String(user?.id)));
+        }
+
+        setIsOpen(false);
       },
       onError: () => {
         toast.error('잠시 후에 시도해주세요');
