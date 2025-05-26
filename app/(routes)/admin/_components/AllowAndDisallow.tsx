@@ -12,13 +12,13 @@ interface AllowAndDisallowProps {
 
 export default function AllowAndDisallow({ userId, applyedId }: AllowAndDisallowProps) {
   const allowMutation = useMutation({
-    mutationFn: () => AllowAritist(userId, applyedId),
+    mutationFn: () => AllowAritist(userId, applyedId, { runtime: 'client' }),
     onSuccess: () => {
       toast.default('승인 되었습니다*새로고침 해주세요!');
     },
   });
   const disallowMutation = useMutation({
-    mutationFn: () => DisallowAritist(userId, applyedId),
+    mutationFn: () => DisallowAritist(userId, applyedId, { runtime: 'client' }),
     onSuccess: () => {
       toast.default('반려 되었습니다*새로고침 해주세요!');
     },

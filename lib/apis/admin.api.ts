@@ -34,7 +34,7 @@ export const AllowAritist = async (
   artistApplyId: number,
   options: { runtime: 'server' | 'client' } = { runtime: 'server' }
 ): Promise<ArtistRightResponse> => {
-  const baseUrl = options.runtime === 'client' ? API_BASE_URL.SERVER : API_BASE_URL.CLIENT;
+  const baseUrl = options.runtime === 'client' ? API_BASE_URL.CLIENT : API_BASE_URL.SERVER;
 
   const res = await fetchWithAuth(`${baseUrl}/api/v1/artist-applies/grant-artist-role`, {
     method: 'POST',
@@ -58,7 +58,7 @@ export const DisallowAritist = async (
   artistApplyId: number,
   options: { runtime: 'server' | 'client' } = { runtime: 'server' }
 ): Promise<ArtistRightResponse> => {
-  const baseUrl = options.runtime === 'client' ? API_BASE_URL.SERVER : API_BASE_URL.CLIENT;
+  const baseUrl = options.runtime === 'client' ? API_BASE_URL.CLIENT : API_BASE_URL.SERVER;
 
   const res = await fetchWithAuth(`${baseUrl}/api/v1/artist-applies/reject`, {
     method: 'POST',
