@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstac
 import { revalidateArtistTag } from '@/app/actions/revalidate';
 
 import {
+  applyArtist,
   editArtistProfile,
   editUserProfile,
   fetchUserSummary,
@@ -103,5 +104,16 @@ export const useEditUserProfile = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.user.summary });
     },
+  });
+};
+
+/**
+ * 작가 신청을 form 제출을 위한 mutation 훅입니다.
+ *
+ * 서버에 formValues(JSON)를 body로 보내 작가를 신청합니다.
+ */
+export const useApplyArtist = () => {
+  return useMutation({
+    mutationFn: applyArtist,
   });
 };

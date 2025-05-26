@@ -1,5 +1,6 @@
 import Link from 'next/link';
 
+import ArtistApplicationDialog from '@/app/_components/shared/ArtistApplicationDialog';
 import ProfileImage from '@/app/_components/shared/ProfileImage';
 import { ROUTE_PATHS } from '@/constants';
 import { useUserSummary } from '@/lib/queries/useUserQueries';
@@ -50,12 +51,13 @@ export default function UserProfilePanel() {
           내 작품 피드로 이동
         </Link>
       ) : (
-        <button
-          onClick={() => toast.error('아직 준비 중인 기능입니다')}
-          className="bg-custom-brand-secondary text-custom-gray-900 flex h-12 w-full cursor-pointer items-center justify-center rounded-full text-sm font-medium"
-        >
-          작가 신청
-        </button>
+        <ArtistApplicationDialog
+          trigger={
+            <button className="bg-custom-brand-secondary text-custom-gray-900 flex h-12 w-full cursor-pointer items-center justify-center rounded-full text-sm font-medium">
+              작가 신청
+            </button>
+          }
+        />
       )}
     </div>
   );

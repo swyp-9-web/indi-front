@@ -2,10 +2,13 @@ import { Metadata } from 'next';
 import localFont from 'next/font/local';
 import Script from 'next/script';
 
+import { SpeedInsights } from '@vercel/speed-insights/next';
+
 import Providers from '@/app/_provider';
 import { Toaster } from '@/components/ui/sonner';
 
 import GlobalNavBar from './_components/layout/GlobalNavBar';
+import ArtistWelcomeDialog from './_components/shared/ArtistWelcomeDialog';
 import LoginDialog from './_components/shared/LoginDialog';
 import './globals.css';
 
@@ -100,8 +103,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <GlobalNavBar />
           {children}
           <LoginDialog />
+          <ArtistWelcomeDialog />
           <Toaster position="bottom-center" />
         </Providers>
+
+        <SpeedInsights />
       </body>
     </html>
   );

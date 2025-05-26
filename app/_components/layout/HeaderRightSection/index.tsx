@@ -42,7 +42,7 @@ export default function HeaderRightSection() {
               </Link>
             </li>
             <li className="h-9.5 w-9.5">
-              <NotificationPopover />
+              <NotificationPopover user={user} />
             </li>
           </ul>
 

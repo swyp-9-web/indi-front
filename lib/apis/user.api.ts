@@ -1,5 +1,7 @@
 import { API_BASE_URL } from '@/constants';
 
+import { FormValues } from '../schemas/artistApplyForm.schema';
+
 import { fetchWithAuth } from './common.api';
 import { ErrorResponse } from './common.type';
 import { ArtistDetailResponse, UserSummaryResponse } from './user.type';
@@ -106,4 +108,18 @@ export const editUserProfile = async (formData: FormData) => {
   }
 
   return data as UserSummaryResponse;
+};
+
+export const applyArtist = async (formValues: FormValues) => {
+  const res = await fetchWithAuth(`${API_BASE_URL.CLIENT}/api/v1/artist-applies`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(formValues),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw data as ErrorResponse;
+  }
 };

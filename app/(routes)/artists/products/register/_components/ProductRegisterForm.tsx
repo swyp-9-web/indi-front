@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { useRouter } from 'next/navigation';
@@ -23,6 +23,8 @@ export default function ProductRegisterForm() {
   const [productImages, setProductImages] = useState<(string | File)[]>(initialImgUrls);
   const [imageOrder, setImageOrder] = useState<string[]>(initialImgUrls);
   const [imageErrorMessage, setImageErrorMessage] = useState('');
+
+  const inputSectionRef = useRef<HTMLDivElement>(null);
 
   const [submitType, setSubmitType] = useState<'TEMP' | 'OPEN'>('OPEN');
 
@@ -152,7 +154,10 @@ export default function ProductRegisterForm() {
       return;
     }
 
-    if (!validateImages()) return;
+    if (!validateImages()) {
+      inputSectionRef.current?.scrollIntoView({ behavior: 'instant', block: 'start' });
+      return;
+    }
 
     const requestPayload = createRequestPayload(formValues);
 
@@ -178,7 +183,7 @@ export default function ProductRegisterForm() {
   return (
     <Form {...form}>
       <form className="w-full" onSubmit={form.handleSubmit(handleSubmit)}>
-        <div className="flex items-start gap-5">
+        <div ref={inputSectionRef} className="flex items-start gap-5">
           <ImageUploadInput
             images={productImages}
             onChangeImages={handleChangeImagesInput}

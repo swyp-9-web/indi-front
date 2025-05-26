@@ -42,9 +42,7 @@ export const productRegisterFormSchema = z
     title: z
       .string()
       .min(1, { message: '작품명을 입력해 주세요.' })
-      .refine((val) => val.replace(/\s/g, '').length <= MAX_LENGTH.name, {
-        message: '작품명은 공백 제외 40자 이내여야 합니다.',
-      }),
+      .max(MAX_LENGTH.name, { message: `작품명은 ${MAX_LENGTH.name}자 이내여야 합니다.` }),
 
     categoryType: z.string().min(1, { message: '카테고리를 선택해 주세요.' }),
 
@@ -52,16 +50,14 @@ export const productRegisterFormSchema = z
 
     material: z
       .string()
-      .optional()
-      .refine((val) => !val || val.replace(/\s/g, '').length <= MAX_LENGTH.material, {
-        message: '재질은 공백 제외 40자 이내여야 합니다.',
-      }),
+      .max(MAX_LENGTH.material, { message: `재질은 ${MAX_LENGTH.material}자 이내여야 합니다.` })
+      .optional(),
 
     description: z
       .string()
       .min(1, { message: '작품 설명을 입력해 주세요.' })
-      .refine((val) => val.replace(/(\s|\n)/g, '').length <= MAX_LENGTH.description, {
-        message: '작품 설명은 공백/줄바꿈 제외 400자 이내여야 합니다.',
+      .max(MAX_LENGTH.description, {
+        message: `작품 설명은 ${MAX_LENGTH.description}자 이내여야 합니다.`,
       }),
 
     priceType: z.enum(['fixed', 'inquiry'], { required_error: '거래 방식을 선택해 주세요.' }),

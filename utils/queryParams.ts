@@ -1,4 +1,5 @@
 import { FollowingArtistsQueryParams } from '@/lib/apis/following.type';
+import { NotificationsQueryParams } from '@/lib/apis/notifications.type';
 import { ProductsListQueryParams } from '@/lib/apis/products.type';
 
 /**
@@ -12,7 +13,7 @@ import { ProductsListQueryParams } from '@/lib/apis/products.type';
  * @returns URL에 사용할 수 있는 쿼리 문자열 (예: page=1&limit=20&sizeTypes=SMALL&sizeTypes=LARGE)
  */
 export const createQueryParams = (
-  params: ProductsListQueryParams | FollowingArtistsQueryParams
+  params: ProductsListQueryParams | FollowingArtistsQueryParams | NotificationsQueryParams
 ): string => {
   const sp = new URLSearchParams();
 
@@ -26,7 +27,8 @@ export const createQueryParams = (
   };
 
   if (params.page) sp.set('page', params.page.toString());
-  if (params.limit) sp.set('limit', params.limit.toString());
+  if ('limit' in params && params.limit) sp.set('limit', params.limit.toString());
+  if ('size' in params && params.size) sp.set('size', params.size.toString());
 
   if ('sortType' in params && params.sortType) sp.set('sortType', params.sortType);
   if ('keyword' in params && params.keyword) sp.set('keyword', params.keyword);
