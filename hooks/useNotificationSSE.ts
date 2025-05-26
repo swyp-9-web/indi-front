@@ -1,6 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
+import { useRouter } from 'next/navigation';
+
+import { ROUTE_PATHS } from '@/constants';
 import { UserSummary } from '@/lib/apis/user.type';
+import { useReadNotification } from '@/lib/queries/useNotificationsQueries';
+import { useUserSummary } from '@/lib/queries/useUserQueries';
+import toast from '@/lib/toast';
+import { useArtistWelcomeDialog } from '@/stores/useArtistWelcomeDialog';
 
 // ⚠️ 주의: Notification 타입은 SSE에서 오는 데이터 전용 타입이므로,
 //         일반 알림 API 응답과 구조가 다르므로 별도로 정의
@@ -37,6 +44,30 @@ export const useNotificationSSE = (user: UserSummary | null) => {
   const [hasIncomingNotification, setHasIncomingNotification] = useState(false);
   const [latestNotification, setLatestNotification] = useState<NotificationPayload | null>(null);
 
+  const { toggleIsOpen, setOnCloseCallback } = useArtistWelcomeDialog();
+  const router = useRouter();
+  const { mutate: readNotification } = useReadNotification();
+  const { data: userData } = useUserSummary();
+
+  const handleArtistWelcomeNotification = useCallback(
+    (data: NotificationPayload) => {
+      const onArtistWelcomeDialogClose = () =>
+        readNotification(data.id, {
+          onSuccess: () => {
+            router.push(ROUTE_PATHS.ARTIST(String(userData?.result?.id)));
+            toggleIsOpen();
+          },
+          onError: () => {
+            toast.error('잠시 후에 다시 시도해주세요');
+          },
+        });
+
+      setOnCloseCallback(onArtistWelcomeDialogClose);
+      toggleIsOpen();
+    },
+    [readNotification, router, toggleIsOpen, setOnCloseCallback, userData]
+  );
+
   useEffect(() => {
     if (!user) return;
 
@@ -49,6 +80,10 @@ export const useNotificationSSE = (user: UserSummary | null) => {
 
         setLatestNotification(data);
         setHasIncomingNotification(true);
+
+        if (data.type === 'ARTIST_APPROVED') {
+          handleArtistWelcomeNotification(data);
+        }
       } catch (error) {
         console.error('알림 파싱 실패:', error);
       }
@@ -71,7 +106,7 @@ export const useNotificationSSE = (user: UserSummary | null) => {
       eventSource.removeEventListener('new-notification', handleNotification);
       eventSource.close();
     };
-  }, [user]);
+  }, [user, handleArtistWelcomeNotification]);
 
   return {
     hasIncomingNotification,
