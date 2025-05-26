@@ -6,7 +6,7 @@ export interface UserSummary {
   nickname: string;
   profileImgUrl: string;
   email: string;
-  role: 'USER' | 'ARTIST';
+  role: 'USER' | 'ARTIST' | 'ADMIN';
   telNumber: string;
   createdAt: string;
   updatedAt: string;
