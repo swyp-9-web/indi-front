@@ -8,6 +8,7 @@ import Providers from '@/app/_provider';
 import { Toaster } from '@/components/ui/sonner';
 
 import GlobalNavBar from './_components/layout/GlobalNavBar';
+import ArtistWelcomeDialog from './_components/shared/ArtistWelcomeDialog';
 import LoginDialog from './_components/shared/LoginDialog';
 import './globals.css';
 
@@ -102,6 +103,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <GlobalNavBar />
           {children}
           <LoginDialog />
+          <ArtistWelcomeDialog />
           <Toaster position="bottom-center" />
         </Providers>
 
