@@ -5,15 +5,20 @@ import { fetchWithAuth } from './common.api';
 import { ErrorResponse } from './common.type';
 
 export const fetchArtistAppliesList = async (
+  page: number,
+  size: number,
   options: { runtime: 'server' | 'client' } = { runtime: 'server' }
 ): Promise<ArtistAppliesResponse> => {
   const baseUrl = options.runtime === 'server' ? API_BASE_URL.SERVER : API_BASE_URL.CLIENT;
 
-  const res = await fetchWithAuth(`${baseUrl}/api/v1/artist-applies/admin`, {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
-    cache: 'no-store',
-  });
+  const res = await fetchWithAuth(
+    `${baseUrl}/api/v1/artist-applies/admin?page=${page}&size=${size}`,
+    {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      cache: 'no-store',
+    }
+  );
 
   const data = await res.json();
 

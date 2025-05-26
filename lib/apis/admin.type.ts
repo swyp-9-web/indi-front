@@ -15,13 +15,20 @@ export interface ArtistApplies {
   };
 }
 
+export interface ArtistAppliesMeta {
+  currentPage: number;
+  pageSize: number;
+  totalApplies: number;
+  hasNextPage: boolean;
+}
+
 export interface ArtistRight {
   userId: number;
   artistApplyId: number;
 }
 
 export interface ArtistAppliesResponse extends SuccessResponse {
-  result: { applies: ArtistApplies[]; meta: Meta };
+  result: { applies: ArtistApplies[]; meta: ArtistAppliesMeta };
 }
 export interface ArtistRightResponse extends SuccessResponse {
   result: string;
