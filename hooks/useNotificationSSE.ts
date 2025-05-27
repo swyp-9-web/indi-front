@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { ROUTE_PATHS } from '@/constants';
 import { UserSummary } from '@/lib/apis/user.type';
 import { useReadNotification } from '@/lib/queries/useNotificationsQueries';
-import { useUserSummary } from '@/lib/queries/useUserQueries';
+import { useRefreshUserSession, useUserSummary } from '@/lib/queries/useUserQueries';
 import toast from '@/lib/toast';
 import { useArtistWelcomeDialog } from '@/stores/useArtistWelcomeDialog';
 
@@ -47,6 +47,7 @@ export const useNotificationSSE = (user: UserSummary | null) => {
   const { toggleIsOpen, setOnClickGoBackButton } = useArtistWelcomeDialog();
   const router = useRouter();
   const { mutate: readNotification } = useReadNotification();
+  const { mutate: refreshUserSession } = useRefreshUserSession();
   const { data: userData } = useUserSummary();
 
   const handleArtistWelcomeNotification = useCallback(
@@ -62,10 +63,11 @@ export const useNotificationSSE = (user: UserSummary | null) => {
           },
         });
 
+      refreshUserSession();
       setOnClickGoBackButton(onClickGoBackButton);
       toggleIsOpen();
     },
-    [readNotification, router, toggleIsOpen, setOnClickGoBackButton, userData]
+    [readNotification, refreshUserSession, router, toggleIsOpen, setOnClickGoBackButton, userData]
   );
 
   useEffect(() => {
