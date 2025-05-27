@@ -44,28 +44,28 @@ export const useNotificationSSE = (user: UserSummary | null) => {
   const [hasIncomingNotification, setHasIncomingNotification] = useState(false);
   const [latestNotification, setLatestNotification] = useState<NotificationPayload | null>(null);
 
-  const { toggleIsOpen, setOnCloseCallback } = useArtistWelcomeDialog();
+  const { toggleIsOpen, setOnClickGoBackButton } = useArtistWelcomeDialog();
   const router = useRouter();
   const { mutate: readNotification } = useReadNotification();
   const { data: userData } = useUserSummary();
 
   const handleArtistWelcomeNotification = useCallback(
     (data: NotificationPayload) => {
-      const onArtistWelcomeDialogClose = () =>
+      const onClickGoBackButton = () =>
         readNotification(data.id, {
           onSuccess: () => {
-            router.push(ROUTE_PATHS.ARTIST(String(userData?.result?.id)));
             toggleIsOpen();
+            router.push(ROUTE_PATHS.ARTIST(String(userData?.result?.id)));
           },
           onError: () => {
             toast.error('잠시 후에 다시 시도해주세요');
           },
         });
 
-      setOnCloseCallback(onArtistWelcomeDialogClose);
+      setOnClickGoBackButton(onClickGoBackButton);
       toggleIsOpen();
     },
-    [readNotification, router, toggleIsOpen, setOnCloseCallback, userData]
+    [readNotification, router, toggleIsOpen, setOnClickGoBackButton, userData]
   );
 
   useEffect(() => {
