@@ -2,20 +2,20 @@ import { create } from 'zustand';
 
 interface ArtistWelcomeDialogState {
   isOpen: boolean;
-  onCloseCallback: () => void;
+  onClickGoBackButton: () => void;
 }
 
 interface ArtistWelcomeDialogActions {
   toggleIsOpen: () => void;
-  setOnCloseCallback: (callback: () => void) => void;
+  setOnClickGoBackButton: (callback: () => void) => void;
 }
 
 type ArtistWelcomeDialogStore = ArtistWelcomeDialogState & ArtistWelcomeDialogActions;
 
 export const useArtistWelcomeDialog = create<ArtistWelcomeDialogStore>((set, get) => ({
   isOpen: false,
-  onCloseCallback: () => {},
+  onClickGoBackButton: () => {},
 
   toggleIsOpen: () => set({ isOpen: !get().isOpen }),
-  setOnCloseCallback: (callback) => set({ onCloseCallback: callback }),
+  setOnClickGoBackButton: (callback) => set({ onClickGoBackButton: callback }),
 }));

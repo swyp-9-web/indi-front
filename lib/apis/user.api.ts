@@ -22,6 +22,18 @@ export const setUserCookie = async (sessionId: string): Promise<void> => {
   }
 };
 
+export const refreshUserSession = async (): Promise<void> => {
+  const res = await fetch(`${API_BASE_URL.CLIENT}/api/v1/auth/refresh-role`, {
+    method: 'PATCH',
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw data as ErrorResponse;
+  }
+};
+
 export const fetchUserSummary = async (
   options: { runtime: 'server' | 'client' } = { runtime: 'server' }
 ): Promise<UserSummaryResponse> => {

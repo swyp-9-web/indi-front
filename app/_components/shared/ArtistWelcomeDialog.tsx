@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { useArtistWelcomeDialog } from '@/stores/useArtistWelcomeDialog';
 
 export default function ArtistWelcomeDialog() {
-  const { isOpen, toggleIsOpen, onCloseCallback } = useArtistWelcomeDialog();
+  const { isOpen, toggleIsOpen, onClickGoBackButton } = useArtistWelcomeDialog();
 
   return (
     <Dialog open={isOpen} onOpenChange={toggleIsOpen}>
@@ -34,7 +34,7 @@ export default function ArtistWelcomeDialog() {
 
         <div className="flex h-full items-end justify-center">
           <button
-            onClick={() => onCloseCallback()}
+            onClick={() => onClickGoBackButton()}
             className="bg-custom-brand-secondary text-custom-gray-900 flex h-12 w-72 cursor-pointer items-center justify-center rounded-full text-sm font-medium"
           >
             돌아가기

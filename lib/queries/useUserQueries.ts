@@ -8,6 +8,7 @@ import {
   editUserProfile,
   fetchUserSummary,
   logoutUser,
+  refreshUserSession,
   setUserCookie,
 } from '../apis/user.api';
 import { UserSummaryResponse } from '../apis/user.type';
@@ -34,6 +35,23 @@ export const useLoginCallback = () => {
       queryClient.invalidateQueries({
         predicate: (query) => query.queryKey[0] === QUERY_KEYS.products.all[0],
       });
+    },
+  });
+};
+
+/**
+ * 로그인한 사용자의 세션 정보를 새로고침하는 훅입니다.
+ *
+ * 서버에 요청을 보내 세션을 갱신하고, 성공 시 사용자 정보를 무효화합니다.
+ * 현재는 작가 권한이 승인된 경우에 role을 갱신하기 위해 실행됩니다.
+ */
+export const useRefreshUserSession = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: refreshUserSession,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.user.summary });
     },
   });
 };
