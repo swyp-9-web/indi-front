@@ -36,8 +36,6 @@ export default function ProductDetailGallery({ images, title }: ProductDetailGal
                 fill
                 loading="lazy"
                 fetchPriority="low"
-                placeholder="blur"
-                blurDataURL="/placeholder.png"
                 className="object-cover"
               />
             </button>
