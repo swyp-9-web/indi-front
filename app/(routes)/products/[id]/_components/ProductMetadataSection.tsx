@@ -1,5 +1,7 @@
 'use client';
 
+import { useCallback, useState } from 'react';
+
 import { ProductDetail } from '@/lib/apis/products.type';
 import { CloseIcon } from '@/lib/icons/index';
 import { formatNumberWithComma } from '@/utils/formatNumber';
@@ -11,6 +13,22 @@ import RecommendButtons from './RecommendButtons';
 import ScrapAndShare from './ScrapAndShare';
 
 export default function ProductMetadataSection({ product }: { product: ProductDetail }) {
+  const [reactionTotal, setReactionTotal] = useState(product.reaction.totalCount);
+  const handleReactionChange = useCallback(
+    ({
+      likesCount,
+      wantsCount,
+      revisitsCount,
+    }: {
+      likesCount: number;
+      wantsCount: number;
+      revisitsCount: number;
+    }) => {
+      setReactionTotal(likesCount + wantsCount + revisitsCount);
+    },
+    []
+  );
+
   return (
     <div className="flex max-w-133.5 flex-col">
       <PatchAndDelete itemId={product.itemId} isOwner={product.viewer.isOwner} />
@@ -23,7 +41,7 @@ export default function ProductMetadataSection({ product }: { product: ProductDe
       <div className="text-custom-brand-primary mb-7.5 text-2xl font-bold">
         {product.price ? `${formatNumberWithComma(product.price)}원` : `구매시 문의`}
       </div>
-      <EngagementSummary productId={product.itemId} reactionTotal={product.reaction.totalCount} />
+      <EngagementSummary productId={product.itemId} reactionTotal={reactionTotal} />
 
       <div className="text-custom-gray-300 mb-1 text-[12px]">사이즈(cm)</div>
       <div className="text-custom-brand-primary mb-3 flex text-[14px] font-semibold">
@@ -79,6 +97,7 @@ export default function ProductMetadataSection({ product }: { product: ProductDe
         revisitId={
           product.reaction.revisitedEmojiId === 0 ? null : product.reaction.revisitedEmojiId
         }
+        onReactionChange={handleReactionChange}
       />
     </div>
   );

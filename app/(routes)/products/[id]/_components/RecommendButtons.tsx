@@ -4,7 +4,6 @@ import { useState } from 'react';
 
 import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { addItemReaction, removeItemReaction } from '@/lib/apis/reaction.api';
-import { useUserSummary } from '@/lib/queries/useUserQueries';
 import { formatOverThousand } from '@/utils/formatNumber';
 
 interface RecommendButtonsProps {
@@ -18,6 +17,11 @@ interface RecommendButtonsProps {
   likeId: number | null;
   wantId: number | null;
   revisitId: number | null;
+  onReactionChange?: (counts: {
+    likesCount: number;
+    wantsCount: number;
+    revisitsCount: number;
+  }) => void;
 }
 
 export default function RecommendButtons({
@@ -31,6 +35,7 @@ export default function RecommendButtons({
   likeId,
   wantId,
   revisitId,
+  onReactionChange,
 }: RecommendButtonsProps) {
   const { checkAuth } = useRequireAuth();
 
@@ -87,21 +92,33 @@ export default function RecommendButtons({
     <div className="flex gap-1.5">
       <button
         className={`border-custom-gray-100 cursor-pointer rounded-4xl border-[1px] px-[13px] py-[8px] text-[14px] ${liked ? 'text-custom-background bg-custom-brand-primary' : 'text-custom-brand-primary'}`}
-        onClick={() => optimisticToggle('LIKES', liked, setLiked, likes, setLikes)}
+        onClick={() => {
+          const newLikes = liked ? likes - 1 : likes + 1;
+          optimisticToggle('LIKES', liked, setLiked, likes, setLikes);
+          onReactionChange?.({ likesCount: newLikes, wantsCount: wants, revisitsCount: revisits });
+        }}
       >
         💖 마음에 들어요
         {formatOverThousand(likes)}
       </button>
       <button
         className={`border-custom-gray-100 cursor-pointer rounded-4xl border-[1px] px-[13px] py-[8px] text-[14px] ${wanted ? 'text-custom-background bg-custom-brand-primary' : 'text-custom-brand-primary'}`}
-        onClick={() => optimisticToggle('WANTS', wanted, setWanted, wants, setWants)}
+        onClick={() => {
+          const newWants = wanted ? wants - 1 : wants + 1;
+          optimisticToggle('WANTS', wanted, setWanted, wants, setWants);
+          onReactionChange?.({ likesCount: likes, wantsCount: newWants, revisitsCount: revisits });
+        }}
       >
         🖼️ 소장하고 싶어요
         {formatOverThousand(wants)}
       </button>
       <button
         className={`border-custom-gray-100 cursor-pointer rounded-4xl border-[1px] px-[13px] py-[8px] text-[14px] ${revisited ? 'text-custom-background bg-custom-brand-primary' : 'text-custom-brand-primary bg-custom-background'}`}
-        onClick={() => optimisticToggle('REVISITS', revisited, setRevisited, revisits, setRevisits)}
+        onClick={() => {
+          const newRevisits = revisited ? revisits - 1 : revisits + 1;
+          optimisticToggle('REVISITS', revisited, setRevisited, revisits, setRevisits);
+          onReactionChange?.({ likesCount: likes, wantsCount: wants, revisitsCount: newRevisits });
+        }}
       >
         👀 또 보고 싶어요
         {formatOverThousand(revisits)}

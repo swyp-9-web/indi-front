@@ -32,10 +32,10 @@ export default function ProductDetailGallery({ images, title }: ProductDetailGal
               <Image
                 src={src}
                 alt={`${title} 썸네일`}
-                quality={75}
+                quality={50}
                 fill
                 loading="lazy"
-                fetchPriority="low"
+                sizes="70px"
                 className="object-cover"
               />
             </button>
@@ -46,11 +46,10 @@ export default function ProductDetailGallery({ images, title }: ProductDetailGal
           <Image
             src={images[currentIndex]}
             alt={`${title} 메인 이미지`}
-            quality={90}
             fill
-            loading="eager"
-            priority
-            sizes="(max-width: 768px) 100vw, 706px"
+            loading={currentIndex === 0 ? 'eager' : 'lazy'}
+            priority={currentIndex === 0}
+            sizes="(max-width: 768px) 100vw, 616px"
             className="object-cover"
           />
         </div>
