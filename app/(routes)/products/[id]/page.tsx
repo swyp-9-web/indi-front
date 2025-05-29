@@ -85,7 +85,7 @@ export default async function ProductDetail({ params }: ProductDetailPageProps) 
       <HighlightedProductsCarousel
         title={'작가의 다른 작품들'}
         variant={'primary'}
-        products={artistPage.items}
+        products={artistPage.items.filter((item) => item.id !== product.itemId)}
       />
     </HydrationBoundary>
   );
