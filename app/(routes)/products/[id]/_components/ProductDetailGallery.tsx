@@ -29,7 +29,15 @@ export default function ProductDetailGallery({ images, title }: ProductDetailGal
                 currentIndex === idx && 'ring-primary ring-2'
               )}
             >
-              <Image src={src} alt={`${title} 썸네일`} quality={90} fill className="object-cover" />
+              <Image
+                src={src}
+                alt={`${title} 썸네일`}
+                quality={50}
+                fill
+                loading="lazy"
+                sizes="70px"
+                className="object-cover"
+              />
             </button>
           ))}
         </div>
@@ -38,8 +46,10 @@ export default function ProductDetailGallery({ images, title }: ProductDetailGal
           <Image
             src={images[currentIndex]}
             alt={`${title} 메인 이미지`}
-            quality={90}
             fill
+            loading={currentIndex === 0 ? 'eager' : 'lazy'}
+            priority={currentIndex === 0}
+            sizes="(max-width: 768px) 100vw, 616px"
             className="object-cover"
           />
         </div>
