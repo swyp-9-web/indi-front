@@ -97,6 +97,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           src="https://cdn.swygbro.com/public/widget/swyg-widget.js"
           strategy="afterInteractive"
         />
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-SZFVQVQNXP"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-SZFVQVQNXP');
+          `}
+        </Script>
       </head>
       <body className={pretendard.className}>
         <Providers>
